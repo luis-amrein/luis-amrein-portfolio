@@ -1,0 +1,53 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WorkFilter from '../../components/WorkFilter';
+
+const entries = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const projects = entries.map((entry) => ({
+  id: entry.id,
+  title: entry.data.title,
+  eyebrow: entry.data.eyebrow,
+  summary: entry.data.summary,
+  outcomeLabel: entry.data.outcomeLabel,
+  outcome: entry.data.outcome,
+  tags: entry.data.tags,
+}));
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout
+  title="Selected product work — Luis Amrein"
+  description="Case studies in product strategy, experimentation, marketplaces, internal platforms, and healthcare."
+>
+  <header class="page-hero shell">
+    <p class="kicker">Selected product work</p>
+    <h1 class="display-title">Decisions,<br /><em>not deliverables.</em></h1>
+    <p class="lede">
+      Five projects across sustainability, healthcare, operations, growth, and consumer products.
+      Each case focuses on the problem, the trade-offs, and what changed.
+    </p>
+  </header>
+
+  <section class="section shell" aria-labelledby="case-studies">
+    <h2 id="case-studies" class="section-label">Case studies</h2>
+    <WorkFilter projects={projects} base={base} client:load />
+  </section>
+
+  <section class="section shell">
+    <div class="section-heading">
+      <p class="section-label">A note on evidence</p>
+      <h2>Specific where I can be. Honest where I <em>cannot.</em></h2>
+    </div>
+    <div class="about-grid">
+      <p class="hero-intro">
+        Some work involves sensitive business systems and client data. I describe my decisions and
+        results without exposing confidential detail.
+      </p>
+      <p>
+        Older case studies are marked where a metric, screenshot, or timeline still needs a current
+        review. That is deliberate: credible product work is better than polished invention.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

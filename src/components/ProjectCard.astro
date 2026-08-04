@@ -1,0 +1,25 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  index: number;
+}
+
+const { project, index } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const number = String(index + 1).padStart(2, '0');
+---
+
+<a class="project-card reveal" href={`${base}work/${project.id}/`}>
+  <span class="project-index">{number}</span>
+  <div>
+    <p class="kicker">{project.data.eyebrow}</p>
+    <h3>{project.data.title}</h3>
+  </div>
+  <p>
+    <span class="project-outcome">{project.data.outcomeLabel}</span>
+    {project.data.outcome}
+  </p>
+  <span class="arrow" aria-hidden="true">↗</span>
+</a>

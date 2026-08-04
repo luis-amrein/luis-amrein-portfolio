@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" role="img" aria-labelledby="title desc">
+  <title id="title">Abstract portrait placeholder for Luis Amrein</title>
+  <desc id="desc">An editorial line drawing indicating where a current portrait can be added.</desc>
+  <rect width="600" height="750" fill="#d9ff57"/>
+  <circle cx="300" cy="235" r="112" fill="#f3f0e8" stroke="#161714" stroke-width="7"/>
+  <path d="M180 210c18-90 220-127 243 4-67-40-163-46-243-4Z" fill="#161714"/>
+  <path d="M110 685c7-180 92-272 190-272s183 92 190 272" fill="#ff5a36" stroke="#161714" stroke-width="7"/>
+  <path d="M220 273c21 28 139 28 160 0" fill="none" stroke="#161714" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="258" cy="241" r="7" fill="#161714"/>
+  <circle cx="342" cy="241" r="7" fill="#161714"/>
+  <path d="M65 70h136M65 95h83M401 650h134M448 675h87" fill="none" stroke="#161714" stroke-width="5"/>
+  <text x="65" y="710" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="2">PORTRAIT TO COME</text>
+</svg>

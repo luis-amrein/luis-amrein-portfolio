@@ -1,0 +1,119 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductPrinciples from '../components/ProductPrinciples';
+import ProjectCard from '../components/ProjectCard.astro';
+
+const projects = (await getCollection('projects'))
+  .filter((project) => project.data.featured)
+  .sort((a, b) => a.data.order - b.data.order);
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout>
+  <section class="hero shell">
+    <div>
+      <p class="kicker">Product Manager · Berlin</p>
+      <h1>I turn hard problems into <em>clear products.</em></h1>
+    </div>
+    <div class="hero-bottom">
+      <div>
+        <p class="hero-intro">
+          I bring engineering depth, product judgment, and a bias for evidence to teams building
+          digital products that matter.
+        </p>
+        <div class="button-row">
+          <a class="button" href={`${base}work/`}>Explore selected work <span aria-hidden="true">↓</span></a>
+          <a class="button secondary" href="mailto:luis.amrein@hotmail.de">Start a conversation</a>
+        </div>
+      </div>
+      <p class="hero-note">
+        Currently shaping digital health products at Caspar Health. Previously sustainability
+        marketplaces, internal platforms, and healthcare staffing.
+      </p>
+    </div>
+  </section>
+
+  <section class="section shell" aria-labelledby="selected-work">
+    <div class="section-heading reveal">
+      <p class="section-label">01 · Selected work</p>
+      <h2 id="selected-work">Strategy is useful when it makes <em>delivery sharper.</em></h2>
+    </div>
+    <div class="project-list">
+      {projects.map((project, index) => <ProjectCard project={project} index={index} />)}
+    </div>
+    <div class="button-row">
+      <a class="button secondary" href={`${base}work/`}>View all case studies</a>
+    </div>
+  </section>
+
+  <section class="section shell" aria-labelledby="evidence">
+    <div class="section-heading reveal">
+      <p class="section-label">02 · Evidence</p>
+      <h2 id="evidence">Close enough to the data. Close enough to the <em>people.</em></h2>
+    </div>
+    <div class="proof-grid reveal">
+      <article class="proof">
+        <span class="proof-number">3×</span>
+        <h3>Campaign conversion</h3>
+        <p>Personalised job recommendations lifted re-engagement conversion threefold.</p>
+      </article>
+      <article class="proof">
+        <span class="proof-number">6</span>
+        <h3>Contributors led</h3>
+        <p>A data-enrichment operation that made recommendations more relevant and useful.</p>
+      </article>
+      <article class="proof">
+        <span class="proof-number">0→1</span>
+        <h3>Products shaped</h3>
+        <p>From investor demo and product strategy to delivery-ready roadmap and launch path.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section shell" aria-labelledby="principles">
+    <div class="section-heading reveal">
+      <p class="section-label">03 · How I work</p>
+      <h2 id="principles">Structure for the problem. Space for the <em>team.</em></h2>
+    </div>
+    <ProductPrinciples client:visible />
+  </section>
+
+  <section class="section shell" aria-labelledby="background">
+    <div class="section-heading reveal">
+      <p class="section-label">04 · Background</p>
+      <h2 id="background">From engineering systems to <em>human ones.</em></h2>
+    </div>
+    <div class="about-grid reveal">
+      <p class="hero-intro">
+        My path into product started with engineering: a head-up display for automated vehicles,
+        ergonomics, medical technology, and a knee prosthesis designed for humanitarian use.
+      </p>
+      <div>
+        <p>
+          Operations taught me how processes and incentives shape outcomes. Product management
+          brought the pieces together: empathy, systems thinking, design, technology, and data.
+        </p>
+        <p>
+          Today I use that mix to create alignment around complex problems and help teams move from
+          uncertainty to a product people can actually use.
+        </p>
+        <a href={`${base}about/`}>More about my path and life outside work →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="personal-band">
+    <div>
+      <p class="section-label">Off the clock</p>
+      <h2>Still curious.<br /><span class="scribble">Less Jira.</span></h2>
+    </div>
+    <div>
+      <p>
+        Gravel rides to Brandenburg lakes, piano lessons from my mum, Portuguese practice, too
+        many Urban Sports classes, mixing music, and making things for my flat.
+      </p>
+      <a class="button secondary" href={`${base}about/#outside-work`}>Meet the person behind the roadmap</a>
+    </div>
+  </section>
+</BaseLayout>

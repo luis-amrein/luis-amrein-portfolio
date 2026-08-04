@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://luis-amrein.github.io/luis-amrein-portfolio/sitemap-index.xml

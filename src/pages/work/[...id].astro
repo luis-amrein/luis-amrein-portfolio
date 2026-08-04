@@ -1,0 +1,72 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { id: project.id },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title={`${project.data.title} — Luis Amrein`} description={project.data.summary}>
+  <header class="page-hero shell">
+    <p class="kicker">{project.data.eyebrow}</p>
+    <h1 class="display-title">{project.data.title}</h1>
+    <p class="lede">{project.data.summary}</p>
+  </header>
+
+  <div class="shell">
+    <dl class="case-meta">
+      <div>
+        <dt>Role</dt>
+        <dd>{project.data.role}</dd>
+      </div>
+      <div>
+        <dt>Year</dt>
+        <dd>{project.data.year}</dd>
+      </div>
+      <div>
+        <dt>Outcome</dt>
+        <dd>{project.data.outcomeLabel}</dd>
+      </div>
+      <div>
+        <dt>Focus</dt>
+        <dd>{project.data.tags.join(' · ')}</dd>
+      </div>
+    </dl>
+  </div>
+
+  <div class="case-body shell">
+    <aside>
+      <p class="section-label">The core challenge</p>
+      <p>{project.data.challenge}</p>
+      <div class="tag-row">
+        {project.data.tags.map((tag) => <span class="tag">{tag}</span>)}
+      </div>
+      {project.data.status === 'needs-update' && (
+        <p class="draft-note">
+          Content review: this older project still needs updated dates, shareable screenshots, or a
+          final metric before the portfolio is considered finished.
+        </p>
+      )}
+    </aside>
+    <article>
+      <Content />
+      <div class="button-row">
+        <a class="button secondary" href={`${base}work/`}>← All case studies</a>
+        <a class="button" href="mailto:luis.amrein@hotmail.de">Discuss this work</a>
+      </div>
+    </article>
+  </div>
+</BaseLayout>

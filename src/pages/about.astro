@@ -1,0 +1,110 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import portrait from '../assets/profile-placeholder.svg';
+---
+
+<BaseLayout
+  title="About Luis Amrein — Product Manager"
+  description="Engineering background, product mindset, and a life outside the roadmap."
+>
+  <header class="page-hero shell">
+    <p class="kicker">About Luis</p>
+    <h1 class="display-title">Engineer by training.<br /><em>Product person by choice.</em></h1>
+    <p class="lede">
+      I am interested in the space where technical systems meet human behaviour—and in making that
+      space a little easier to navigate.
+    </p>
+  </header>
+
+  <section class="section shell" aria-labelledby="story">
+    <div class="about-grid">
+      <div class="portrait-placeholder">
+        <Image
+          src={portrait}
+          alt="Editorial portrait placeholder for Luis; a current photograph will replace it"
+          widths={[480, 720]}
+          sizes="(max-width: 820px) 100vw, 40vw"
+        />
+      </div>
+      <div class="about-copy">
+        <p id="story">
+          Product management is where my favourite things meet: empathy, design, technology,
+          creativity, and evidence.
+        </p>
+        <p>
+          I started in engineering, fascinated by how design and technology improve real-world
+          systems. My bachelor’s thesis explored a head-up display for highly automated vehicles.
+          During my master’s, I added ergonomics, medical technology, and management, then designed
+          a knee-joint prosthesis for humanitarian use.
+        </p>
+        <p>
+          Operations management gave me a practical education in agile work, data analysis, and
+          process design. Working closely with product managers showed me a role that connected the
+          technical and human sides of a problem. I made the switch and have not looked back.
+        </p>
+        <p>
+          Since then, I have worked across healthcare staffing, sustainability products, internal
+          operations platforms, marketplaces, and digital health. I am most useful when a problem
+          is complex, several perspectives need to align, and the team needs a clear next move.
+        </p>
+        <div class="button-row">
+          <a class="button" href="mailto:luis.amrein@hotmail.de">Say hello</a>
+          <a class="button secondary" href="https://www.linkedin.com/in/luis-amrein/">
+            View LinkedIn <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section shell" id="outside-work" aria-labelledby="outside-heading">
+    <div class="section-heading reveal">
+      <p class="section-label">Outside work</p>
+      <h2 id="outside-heading">A very Berlin mix of motion, music, and <em>making.</em></h2>
+    </div>
+    <div class="interest-grid reveal">
+      <article class="interest">
+        <span class="interest-index">01</span>
+        <h3>Gravel rides</h3>
+        <p>Summer routes to the many lakes around Brandenburg—ideally with a good swim at the end.</p>
+      </article>
+      <article class="interest">
+        <span class="interest-index">02</span>
+        <h3>Every sport</h3>
+        <p>Yoga, HIIT, volleyball, squash, table tennis. Urban Sports probably loses money on me.</p>
+      </article>
+      <article class="interest">
+        <span class="interest-index">03</span>
+        <h3>Music</h3>
+        <p>Learning piano from my mum and, because this is Berlin, mixing music whenever I can.</p>
+      </article>
+      <article class="interest">
+        <span class="interest-index">04</span>
+        <h3>Portuguese</h3>
+        <p>Still learning. Always open to a language tandem and patient corrections.</p>
+      </article>
+      <article class="interest">
+        <span class="interest-index">05</span>
+        <h3>Making things</h3>
+        <p>DIY projects for my flat—another place where a rough prototype beats a long discussion.</p>
+      </article>
+      <article class="interest">
+        <span class="interest-index">06</span>
+        <h3>Curiosity</h3>
+        <p>Long podcasts, new tools, unfamiliar systems, and the inevitable side project.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="personal-band">
+    <div>
+      <p class="section-label">The short version</p>
+      <h2>Serious about work.<br /><span class="scribble">Not myself.</span></h2>
+    </div>
+    <p>
+      Yes, this can sound suspiciously like the next-door consultant checklist. I also spend time
+      doing absolutely nothing—this page is simply trying to make a good impression.
+    </p>
+  </section>
+</BaseLayout>

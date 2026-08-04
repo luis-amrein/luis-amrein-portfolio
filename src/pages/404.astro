@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Page not found — Luis Amrein" description="This page does not exist.">
+  <section class="hero shell">
+    <div>
+      <p class="kicker">404 · Wrong turn</p>
+      <h1>This path is not on the <em>roadmap.</em></h1>
+    </div>
+    <div class="hero-bottom">
+      <p class="hero-intro">
+        The page may have moved, or perhaps it was a low-confidence feature request.
+      </p>
+      <div class="button-row">
+        <a class="button" href={base}>Return home</a>
+        <a class="button secondary" href={`${base}work/`}>Browse work</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
