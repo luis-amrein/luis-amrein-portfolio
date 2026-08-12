@@ -1,6 +1,7 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import DeviceShowcase from '../../components/DeviceShowcase.astro';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -17,6 +18,7 @@ interface Props {
 const { project } = Astro.props;
 const { Content } = await render(project);
 const base = import.meta.env.BASE_URL;
+const showcase = project.data.showcase;
 ---
 
 <BaseLayout title={`${project.data.title} — Luis Amrein`} description={project.data.summary}>
@@ -47,6 +49,16 @@ const base = import.meta.env.BASE_URL;
     </dl>
   </div>
 
+  {
+    showcase && showcase.length > 0 && (
+      <DeviceShowcase
+        items={showcase}
+        title={project.data.showcaseTitle ?? 'Product in the hand'}
+        label={project.data.showcaseLabel ?? 'Product visuals'}
+      />
+    )
+  }
+
   <div class="case-body shell">
     <aside>
       <p class="section-label">The core challenge</p>
@@ -59,6 +71,13 @@ const base = import.meta.env.BASE_URL;
           Content review: this older project still needs updated dates, shareable screenshots, or a
           final metric before the portfolio is considered finished.
         </p>
+      )}
+      {project.data.link && (
+        <div class="button-row">
+          <a class="button secondary" href={project.data.link} target="_blank" rel="noopener noreferrer">
+            {project.data.linkLabel ?? 'Open project'} <span aria-hidden="true">↗</span>
+          </a>
+        </div>
       )}
     </aside>
     <article>

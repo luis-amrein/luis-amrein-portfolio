@@ -4,7 +4,7 @@ eyebrow: Matching · Data · B2C
 summary: Using personalised recommendations to re-engage healthcare professionals with relevant jobs.
 year: "2023"
 order: 5
-featured: true
+featured: false
 tags: ["B2C", "Data", "0→1"]
 role: Project lead for data and analytics
 challenge: Make re-engagement useful to job seekers and economically sustainable for the acquisition funnel.

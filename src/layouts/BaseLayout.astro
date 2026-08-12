@@ -56,6 +56,7 @@ const personSchema = {
     <title>{title}</title>
   </head>
   <body>
+    <div class="cursor-wash" aria-hidden="true"></div>
     <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="site-header shell">
       <a class="wordmark" href={base} aria-label="Luis Amrein, home">Luis Amrein</a>
@@ -74,14 +75,12 @@ const personSchema = {
     <footer class="site-footer">
       <div class="shell">
         <div class="footer-cta">
-          <h2>Have a hard problem?<br /><em>Let’s talk.</em></h2>
+          <h2>Say <em>hello.</em></h2>
           <a class="button" href="mailto:luis.amrein@hotmail.de">
             Send an email <span aria-hidden="true">↗</span>
           </a>
         </div>
         <div class="footer-meta">
-          <span>Product, systems & people</span>
-          <span>Berlin · {new Date().getFullYear()}</span>
           <span>
             <a href="https://www.linkedin.com/in/luis-amrein/" rel="me">LinkedIn</a>
             &nbsp;·&nbsp;
@@ -109,6 +108,115 @@ const personSchema = {
           { threshold: 0.12 },
         );
         reveals.forEach((item) => observer.observe(item));
+      }
+
+      const finePointer = window.matchMedia('(pointer: fine)').matches;
+      if (!reduceMotion && finePointer) {
+        let frame = 0;
+        let targetX = 50;
+        let targetY = 35;
+        let currentX = 50;
+        let currentY = 35;
+
+        const render = () => {
+          currentX += (targetX - currentX) * 0.12;
+          currentY += (targetY - currentY) * 0.12;
+          document.documentElement.style.setProperty('--cursor-x', `${currentX}%`);
+          document.documentElement.style.setProperty('--cursor-y', `${currentY}%`);
+          if (Math.abs(targetX - currentX) > 0.05 || Math.abs(targetY - currentY) > 0.05) {
+            frame = requestAnimationFrame(render);
+          } else {
+            frame = 0;
+          }
+        };
+
+        window.addEventListener(
+          'pointermove',
+          (event) => {
+            targetX = (event.clientX / window.innerWidth) * 100;
+            targetY = (event.clientY / window.innerHeight) * 100;
+            if (!frame) frame = requestAnimationFrame(render);
+          },
+          { passive: true },
+        );
+      }
+
+      const headlines = document.querySelectorAll(
+        '.hero h1, .page-hero .display-title, .section-heading h2',
+      );
+
+      const wrapCharacters = (node, chars = []) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const text = node.textContent ?? '';
+          if (!text) return chars;
+          const fragment = document.createDocumentFragment();
+          for (const character of text) {
+            const span = document.createElement('span');
+            span.className = 'typewriter-char';
+            span.textContent = character;
+            fragment.appendChild(span);
+            chars.push(span);
+          }
+          node.parentNode?.replaceChild(fragment, node);
+        } else if (node.nodeType === Node.ELEMENT_NODE && !node.classList.contains('typewriter-caret')) {
+          [...node.childNodes].forEach((child) => wrapCharacters(child, chars));
+        }
+        return chars;
+      };
+
+      const typeHeadline = (headline) => {
+        if (headline.dataset.typed === 'true') return;
+        headline.dataset.typed = 'true';
+        headline.classList.add('typewriter');
+        headline.closest('.reveal')?.classList.add('is-visible');
+
+        const fullText = headline.textContent?.trim() ?? '';
+        headline.setAttribute('aria-label', fullText);
+
+        const chars = wrapCharacters(headline);
+        if (reduceMotion || chars.length === 0) {
+          chars.forEach((char) => char.classList.add('is-typed'));
+          headline.classList.add('is-done');
+          return;
+        }
+
+        const caret = document.createElement('span');
+        caret.className = 'typewriter-caret';
+        caret.setAttribute('aria-hidden', 'true');
+
+        let index = 0;
+        const tick = () => {
+          if (index >= chars.length) {
+            headline.classList.add('is-done');
+            return;
+          }
+          const char = chars[index];
+          char.classList.add('is-typed');
+          char.after(caret);
+          const value = char.textContent ?? '';
+          index += 1;
+          const delay = /[.,!?;:]/.test(value) ? 120 : value === ' ' ? 18 : 28;
+          window.setTimeout(tick, delay);
+        };
+        if (chars[0]) chars[0].before(caret);
+        window.setTimeout(tick, 180);
+      };
+
+      if (reduceMotion || !('IntersectionObserver' in window)) {
+        headlines.forEach((headline) => typeHeadline(headline));
+      } else {
+        const typeObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                typeHeadline(entry.target);
+                typeObserver.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.35 },
+        );
+        headlines.forEach((headline) => typeObserver.observe(headline));
       }
     </script>
   </body>

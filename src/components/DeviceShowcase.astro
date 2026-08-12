@@ -1,0 +1,92 @@
+---
+import PhoneFrame from './PhoneFrame.astro';
+import ScreenFrame from './ScreenFrame.astro';
+
+export interface ShowcaseItem {
+  type: 'image' | 'video';
+  src: string;
+  alt: string;
+  caption?: string;
+  frame?: 'phone' | 'screen';
+}
+
+interface Props {
+  items: ShowcaseItem[];
+  title?: string;
+  label?: string;
+}
+
+const { items, title = 'Product in the hand', label = 'Product visuals' } = Astro.props;
+const video = items.find((item) => item.type === 'video');
+const screens = items.filter((item) => item.type === 'image');
+const railFrame = screens[0]?.frame ?? 'phone';
+const railLabel =
+  railFrame === 'screen'
+    ? 'Product screenshots. Scroll horizontally to see more.'
+    : 'App screenshots. Scroll horizontally to see more.';
+---
+
+<section class={`device-showcase device-showcase--${railFrame}`} aria-labelledby="device-showcase-heading">
+  <div class="shell">
+    <div class="section-heading reveal">
+      <p class="section-label">{label}</p>
+      <h2 id="device-showcase-heading">{title}</h2>
+    </div>
+
+    {
+      video && (
+        <div class="device-showcase__hero reveal">
+          <PhoneFrame
+            type="video"
+            src={video.src}
+            alt={video.alt}
+            caption={video.caption}
+            priority
+          />
+        </div>
+      )
+    }
+  </div>
+
+  {
+    screens.length > 0 && (
+      <div class="device-showcase__rail-wrap">
+        <div
+          class="device-showcase__rail"
+          role="list"
+          tabindex="0"
+          aria-label={railLabel}
+        >
+          {screens.map((screen, index) => (
+            <div
+              class="device-showcase__item reveal"
+              role="listitem"
+              style={`--delay: ${index * 40}ms`}
+            >
+              {screen.frame === 'screen' ? (
+                <ScreenFrame
+                  src={screen.src}
+                  alt={screen.alt}
+                  caption={screen.caption}
+                  priority={index < 2}
+                />
+              ) : (
+                <PhoneFrame
+                  type="image"
+                  src={screen.src}
+                  alt={screen.alt}
+                  caption={screen.caption}
+                  priority={index < 2}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+        <p class="device-showcase__hint" aria-hidden="true">
+          <span>Drag</span>
+          <span class="device-showcase__hint-arrow">→</span>
+        </p>
+      </div>
+    )
+  }
+</section>

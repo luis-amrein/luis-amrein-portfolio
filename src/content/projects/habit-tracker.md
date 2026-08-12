@@ -3,7 +3,7 @@ title: Habit Tracker for Atom
 eyebrow: Consumer App · Discovery · Case Study
 summary: Designing a habit loop that extends a meditation product without losing its calm core.
 year: "2023"
-order: 3
+order: 6
 featured: false
 tags: ["B2C", "0→1"]
 role: Product Owner, sole contributor

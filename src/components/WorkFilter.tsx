@@ -15,7 +15,7 @@ type Props = {
   base: string;
 };
 
-const filters = ['All', 'B2B', 'B2C', 'Marketplace', 'Data', '0→1'];
+const filters = ['All', 'B2B', 'B2C', 'Mobile', 'Marketplace', 'Data', '0→1'];
 
 export default function WorkFilter({ projects, base }: Props) {
   const [activeFilter, setActiveFilter] = useState('All');

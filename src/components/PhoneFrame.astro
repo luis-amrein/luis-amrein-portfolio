@@ -1,0 +1,135 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  type?: 'image' | 'video';
+  caption?: string;
+  priority?: boolean;
+}
+
+const { src, alt, type = 'image', caption, priority = false } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const resolvedSrc = src.startsWith('http') || src.startsWith(base) ? src : `${base}${src.replace(/^\//, '')}`;
+---
+
+<figure class="phone-frame">
+  <div class="iphone-17-pro">
+    <span class="iphone-17-pro__btn iphone-17-pro__btn--silent" aria-hidden="true"></span>
+    <span class="iphone-17-pro__btn iphone-17-pro__btn--volume-up" aria-hidden="true"></span>
+    <span class="iphone-17-pro__btn iphone-17-pro__btn--volume-down" aria-hidden="true"></span>
+    <span class="iphone-17-pro__btn iphone-17-pro__btn--power" aria-hidden="true"></span>
+    <div class="iphone-17-pro__shell">
+      <div class="iphone-17-pro__screen">
+        {
+          type === 'video' ? (
+            <video
+              class="phone-autoplay"
+              src={resolvedSrc}
+              controls
+              muted
+              playsinline
+              loop
+              preload="metadata"
+              poster={`${base}work/habbit/screen-03.jpg`}
+              aria-label={alt}
+            />
+          ) : (
+            <img
+              class="iphone-17-pro__shot"
+              src={resolvedSrc}
+              alt={alt}
+              width="402"
+              height="874"
+              loading={priority ? 'eager' : 'lazy'}
+              decoding="async"
+            />
+          )
+        }
+      </div>
+    </div>
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<script>
+  const sampleEdgeColor = (img) => {
+    const width = img.naturalWidth;
+    const height = img.naturalHeight;
+    if (!width || !height) return null;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    if (!ctx) return null;
+
+    ctx.drawImage(img, 0, 0);
+    const points = [
+      [2, Math.floor(height / 2)],
+      [width - 3, Math.floor(height / 2)],
+      [Math.floor(width / 2), 2],
+      [Math.floor(width / 2), height - 3],
+      [2, 2],
+      [width - 3, 2],
+      [2, height - 3],
+      [width - 3, height - 3],
+    ];
+
+    let r = 0;
+    let g = 0;
+    let b = 0;
+    for (const [x, y] of points) {
+      const pixel = ctx.getImageData(x, y, 1, 1).data;
+      r += pixel[0];
+      g += pixel[1];
+      b += pixel[2];
+    }
+
+    const count = points.length;
+    return `rgb(${Math.round(r / count)}, ${Math.round(g / count)}, ${Math.round(b / count)})`;
+  };
+
+  const applyEdgeFill = (img) => {
+    const screen = img.closest('.iphone-17-pro__screen');
+    if (!(screen instanceof HTMLElement)) return;
+    const color = sampleEdgeColor(img);
+    if (color) screen.style.backgroundColor = color;
+  };
+
+  document.querySelectorAll('img.iphone-17-pro__shot').forEach((img) => {
+    if (!(img instanceof HTMLImageElement)) return;
+    if (img.complete && img.naturalWidth) {
+      applyEdgeFill(img);
+    } else {
+      img.addEventListener('load', () => applyEdgeFill(img), { once: true });
+    }
+  });
+</script>
+
+{
+  type === 'video' && (
+    <script>
+      const videos = document.querySelectorAll('video.phone-autoplay');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (videos.length && !reduceMotion && 'IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              const video = entry.target;
+              if (!(video instanceof HTMLVideoElement)) return;
+              if (entry.isIntersecting && entry.intersectionRatio >= 0.45) {
+                video.play().catch(() => {});
+              } else {
+                video.pause();
+              }
+            });
+          },
+          { threshold: [0, 0.45, 0.75] },
+        );
+
+        videos.forEach((video) => observer.observe(video));
+      }
+    </script>
+  )
+}

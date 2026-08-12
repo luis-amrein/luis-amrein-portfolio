@@ -6,7 +6,7 @@
   --paper-deep: #e5e0d3;
   --signal: #ff5a36;
   --signal-soft: #ffd9cf;
-  --lime: #d9ff57;
+  --lime: #36ffb6;
   --muted: #5d6058;
   --line: rgba(22, 23, 20, 0.2);
   --max: 1240px;
@@ -14,6 +14,8 @@
   --display: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
   --body: "Helvetica Neue", Helvetica, Arial, sans-serif;
   --serif: Iowan Old Style, Baskerville, "Times New Roman", serif;
+  --cursor-x: 50%;
+  --cursor-y: 35%;
 }
 
 * {
@@ -28,11 +30,39 @@ html {
 }
 
 body {
+  position: relative;
   margin: 0;
   min-width: 320px;
+  background: var(--paper);
   font-size: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
   line-height: 1.55;
   text-rendering: optimizeLegibility;
+}
+
+.cursor-wash {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: radial-gradient(
+    circle 72vmax at var(--cursor-x) var(--cursor-y),
+    transparent 0%,
+    transparent 48%,
+    color-mix(in srgb, var(--signal) 5%, transparent) 78%,
+    color-mix(in srgb, var(--signal) 11%, transparent) 100%
+  );
+  transition: opacity 280ms ease;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+  background: var(--paper);
+}
+
+.site-footer {
+  position: relative;
+  z-index: 5;
 }
 
 ::selection {
@@ -216,35 +246,74 @@ input {
 }
 
 .button {
+  position: relative;
+  z-index: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.65rem;
   min-height: 3rem;
   padding: 0.75rem 1.1rem;
+  overflow: hidden;
   border: 1px solid var(--ink);
-  background: var(--ink);
+  background: transparent;
   color: var(--paper);
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.07em;
   text-decoration: none;
   text-transform: uppercase;
-  transition: transform 180ms ease, background 180ms ease, color 180ms ease;
+  transition: color 400ms ease, border-color 400ms ease, transform 220ms ease;
 }
 
-.button:hover {
-  transform: translateY(-3px);
+/* Base fill sits behind the diagonal layer */
+.button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: var(--ink);
+}
+
+/* Diagonal coral wipe */
+.button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: var(--signal);
+  clip-path: polygon(0 0, 0 0, 0 0);
+  transition: clip-path 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.button:hover,
+.button:focus-visible {
+  transform: translateY(-2px);
+  color: var(--paper);
+  border-color: var(--signal);
+}
+
+.button:hover::after,
+.button:focus-visible::after {
+  clip-path: polygon(0 0, 240% 0, 0 240%);
 }
 
 .button.secondary {
-  background: transparent;
   color: var(--ink);
 }
 
-.button.secondary:hover {
+.button.secondary::before {
+  background: transparent;
+}
+
+.button.secondary::after {
   background: var(--lime);
+}
+
+.button.secondary:hover,
+.button.secondary:focus-visible {
+  color: var(--ink);
+  border-color: var(--ink);
 }
 
 .section {
@@ -456,6 +525,10 @@ input {
   font-size: 1.15rem;
 }
 
+.personal-band p + .button {
+  margin-top: 1.5rem;
+}
+
 .scribble {
   font-family: var(--serif);
   font-style: italic;
@@ -498,12 +571,17 @@ input {
   grid-template-columns: minmax(160px, 0.35fr) minmax(0, 1fr);
   gap: clamp(2rem, 8vw, 8rem);
   padding-block: clamp(4rem, 10vw, 9rem);
+  background: var(--paper);
 }
 
 .case-body > aside {
   position: sticky;
   top: 2rem;
   align-self: start;
+}
+
+.case-body > aside .tag-row {
+  margin-top: 1.75rem;
 }
 
 .case-body article {
@@ -531,8 +609,355 @@ input {
   color: #33352f;
 }
 
+.case-body article ul,
+.case-body article ol {
+  list-style: none;
+  margin: 1.75rem 0;
+  padding: 0;
+  border-top: 1px solid var(--ink);
+}
+
+.case-body article ul > li,
+.case-body article ol > li {
+  position: relative;
+  margin: 0;
+  padding: 0.85rem 0 0.85rem 1.85rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.case-body article ul > li::before,
+.case-body article ol > li::before {
+  position: absolute;
+  top: calc(0.85rem + 0.775em);
+  left: 0;
+  width: 0.85rem;
+  height: 2px;
+  background: var(--signal);
+  content: '';
+  transform: translateY(-50%);
+}
+
+.case-body article ol {
+  counter-reset: case-step;
+}
+
+.case-body article ol > li {
+  counter-increment: case-step;
+  padding-left: 2.4rem;
+}
+
+.case-body article ol > li::before {
+  top: 0.85rem;
+  width: auto;
+  height: auto;
+  background: none;
+  color: var(--signal);
+  font-family: var(--display);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.55;
+  content: counter(case-step, decimal-leading-zero);
+  transform: none;
+}
+
 .case-body article li + li {
-  margin-top: 0.55rem;
+  margin-top: 0;
+}
+
+.case-body article li ul,
+.case-body article li ol {
+  margin: 0.75rem 0 0.15rem;
+  border-top: 0;
+}
+
+.case-body article li li {
+  padding-block: 0.45rem;
+  border-bottom-color: color-mix(in srgb, var(--line) 55%, transparent);
+}
+
+.case-body article li li::before {
+  top: calc(0.45rem + 0.775em);
+  width: 0.45rem;
+  background: var(--ink);
+}
+
+/* —— iPhone 17 Pro device frame —— */
+.device-showcase {
+  padding-block: clamp(3rem, 8vw, 6rem);
+  background: var(--paper);
+}
+
+.device-showcase .section-heading {
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+}
+
+.device-showcase__hero {
+  display: flex;
+  justify-content: center;
+  margin-bottom: clamp(2.5rem, 6vw, 4rem);
+}
+
+.device-showcase__hero .phone-frame {
+  width: min(100%, 300px);
+}
+
+.device-showcase__rail-wrap {
+  position: relative;
+  margin-top: 0.5rem;
+  background: var(--paper);
+}
+
+.device-showcase__rail {
+  display: flex;
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+  padding-block: 0.35rem 1.25rem;
+  padding-inline: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
+  background: var(--paper);
+  scrollbar-width: none;
+  cursor: grab;
+}
+
+.device-showcase__rail::-webkit-scrollbar {
+  display: none;
+}
+
+.device-showcase__rail:active {
+  cursor: grabbing;
+}
+
+.device-showcase__rail:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+.device-showcase__item {
+  flex: 0 0 min(42vw, 220px);
+  scroll-snap-align: start;
+  background: var(--paper);
+}
+
+.device-showcase--screen .device-showcase__item {
+  flex: 0 0 min(78vw, 560px);
+}
+
+.device-showcase__item.reveal {
+  transition-delay: var(--delay, 0ms);
+}
+
+.device-showcase__hint {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  margin: 0;
+  padding-inline: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.device-showcase__hint-arrow {
+  display: inline-block;
+  animation: rail-nudge 1.6s ease-in-out infinite;
+}
+
+@keyframes rail-nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(6px);
+  }
+}
+
+.phone-frame {
+  margin: 0;
+  width: 100%;
+  background: none;
+}
+
+.phone-frame figcaption,
+.screen-frame figcaption {
+  margin-top: 0.85rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.screen-frame {
+  margin: 0;
+  width: 100%;
+}
+
+.screen-chrome {
+  overflow: hidden;
+  border-radius: 14px;
+  background: #1a1b1e;
+  box-shadow:
+    0 14px 28px rgba(20, 22, 18, 0.12),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.screen-chrome__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  height: 1.55rem;
+  padding-inline: 0.7rem;
+  background: linear-gradient(180deg, #2c2d31 0%, #1f2023 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.screen-chrome__dot {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: #5c5d62;
+}
+
+.screen-chrome__dot:nth-child(1) {
+  background: #ff5f57;
+}
+
+.screen-chrome__dot:nth-child(2) {
+  background: #febc2e;
+}
+
+.screen-chrome__dot:nth-child(3) {
+  background: #28c840;
+}
+
+.screen-chrome__viewport {
+  overflow: hidden;
+  background: #0c0c0e;
+}
+
+.screen-chrome__viewport img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: top center;
+}
+
+.iphone-17-pro {
+  --bezel: 3.4cqw;
+  --phone-radius: 21cqw;
+  --screen-radius: 17.4cqw;
+  container-type: inline-size;
+  position: relative;
+  width: 100%;
+}
+
+.iphone-17-pro__shell {
+  position: relative;
+  overflow: hidden;
+  padding: var(--bezel);
+  border-radius: var(--phone-radius);
+  background:
+    linear-gradient(145deg, #4a4b50 0%, #1c1d21 38%, #0a0a0c 100%);
+  box-shadow:
+    0 14px 28px rgba(20, 22, 18, 0.12),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+    inset 0 0 0 2.5px #050506,
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.iphone-17-pro__shell::before {
+  content: '';
+  position: absolute;
+  inset: 1.2cqw;
+  z-index: 2;
+  border-radius: calc(var(--phone-radius) - 1.2cqw);
+  box-shadow: inset 0 0 0 1.5px #000;
+  pointer-events: none;
+}
+
+.iphone-17-pro__screen {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  aspect-ratio: 1206 / 2622;
+  border-radius: var(--screen-radius);
+  background: #f5f5f5;
+  transform: translateZ(0);
+}
+
+.iphone-17-pro__shot,
+.iphone-17-pro__screen video {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  border: 0;
+}
+
+.iphone-17-pro__screen video {
+  background: #000;
+}
+
+.iphone-17-pro__btn {
+  position: absolute;
+  z-index: 3;
+  display: block;
+  background: linear-gradient(90deg, #2c2d31, #151618 45%, #2a2b2f);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+}
+
+.iphone-17-pro__btn--silent {
+  top: 14.5%;
+  left: -1.45%;
+  width: 1.45%;
+  height: 3.2%;
+  border-radius: 2px 0 0 2px;
+}
+
+.iphone-17-pro__btn--volume-up {
+  top: 20.5%;
+  left: -1.45%;
+  width: 1.45%;
+  height: 6.2%;
+  border-radius: 2px 0 0 2px;
+}
+
+.iphone-17-pro__btn--volume-down {
+  top: 28.5%;
+  left: -1.45%;
+  width: 1.45%;
+  height: 6.2%;
+  border-radius: 2px 0 0 2px;
+}
+
+.iphone-17-pro__btn--power {
+  top: 22%;
+  right: -1.45%;
+  width: 1.45%;
+  height: 9.5%;
+  border-radius: 0 2px 2px 0;
+  background: linear-gradient(270deg, #2c2d31, #151618 45%, #2a2b2f);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .device-showcase__hint-arrow {
+    animation: none;
+  }
 }
 
 .draft-note {
@@ -680,6 +1105,41 @@ input {
   transform: none;
 }
 
+.typewriter-char {
+  opacity: 0;
+}
+
+.typewriter-char.is-typed {
+  opacity: 1;
+}
+
+.typewriter-caret {
+  display: inline-block;
+  width: 0.06em;
+  height: 0.82em;
+  margin-left: 0.04em;
+  background: var(--signal);
+  vertical-align: -0.05em;
+  animation: caret-blink 0.9s steps(1) infinite;
+}
+
+.typewriter.is-done .typewriter-caret {
+  opacity: 0;
+  animation: none;
+  transition: opacity 400ms ease;
+}
+
+@keyframes caret-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
 @media (max-width: 820px) {
   .availability {
     display: none;
@@ -768,6 +1228,18 @@ input {
   }
 }
 
+@media (pointer: coarse) {
+  .cursor-wash {
+    background: radial-gradient(
+      circle at 50% 30%,
+      transparent 0%,
+      transparent 42%,
+      color-mix(in srgb, var(--signal) 2.5%, transparent) 75%,
+      color-mix(in srgb, var(--signal) 5%, transparent) 100%
+    );
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -785,5 +1257,32 @@ input {
   .reveal {
     opacity: 1;
     transform: none;
+  }
+
+  .typewriter-char {
+    opacity: 1;
+  }
+
+  .typewriter-caret {
+    display: none;
+  }
+
+  .button::before,
+  .button::after {
+    transition: none;
+  }
+
+  .button:hover::after,
+  .button:focus-visible::after {
+    clip-path: polygon(0 0, 240% 0, 0 240%);
+  }
+
+  .cursor-wash {
+    background: radial-gradient(
+      circle at 50% 30%,
+      transparent 0%,
+      transparent 48%,
+      color-mix(in srgb, var(--signal) 2.5%, transparent) 100%
+    );
   }
 }

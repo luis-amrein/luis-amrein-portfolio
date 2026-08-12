@@ -14,13 +14,13 @@ const base = import.meta.env.BASE_URL;
   <section class="hero shell">
     <div>
       <p class="kicker">Product Manager · Berlin</p>
-      <h1>I turn hard problems into <em>clear products.</em></h1>
+      <h1>Making products <em>make(s) sense.</em></h1>
     </div>
     <div class="hero-bottom">
       <div>
         <p class="hero-intro">
-          I bring engineering depth, product judgment, and a bias for evidence to teams building
-          digital products that matter.
+          I build. Prototypes to test ideas fast, and production-ready code when it's time to ship.
+          Engineering depth and product judgment in the same hands.
         </p>
         <div class="button-row">
           <a class="button" href={`${base}work/`}>Explore selected work <span aria-hidden="true">↓</span></a>
@@ -29,7 +29,7 @@ const base = import.meta.env.BASE_URL;
       </div>
       <p class="hero-note">
         Currently shaping digital health products at Caspar Health. Previously sustainability
-        marketplaces, internal platforms, and healthcare staffing.
+        marketplaces and healthcare staffing.
       </p>
     </div>
   </section>
@@ -37,7 +37,7 @@ const base = import.meta.env.BASE_URL;
   <section class="section shell" aria-labelledby="selected-work">
     <div class="section-heading reveal">
       <p class="section-label">01 · Selected work</p>
-      <h2 id="selected-work">Strategy is useful when it makes <em>delivery sharper.</em></h2>
+      <h2 id="selected-work">Things I shipped, shaped, or <em>steered.</em></h2>
     </div>
     <div class="project-list">
       {projects.map((project, index) => <ProjectCard project={project} index={index} />)}
@@ -47,33 +47,9 @@ const base = import.meta.env.BASE_URL;
     </div>
   </section>
 
-  <section class="section shell" aria-labelledby="evidence">
-    <div class="section-heading reveal">
-      <p class="section-label">02 · Evidence</p>
-      <h2 id="evidence">Close enough to the data. Close enough to the <em>people.</em></h2>
-    </div>
-    <div class="proof-grid reveal">
-      <article class="proof">
-        <span class="proof-number">3×</span>
-        <h3>Campaign conversion</h3>
-        <p>Personalised job recommendations lifted re-engagement conversion threefold.</p>
-      </article>
-      <article class="proof">
-        <span class="proof-number">6</span>
-        <h3>Contributors led</h3>
-        <p>A data-enrichment operation that made recommendations more relevant and useful.</p>
-      </article>
-      <article class="proof">
-        <span class="proof-number">0→1</span>
-        <h3>Products shaped</h3>
-        <p>From investor demo and product strategy to delivery-ready roadmap and launch path.</p>
-      </article>
-    </div>
-  </section>
-
   <section class="section shell" aria-labelledby="principles">
     <div class="section-heading reveal">
-      <p class="section-label">03 · How I work</p>
+      <p class="section-label">02 · How I work</p>
       <h2 id="principles">Structure for the problem. Space for the <em>team.</em></h2>
     </div>
     <ProductPrinciples client:visible />
@@ -81,8 +57,8 @@ const base = import.meta.env.BASE_URL;
 
   <section class="section shell" aria-labelledby="background">
     <div class="section-heading reveal">
-      <p class="section-label">04 · Background</p>
-      <h2 id="background">From engineering systems to <em>human ones.</em></h2>
+      <p class="section-label">03 · Background</p>
+      <h2 id="background">From screws and sensors to <em>screens and systems.</em></h2>
     </div>
     <div class="about-grid reveal">
       <p class="hero-intro">

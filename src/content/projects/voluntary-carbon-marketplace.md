@@ -3,14 +3,42 @@ title: Voluntary Carbon Credit Marketplace
 eyebrow: B2B · Sustainability · 0→1
 summary: Taking an early marketplace demo toward an investor-ready product and launch plan.
 year: "2024"
-order: 1
+order: 2
 featured: true
 tags: ["B2B", "Marketplace", "0→1", "Data"]
 role: First Product Manager
 challenge: Turn an early demo into a credible product direction for corporate sustainability teams, investors, and a future public launch.
 outcome: A clearer product proposition, release roadmap, and delivery-ready specifications.
-outcomeLabel: Investor-ready
+outcomeLabel: Investor-ready product
 status: needs-update
+showcaseTitle: Marketplace screens
+showcaseLabel: Product screens
+showcase:
+  - type: image
+    frame: screen
+    src: work/vcmp/screen-01.jpg
+    alt: Marketplace intro with Find Projects flow and project discovery cards
+    caption: Intro & discovery
+  - type: image
+    frame: screen
+    src: work/vcmp/screen-02.jpg
+    alt: Projects catalogue with SDG filters, summary metrics, and project cards
+    caption: Browse projects
+  - type: image
+    frame: screen
+    src: work/vcmp/screen-03.jpg
+    alt: Projects view with active SDG filters and My Selection highlighted
+    caption: Filtered selection
+  - type: image
+    frame: screen
+    src: work/vcmp/screen-04.jpg
+    alt: Project detail page for aluminium recycling carbon credits
+    caption: Project detail
+  - type: image
+    frame: screen
+    src: work/vcmp/screen-05.jpg
+    alt: Project detail page for Genneia Solar with overview and SDG badges
+    caption: Solar project
 ---
 
 ## The situation
@@ -30,6 +58,8 @@ I treated the demo and the product strategy as connected work. Improvements to t
 - Created tickets, tested continuously, and coordinated decisions across product and engineering.
 - Explored user flows and automation opportunities behind the marketplace experience.
 
+
+
 ## Product judgment
 
 Marketplace products can easily become catalogues of features. The important decision was to anchor the experience in a sustainability manager’s job: evaluate credibility, compare options, and move through a purchase with confidence.
@@ -39,11 +69,3 @@ That framing gave the roadmap a useful filter. Features were judged by whether t
 ## What changed
 
 The team moved from a semi-connected demo toward a coherent investor narrative, a defined target user, and a sequenced path to launch. The work also created delivery artefacts that engineering could act on: flows, wireframes, requirements, and tested increments.
-
-## Tools
-
-Jira, Confluence, Figma, Miro, MongoDB, and Airtable.
-
-## What I would add now
-
-The next version of this case study should include the final launch stage, evidence from investor or customer conversations, and screenshots that can be shared publicly.
