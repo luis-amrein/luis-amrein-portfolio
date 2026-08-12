@@ -18,10 +18,61 @@ interface Props {
 const { project } = Astro.props;
 const { Content } = await render(project);
 const base = import.meta.env.BASE_URL;
+const siteRoot = new URL(base, Astro.site).toString();
+const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
 const showcase = project.data.showcase;
+
+const creativeWorkSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  '@id': `${pageUrl}#case`,
+  name: project.data.title,
+  headline: project.data.title,
+  description: project.data.summary,
+  dateCreated: project.data.year,
+  inLanguage: 'en',
+  url: pageUrl,
+  author: { '@id': `${siteRoot}#person` },
+  creator: { '@id': `${siteRoot}#person` },
+  about: project.data.tags,
+  keywords: project.data.tags.join(', '),
+  genre: project.data.eyebrow,
+  abstract: project.data.challenge,
+  creativeWorkStatus: project.data.outcomeLabel,
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: siteRoot,
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Work',
+      item: new URL(`${base}work/`, Astro.site).toString(),
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: project.data.title,
+      item: pageUrl,
+    },
+  ],
+};
 ---
 
-<BaseLayout title={`${project.data.title} — Luis Amrein`} description={project.data.summary}>
+<BaseLayout
+  title={`${project.data.title} — case study by Luis Amrein`}
+  description={`${project.data.summary} Role: ${project.data.role}. Outcome: ${project.data.outcomeLabel}.`}
+  ogType="article"
+  jsonLd={[creativeWorkSchema, breadcrumbSchema]}
+>
   <header class="page-hero shell">
     <p class="kicker">{project.data.eyebrow}</p>
     <h1 class="display-title">{project.data.title}</h1>
@@ -80,7 +131,9 @@ const showcase = project.data.showcase;
         </div>
       )}
     </aside>
-    <article>
+    <article itemscope itemtype="https://schema.org/CreativeWork">
+      <meta itemprop="name" content={project.data.title} />
+      <meta itemprop="description" content={project.data.summary} />
       <Content />
       <div class="button-row">
         <a class="button secondary" href={`${base}work/`}>← All case studies</a>

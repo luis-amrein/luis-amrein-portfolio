@@ -1,0 +1,18 @@
+/* TEAM */
+Owner: Luis Amrein
+Location: Berlin, Germany
+Contact: luis.amrein@hotmail.de
+LinkedIn: https://www.linkedin.com/in/luis-amrein/
+GitHub: https://github.com/luis-amrein
+
+/* SITE */
+Last update: 2026
+Language: English
+Standards: HTML, CSS, Astro
+Software: Astro, React, Tailwind CSS
+Hosting: GitHub Pages
+
+/* AGENT CONTEXT */
+llms.txt: /luis-amrein-portfolio/llms.txt
+llms-full.txt: /luis-amrein-portfolio/llms-full.txt
+Sitemap: /luis-amrein-portfolio/sitemap-index.xml

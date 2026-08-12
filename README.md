@@ -51,3 +51,10 @@ Before considering the portfolio final:
 Pushes to `main` trigger `.github/workflows/deploy.yml`. The workflow validates the Astro project, builds static assets, and deploys them to GitHub Pages.
 
 The repository must use **GitHub Actions** as its Pages source under **Settings → Pages**. The configured base path is `/luis-amrein-portfolio`.
+
+### Discoverability
+
+- Sitemap: `/sitemap-index.xml`
+- Crawler policy: `/robots.txt` (allows search and major AI crawlers)
+- Agent map: `/llms.txt` and `/llms-full.txt`
+- After deploy, submit the sitemap in [Google Search Console](https://search.google.com/search-console) and request indexing for the homepage.

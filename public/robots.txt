@@ -1,4 +1,38 @@
 User-agent: *
 Allow: /
 
+# AI / agent crawlers — explicit allow for retrieval and citation
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
 Sitemap: https://luis-amrein.github.io/luis-amrein-portfolio/sitemap-index.xml
+# Prefer these maps for agent orientation:
+# https://luis-amrein.github.io/luis-amrein-portfolio/llms.txt
+# https://luis-amrein.github.io/luis-amrein-portfolio/llms-full.txt

@@ -4,33 +4,94 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  ogType?: 'website' | 'article' | 'profile';
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
-  title = 'Luis Amrein — Product Manager',
-  description = 'Product Manager in Berlin turning complex systems, user needs, and data into products that work.',
+  title = 'Luis Amrein — Product Manager in Berlin',
+  description = 'Product Manager in Berlin who builds prototypes and ships production-ready products. Case studies across digital health, sustainability marketplaces, and consumer apps.',
+  ogType = 'website',
+  jsonLd = [],
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL;
+const siteRoot = new URL(base, Astro.site).toString();
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(`${base}og-card.svg`, Astro.site).toString();
 const relativePath = Astro.url.pathname.replace(base, '/');
 const isWork = relativePath.startsWith('/work');
+const isHome = relativePath === '/' || relativePath === '';
+
 const personSchema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
+  '@id': `${siteRoot}#person`,
   name: 'Luis Amrein',
+  givenName: 'Luis',
+  familyName: 'Amrein',
   jobTitle: 'Product Manager',
-  url: new URL(base, Astro.site).toString(),
+  description:
+    'Product Manager in Berlin with an engineering background. Builds prototypes to learn fast and ships production-ready software. Currently shaping digital health products at Caspar Health.',
+  url: siteRoot,
+  email: 'mailto:luis.amrein@hotmail.de',
+  image: ogImage,
   sameAs: [
     'https://www.linkedin.com/in/luis-amrein/',
     'https://github.com/luis-amrein',
   ],
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: 'Berlin',
-    addressCountry: 'DE',
+  worksFor: {
+    '@type': 'Organization',
+    name: 'Caspar Health',
   },
+  homeLocation: {
+    '@type': 'Place',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Berlin',
+      addressCountry: 'DE',
+    },
+  },
+  knowsAbout: [
+    'Product management',
+    'Product strategy',
+    'Prototyping',
+    'iOS development',
+    'SwiftUI',
+    'Digital health',
+    'Marketplaces',
+    'Experimentation',
+    'A/B testing',
+  ],
 };
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${siteRoot}#website`,
+  name: 'Luis Amrein Portfolio',
+  url: siteRoot,
+  description,
+  inLanguage: 'en',
+  publisher: { '@id': `${siteRoot}#person` },
+  author: { '@id': `${siteRoot}#person` },
+};
+
+const profilePageSchema = isHome
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'ProfilePage',
+      '@id': canonical.toString(),
+      url: canonical.toString(),
+      name: title,
+      description,
+      mainEntity: { '@id': `${siteRoot}#person` },
+      isPartOf: { '@id': `${siteRoot}#website` },
+    }
+  : null;
+
+const extraSchemas = Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [];
+const schemas = [personSchema, websiteSchema, profilePageSchema, ...extraSchemas].filter(Boolean);
 ---
 
 <!doctype html>
@@ -40,19 +101,34 @@ const personSchema = {
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    <meta name="author" content="Luis Amrein" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+    <meta name="googlebot" content="index, follow" />
     <meta name="theme-color" content="#f3f0e8" />
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
     <link rel="canonical" href={canonical} />
-    <meta property="og:type" content="website" />
+    <link rel="alternate" type="text/plain" href={`${base}llms.txt`} title="LLM context" />
+    <link rel="sitemap" type="application/xml" href={`${base}sitemap-index.xml`} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Luis Amrein" />
+    <meta property="og:locale" content="en_GB" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={new URL(`${base}og-card.svg`, Astro.site)} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content="Luis Amrein — Product Manager portfolio" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL(`${base}og-card.svg`, Astro.site)} />
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+    <meta name="twitter:image" content={ogImage} />
+    {
+      schemas.map((schema) => (
+        <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+      ))
+    }
     <title>{title}</title>
   </head>
   <body>

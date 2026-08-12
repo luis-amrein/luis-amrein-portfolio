@@ -52,7 +52,7 @@ const resolvedSrc = src.startsWith('http') || src.startsWith(base) ? src : `${ba
 </figure>
 
 <script>
-  const sampleEdgeColor = (img) => {
+  const sampleEdgeColor = (img: HTMLImageElement) => {
     const width = img.naturalWidth;
     const height = img.naturalHeight;
     if (!width || !height) return null;
@@ -89,7 +89,7 @@ const resolvedSrc = src.startsWith('http') || src.startsWith(base) ? src : `${ba
     return `rgb(${Math.round(r / count)}, ${Math.round(g / count)}, ${Math.round(b / count)})`;
   };
 
-  const applyEdgeFill = (img) => {
+  const applyEdgeFill = (img: HTMLImageElement) => {
     const screen = img.closest('.iphone-17-pro__screen');
     if (!(screen instanceof HTMLElement)) return;
     const color = sampleEdgeColor(img);
