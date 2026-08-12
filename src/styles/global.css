@@ -178,9 +178,9 @@ input {
 .hero::after {
   position: absolute;
   z-index: -1;
-  width: clamp(15rem, 35vw, 31rem);
+  width: clamp(15rem, 32vw, 28rem);
   aspect-ratio: 1;
-  right: -8%;
+  right: max(0px, calc(var(--gutter) - 0.25rem));
   top: 8%;
   border: 1px solid var(--line);
   border-radius: 50%;
