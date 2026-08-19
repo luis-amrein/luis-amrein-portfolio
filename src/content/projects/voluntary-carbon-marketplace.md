@@ -11,34 +11,6 @@ challenge: Turn an early demo into a credible product direction for corporate su
 outcome: A clearer product proposition, release roadmap, and delivery-ready specifications.
 outcomeLabel: Investor-ready product
 status: needs-update
-showcaseTitle: Marketplace screens
-showcaseLabel: Product screens
-showcase:
-  - type: image
-    frame: screen
-    src: work/vcmp/screen-01.jpg
-    alt: Marketplace intro with Find Projects flow and project discovery cards
-    caption: Intro & discovery
-  - type: image
-    frame: screen
-    src: work/vcmp/screen-02.jpg
-    alt: Projects catalogue with SDG filters, summary metrics, and project cards
-    caption: Browse projects
-  - type: image
-    frame: screen
-    src: work/vcmp/screen-03.jpg
-    alt: Projects view with active SDG filters and My Selection highlighted
-    caption: Filtered selection
-  - type: image
-    frame: screen
-    src: work/vcmp/screen-04.jpg
-    alt: Project detail page for aluminium recycling carbon credits
-    caption: Project detail
-  - type: image
-    frame: screen
-    src: work/vcmp/screen-05.jpg
-    alt: Project detail page for Genneia Solar with overview and SDG badges
-    caption: Solar project
 ---
 
 ## The situation
