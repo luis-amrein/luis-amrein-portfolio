@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroAntigravity from '../components/HeroAntigravity';
 import ProductPrinciples from '../components/ProductPrinciples';
 import ProjectCard from '../components/ProjectCard.astro';
 
@@ -11,30 +12,30 @@ const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout>
-  <section class="hero shell">
+  <div class="section-stack">
+  <section class="hero shell slide-panel has-antigravity">
+    <div class="hero-antigravity" aria-hidden="true">
+      <HeroAntigravity client:only="react" />
+    </div>
     <div>
-      <p class="kicker">Product Manager · Berlin</p>
       <h1>Making products <em>make(s) sense.</em></h1>
     </div>
     <div class="hero-bottom">
       <div>
         <p class="hero-intro">
-          I build. Prototypes to test ideas fast, and production-ready code when it's time to ship.
-          Engineering depth and product judgment in the same hands.
+          I am a Product Manager in Berlin, currently shaping digital health products at Caspar
+          Health. Previously carbon marketplaces and healthcare staffing. I like to build things —
+          this site is where I’ll publish them, step by step.
         </p>
         <div class="button-row">
           <a class="button" href={`${base}work/`}>Explore selected work <span aria-hidden="true">↓</span></a>
           <a class="button secondary" href="mailto:luis.amrein@hotmail.de">Start a conversation</a>
         </div>
       </div>
-      <p class="hero-note">
-        Currently shaping digital health products at Caspar Health. Previously sustainability
-        marketplaces and healthcare staffing.
-      </p>
     </div>
   </section>
 
-  <section class="section shell" aria-labelledby="selected-work">
+  <section class="section shell slide-panel" aria-labelledby="selected-work">
     <div class="section-heading reveal">
       <p class="section-label">01 · Selected work</p>
       <h2 id="selected-work">Things I shipped, shaped, or <em>steered.</em></h2>
@@ -47,7 +48,7 @@ const base = import.meta.env.BASE_URL;
     </div>
   </section>
 
-  <section class="section shell" aria-labelledby="principles">
+  <section class="section shell slide-panel" aria-labelledby="principles">
     <div class="section-heading reveal">
       <p class="section-label">02 · How I work</p>
       <h2 id="principles">Structure for the problem. Space for the <em>team.</em></h2>
@@ -55,7 +56,7 @@ const base = import.meta.env.BASE_URL;
     <ProductPrinciples client:visible />
   </section>
 
-  <section class="section shell" aria-labelledby="background">
+  <section class="section shell slide-panel" aria-labelledby="background">
     <div class="section-heading reveal">
       <p class="section-label">03 · Background</p>
       <h2 id="background">From screws and sensors to <em>screens and systems.</em></h2>
@@ -79,7 +80,7 @@ const base = import.meta.env.BASE_URL;
     </div>
   </section>
 
-  <section class="personal-band">
+  <section class="personal-band slide-panel">
     <div>
       <p class="section-label">Off the clock</p>
       <h2>Still curious.<br /><span class="scribble">Less Jira.</span></h2>
@@ -92,4 +93,5 @@ const base = import.meta.env.BASE_URL;
       <a class="button secondary" href={`${base}about/#outside-work`}>Meet the person behind the roadmap</a>
     </div>
   </section>
+  </div>
 </BaseLayout>
