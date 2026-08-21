@@ -151,7 +151,7 @@ const schemas = [personSchema, websiteSchema, profilePageSchema, ...extraSchemas
     <footer class="site-footer">
       <div class="shell">
         <div class="footer-cta">
-          <h2>Say <em>hello.</em></h2>
+          <h2>Say hello.</h2>
           <a class="button" href="mailto:luis.amrein@hotmail.de">
             Send an email <span aria-hidden="true">↗</span>
           </a>
@@ -184,40 +184,6 @@ const schemas = [personSchema, websiteSchema, profilePageSchema, ...extraSchemas
           { threshold: 0.12 },
         );
         reveals.forEach((item) => observer.observe(item));
-      }
-
-      const stack = document.querySelector('.section-stack');
-      if (stack && !reduceMotion) {
-        const panels = [...stack.querySelectorAll(':scope > .slide-panel')];
-        let frame = 0;
-        const headerEl = document.querySelector('.site-header');
-        const footerEl = document.querySelector('.site-footer');
-        const updateSlideProgress = () => {
-          frame = 0;
-          const headerPx = headerEl?.getBoundingClientRect().height ?? 0;
-          const travel = Math.max(1, window.innerHeight - headerPx);
-          panels.forEach((panel, index) => {
-            const next = panels[index + 1] ?? footerEl;
-            if (!next) {
-              panel.style.setProperty('--slide-progress', '0');
-              return;
-            }
-            const nextTop = next.getBoundingClientRect().top;
-            const progress = (1 - Math.min(1, Math.max(0, (nextTop - headerPx) / travel))).toFixed(3);
-            if (panel.style.getPropertyValue('--slide-progress') !== progress) {
-              panel.style.setProperty('--slide-progress', progress);
-            }
-          });
-        };
-        window.addEventListener(
-          'scroll',
-          () => {
-            if (!frame) frame = requestAnimationFrame(updateSlideProgress);
-          },
-          { passive: true },
-        );
-        window.addEventListener('resize', updateSlideProgress, { passive: true });
-        updateSlideProgress();
       }
 
       const finePointer = window.matchMedia('(pointer: fine)').matches;

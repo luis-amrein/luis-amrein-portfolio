@@ -13,53 +13,54 @@ const base = import.meta.env.BASE_URL;
 
 <BaseLayout>
   <div class="section-stack">
-  <section class="hero shell slide-panel has-antigravity">
-    <div class="hero-antigravity" aria-hidden="true">
-      <HeroAntigravity client:only="react" />
-    </div>
-    <div>
-      <h1>Making products <em>make(s) sense.</em></h1>
-    </div>
-    <div class="hero-bottom">
+    <section class="hero shell slide-panel has-antigravity">
+      <div class="hero-antigravity" aria-hidden="true">
+        <HeroAntigravity client:only="react" />
+      </div>
       <div>
-        <p class="hero-intro">
-          I am a Product Manager in Berlin, currently shaping digital health products at Caspar
-          Health. Previously carbon marketplaces and healthcare staffing. I like to build things —
-          this site is where I’ll publish them, step by step.
-        </p>
-        <div class="button-row">
-          <a class="button" href={`${base}work/`}>Explore selected work <span aria-hidden="true">↓</span></a>
-          <a class="button secondary" href="mailto:luis.amrein@hotmail.de">Start a conversation</a>
+        <h1>Making products <em>make(s) sense.</em></h1>
+      </div>
+      <div class="hero-bottom">
+        <div>
+          <p class="hero-intro">
+            I am a Product Manager in Berlin, currently shaping digital health products at Caspar
+            Health. Previously carbon marketplaces and healthcare staffing. I like to build things —
+            this site is where I’ll publish them, step by step.
+          </p>
+          <div class="button-row">
+            <a class="button" href={`${base}work/`}>Explore selected work <span aria-hidden="true">↓</span></a>
+            <a class="button secondary" href="mailto:luis.amrein@hotmail.de">Start a conversation</a>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section shell slide-panel" aria-labelledby="selected-work">
-    <div class="section-heading reveal">
-      <p class="section-label">01 · Selected work</p>
-      <h2 id="selected-work">Things I shipped, shaped, or <em>steered.</em></h2>
-    </div>
-    <div class="project-list">
-      {projects.map((project, index) => <ProjectCard project={project} index={index} />)}
-    </div>
-    <div class="button-row">
-      <a class="button secondary" href={`${base}work/`}>View all case studies</a>
-    </div>
-  </section>
+    <section class="section shell slide-over" aria-labelledby="selected-work">
+      <div class="section-heading reveal">
+        <p class="section-label">01 · Selected work</p>
+        <h2 id="selected-work">Things I shipped, shaped, or steered.</h2>
+      </div>
+      <div class="project-list">
+        {projects.map((project, index) => <ProjectCard project={project} index={index} />)}
+      </div>
+      <div class="button-row">
+        <a class="button secondary" href={`${base}work/`}>View all case studies</a>
+      </div>
+    </section>
+  </div>
 
-  <section class="section shell slide-panel" aria-labelledby="principles">
+  <section class="section shell" aria-labelledby="principles">
     <div class="section-heading reveal">
       <p class="section-label">02 · How I work</p>
-      <h2 id="principles">Structure for the problem. Space for the <em>team.</em></h2>
+      <h2 id="principles">How I get from a messy problem to something a team can ship.</h2>
     </div>
     <ProductPrinciples client:visible />
   </section>
 
-  <section class="section shell slide-panel" aria-labelledby="background">
+  <section class="section shell" aria-labelledby="background">
     <div class="section-heading reveal">
       <p class="section-label">03 · Background</p>
-      <h2 id="background">From screws and sensors to <em>screens and systems.</em></h2>
+      <h2 id="background">From screws and sensors to screens and systems.</h2>
     </div>
     <div class="about-grid reveal">
       <p class="hero-intro">
@@ -80,10 +81,10 @@ const base = import.meta.env.BASE_URL;
     </div>
   </section>
 
-  <section class="personal-band slide-panel">
+  <section class="personal-band">
     <div>
       <p class="section-label">Off the clock</p>
-      <h2>Still curious.<br /><span class="scribble">Less Jira.</span></h2>
+      <h2>Still curious.<br />Less Jira.</h2>
     </div>
     <div>
       <p>
@@ -93,5 +94,4 @@ const base = import.meta.env.BASE_URL;
       <a class="button secondary" href={`${base}about/#outside-work`}>Meet the person behind the roadmap</a>
     </div>
   </section>
-  </div>
 </BaseLayout>

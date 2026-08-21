@@ -20,6 +20,7 @@ He currently shapes digital health products at Caspar Health. Previously he work
 - MEDWING Registration: user-to-lead conversion increased by 40% through iterative registration experiments.
 - Habbit: end-to-end personal habit app, used by Luis and friends; extends an earlier Product Owner case study for Atom.
 - Voluntary Carbon Credit Marketplace: first Product Manager role; moved an early demo toward an investor-ready product narrative and delivery artefacts.
+- Adjustable Knee Prosthesis: master's thesis; four prototype generations, adjustable stability, injection-mould tooling, and an ISO 10328 test concept for use in Ethiopia.
 
 ## Canonical URLs
 
@@ -28,6 +29,7 @@ He currently shapes digital health products at Caspar Health. Previously he work
 - About: https://luis-amrein.github.io/luis-amrein-portfolio/about/
 - Habbit: https://luis-amrein.github.io/luis-amrein-portfolio/work/habbit/
 - Voluntary Carbon Marketplace: https://luis-amrein.github.io/luis-amrein-portfolio/work/voluntary-carbon-marketplace/
+- Adjustable Knee Prosthesis: https://luis-amrein.github.io/luis-amrein-portfolio/work/adjustable-knee-prosthesis/
 - MEDWING Registration: https://luis-amrein.github.io/luis-amrein-portfolio/work/medwing-registration/
 - MEDWING Recommendations: https://luis-amrein.github.io/luis-amrein-portfolio/work/medwing-recommendations/
 - Persephone: https://luis-amrein.github.io/luis-amrein-portfolio/work/persephone/

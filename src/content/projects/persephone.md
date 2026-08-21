@@ -3,7 +3,7 @@ title: Persephone
 eyebrow: Internal Platform · Operations · B2B
 summary: Bringing structure, reliability, and a client-facing layer to a young operations platform.
 year: "2024"
-order: 3
+order: 4
 featured: true
 tags: ["B2B", "Data"]
 role: Product Owner and Scrum Master

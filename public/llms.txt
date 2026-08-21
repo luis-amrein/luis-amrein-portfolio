@@ -15,6 +15,7 @@ Luis Amrein is a Product Manager based in Berlin, Germany. He combines product j
 
 - [Habbit](https://luis-amrein.github.io/luis-amrein-portfolio/work/habbit/): Personal iOS habit tracker designed and built end-to-end; extension of Atom habit-tracker Product Owner case; used by Luis and friends
 - [Voluntary Carbon Credit Marketplace](https://luis-amrein.github.io/luis-amrein-portfolio/work/voluntary-carbon-marketplace/): First PM; turned early demo into investor-ready marketplace direction
+- [Adjustable Knee Prosthesis](https://luis-amrein.github.io/luis-amrein-portfolio/work/adjustable-knee-prosthesis/): Master's thesis; four generations of an adjustable polycentric knee designed for Ethiopian patients, technicians, and local production
 - [MEDWING Registration](https://luis-amrein.github.io/luis-amrein-portfolio/work/medwing-registration/): Growth / A/B testing; +40% user-to-lead conversion
 - [MEDWING Recommendations](https://luis-amrein.github.io/luis-amrein-portfolio/work/medwing-recommendations/): Personalised job recommendations; campaign conversion lift
 - [Persephone](https://luis-amrein.github.io/luis-amrein-portfolio/work/persephone/): Internal product leadership after launch

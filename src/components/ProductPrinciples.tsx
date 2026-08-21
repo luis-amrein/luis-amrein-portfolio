@@ -3,33 +3,28 @@ import { useState } from 'react';
 const principles = [
   {
     title: 'Start with the real problem',
-    quote: 'A clean problem statement is already half a product strategy.',
     detail:
-      'I use research, data, and direct conversations to separate symptoms from causes before a team commits to a solution.',
+      'I write down constraints, users, and what “good” looks like before a solution. That can be a requirements list from the people who will use the product, conversion data plus session replays, or time sitting with operations. The aim is to separate symptoms from causes so the team is not solving the wrong thing.',
   },
   {
     title: 'Build to learn, then ship',
-    quote: 'Prototypes answer questions. Production code earns trust.',
     detail:
-      'I build working prototypes to test ideas early—then turn the right ones into production-ready software that teams can ship and maintain.',
+      'I prototype while the question is still open — four generations of a physical knee, an expanded marketplace demo, a native app I can install. When the bet is clear, I turn it into production-ready work: tickets, specs, and code a team can maintain.',
   },
   {
     title: 'Make trade-offs visible',
-    quote: 'Prioritisation is a conversation about evidence, risk, and intent.',
     detail:
-      'Roadmaps become useful when people can see why one bet matters more than another—and what we deliberately chose not to do.',
+      'I make the “why this, not that” explicit: a roadmap, a PRD, or a short list of what we are deliberately not doing. Stability versus activity, speed versus data quality, polish versus a believable investor story. A visible trade-off can be challenged. A hidden one cannot.',
   },
   {
     title: 'Bring the team into the thinking',
-    quote: 'The best product decisions are made with a team, not handed to one.',
     detail:
-      'I create enough structure for designers, engineers, and stakeholders to challenge assumptions and improve the direction together.',
+      'I work as the product contact, not the sole decision-maker. Designers, engineers, and stakeholders get a backlog, acceptance criteria, and a shared problem statement so they can challenge the direction while it is still movable.',
   },
   {
     title: 'Measure the change',
-    quote: 'Shipping is a milestone. Changed behaviour is the outcome.',
     detail:
-      'I define success before delivery, instrument what matters, and use both quantitative signals and qualitative context to learn.',
+      'I define what should move before we build, then check it after — quantitative signals where they exist, qualitative feedback where they do not. An experiment, a field constraint, or someone actually using the thing all count.',
   },
 ];
 
@@ -63,7 +58,7 @@ export default function ProductPrinciples() {
         aria-labelledby={`principle-tab-${selected}`}
         tabIndex={0}
       >
-        <blockquote>“{principle.quote}”</blockquote>
+        <h3>{principle.title}</h3>
         <p>{principle.detail}</p>
       </div>
     </div>

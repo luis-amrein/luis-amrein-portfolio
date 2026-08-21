@@ -1,13 +1,14 @@
 ---
 import PhoneFrame from './PhoneFrame.astro';
 import ScreenFrame from './ScreenFrame.astro';
+import TechnicalFrame from './TechnicalFrame.astro';
 
 export interface ShowcaseItem {
   type: 'image' | 'video';
   src: string;
   alt: string;
   caption?: string;
-  frame?: 'phone' | 'screen';
+  frame?: 'phone' | 'screen' | 'technical';
 }
 
 interface Props {
@@ -20,10 +21,12 @@ const { items, title = 'Product in the hand', label = 'Product visuals' } = Astr
 const video = items.find((item) => item.type === 'video');
 const screens = items.filter((item) => item.type === 'image');
 const railFrame = screens[0]?.frame ?? 'phone';
-const railLabel =
-  railFrame === 'screen'
-    ? 'Product screenshots. Scroll horizontally to see more.'
-    : 'App screenshots. Scroll horizontally to see more.';
+const railLabels = {
+  screen: 'Product screenshots. Scroll horizontally to see more.',
+  technical: 'Engineering artefacts. Scroll horizontally to see more.',
+  phone: 'App screenshots. Scroll horizontally to see more.',
+} as const;
+const railLabel = railLabels[railFrame];
 ---
 
 <section class={`device-showcase device-showcase--${railFrame}`} aria-labelledby="device-showcase-heading">
@@ -63,7 +66,15 @@ const railLabel =
               role="listitem"
               style={`--delay: ${index * 40}ms`}
             >
-              {screen.frame === 'screen' ? (
+              {screen.frame === 'technical' ? (
+                <TechnicalFrame
+                  src={screen.src}
+                  alt={screen.alt}
+                  caption={screen.caption}
+                  priority={index < 2}
+                  number={index + 1}
+                />
+              ) : screen.frame === 'screen' ? (
                 <ScreenFrame
                   src={screen.src}
                   alt={screen.alt}

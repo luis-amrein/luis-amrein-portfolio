@@ -3,7 +3,7 @@ title: MEDWING Registration
 eyebrow: Growth · Experimentation · B2C
 summary: Improving how healthcare job seekers move from first visit to a qualified registration.
 year: "2022"
-order: 4
+order: 5
 featured: false
 tags: ["B2C", "Data"]
 role: Associate Product Manager

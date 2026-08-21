@@ -1,4 +1,6 @@
 ---
+import { withBase } from '../lib/paths';
+
 interface Props {
   src: string;
   alt: string;
@@ -9,7 +11,7 @@ interface Props {
 
 const { src, alt, type = 'image', caption, priority = false } = Astro.props;
 const base = import.meta.env.BASE_URL;
-const resolvedSrc = src.startsWith('http') || src.startsWith(base) ? src : `${base}${src.replace(/^\//, '')}`;
+const resolvedSrc = withBase(src);
 ---
 
 <figure class="phone-frame">

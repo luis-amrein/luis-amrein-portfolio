@@ -2,6 +2,7 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import DeviceShowcase from '../../components/DeviceShowcase.astro';
+import { isExternalUrl, withBase } from '../../lib/paths';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -21,6 +22,9 @@ const base = import.meta.env.BASE_URL;
 const siteRoot = new URL(base, Astro.site).toString();
 const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
 const showcase = project.data.showcase;
+const projectLink = project.data.link
+  ? { href: withBase(project.data.link), external: isExternalUrl(project.data.link) }
+  : undefined;
 
 const creativeWorkSchema = {
   '@context': 'https://schema.org',
@@ -123,10 +127,16 @@ const breadcrumbSchema = {
           final metric before the portfolio is considered finished.
         </p>
       )}
-      {project.data.link && (
+      {projectLink && (
         <div class="button-row">
-          <a class="button secondary" href={project.data.link} target="_blank" rel="noopener noreferrer">
-            {project.data.linkLabel ?? 'Open project'} <span aria-hidden="true">↗</span>
+          <a
+            class="button secondary"
+            href={projectLink.href}
+            target={projectLink.external ? '_blank' : undefined}
+            rel={projectLink.external ? 'noopener noreferrer' : undefined}
+          >
+            {project.data.linkLabel ?? 'Open project'}
+            {projectLink.external && <span aria-hidden="true"> ↗</span>}
           </a>
         </div>
       )}
@@ -138,6 +148,17 @@ const breadcrumbSchema = {
       <div class="button-row">
         <a class="button secondary" href={`${base}work/`}>← All case studies</a>
         <a class="button" href="mailto:luis.amrein@hotmail.de">Discuss this work</a>
+        {projectLink && (
+          <a
+            class="button secondary"
+            href={projectLink.href}
+            target={projectLink.external ? '_blank' : undefined}
+            rel={projectLink.external ? 'noopener noreferrer' : undefined}
+          >
+            {project.data.linkLabel ?? 'Open project'}
+            {projectLink.external && <span aria-hidden="true"> ↗</span>}
+          </a>
+        )}
       </div>
     </article>
   </div>

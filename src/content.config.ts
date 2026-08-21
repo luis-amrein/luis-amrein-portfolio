@@ -17,7 +17,7 @@ const projects = defineCollection({
     outcome: z.string(),
     outcomeLabel: z.string(),
     status: z.enum(['ready', 'needs-update']).default('needs-update'),
-    link: z.string().url().optional(),
+    link: z.string().optional(),
     linkLabel: z.string().optional(),
     showcaseTitle: z.string().optional(),
     showcaseLabel: z.string().optional(),
@@ -28,7 +28,7 @@ const projects = defineCollection({
           src: z.string(),
           alt: z.string(),
           caption: z.string().optional(),
-          frame: z.enum(['phone', 'screen']).default('phone'),
+          frame: z.enum(['phone', 'screen', 'technical']).default('phone'),
         }),
       )
       .optional(),

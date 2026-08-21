@@ -39,7 +39,6 @@ The homepage is in `src/pages/index.astro`; the personal story is in `src/pages/
 
 Before considering the portfolio final:
 
-- Replace the editorial portrait placeholder with a current photograph.
 - Review dates and wording for all older projects.
 - Add shareable screenshots or diagrams where confidentiality allows.
 - Confirm metrics and sample details for the MEDWING registration experiments.

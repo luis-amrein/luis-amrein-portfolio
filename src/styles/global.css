@@ -351,31 +351,19 @@ input {
 }
 
 .slide-panel {
-  --slide-progress: 0;
   position: sticky;
   top: var(--header-h);
   z-index: 1;
   min-height: calc(100svh - var(--header-h));
   background: var(--paper);
-  box-shadow: 0 -1.5rem 3rem color-mix(in srgb, var(--ink) 8%, transparent);
 }
 
-.slide-panel:first-child {
-  box-shadow: none;
-}
-
-.slide-panel:not(:first-child) {
-  transform: scale(calc(1 - var(--slide-progress) * 0.045))
-    translateY(calc(var(--slide-progress) * -1.25rem));
-  transform-origin: center top;
-}
-
-.slide-panel.hero {
+.slide-over {
+  position: relative;
+  z-index: 2;
   min-height: calc(100svh - var(--header-h));
-}
-
-.slide-panel.personal-band {
-  background: var(--signal);
+  background: var(--paper);
+  box-shadow: 0 -1.5rem 3rem color-mix(in srgb, var(--ink) 8%, transparent);
 }
 
 .section {
@@ -542,24 +530,26 @@ input {
 .principle-copy {
   position: sticky;
   top: 2rem;
-  min-height: 22rem;
+  min-height: 16rem;
   padding: clamp(1.5rem, 5vw, 4rem);
   background: var(--ink);
   color: var(--paper);
 }
 
-.principle-copy blockquote {
+.principle-copy h3 {
   margin: 0;
-  font-family: var(--serif);
-  font-size: clamp(2rem, 4vw, 4.25rem);
-  line-height: 1.04;
-  letter-spacing: -0.035em;
+  font-family: var(--display);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
 }
 
 .principle-copy p {
-  max-width: 35rem;
-  margin: 2rem 0 0;
+  max-width: 38rem;
+  margin: 1.25rem 0 0;
   color: #c8c8c1;
+  font-size: 1.05rem;
+  line-height: 1.5;
 }
 
 .personal-band {
@@ -572,6 +562,10 @@ input {
   background: var(--signal);
   color: var(--ink);
   overflow: hidden;
+}
+
+.personal-band--solo {
+  grid-template-columns: 1fr;
 }
 
 .personal-band h2 {
@@ -807,6 +801,10 @@ input {
   flex: 0 0 min(78vw, 560px);
 }
 
+.device-showcase--technical .device-showcase__item {
+  flex: 0 0 min(84vw, 720px);
+}
+
 .device-showcase__item.reveal {
   transition-delay: var(--delay, 0ms);
 }
@@ -850,7 +848,8 @@ input {
 }
 
 .phone-frame figcaption,
-.screen-frame figcaption {
+.screen-frame figcaption,
+.technical-frame figcaption {
   margin-top: 0.85rem;
   color: var(--muted);
   font-size: 0.72rem;
@@ -858,6 +857,69 @@ input {
   letter-spacing: 0.08em;
   text-align: center;
   text-transform: uppercase;
+}
+
+.technical-frame {
+  margin: 0;
+  width: 100%;
+}
+
+.technical-frame__sheet {
+  position: relative;
+  display: grid;
+  min-height: clamp(18rem, 43vw, 30rem);
+  padding: clamp(2.1rem, 4vw, 3.25rem) clamp(1rem, 3vw, 2rem) clamp(1rem, 3vw, 2rem);
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--ink);
+  background:
+    linear-gradient(90deg, transparent 49.9%, rgba(22, 23, 20, 0.055) 50%, transparent 50.1%),
+    linear-gradient(rgba(22, 23, 20, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(22, 23, 20, 0.035) 1px, transparent 1px),
+    #fff;
+  background-size: 100% 100%, 1.5rem 1.5rem, 1.5rem 1.5rem, auto;
+  box-shadow: 0.7rem 0.7rem 0 var(--signal);
+}
+
+.technical-frame__sheet::before,
+.technical-frame__sheet::after {
+  position: absolute;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-color: var(--ink);
+  content: "";
+  pointer-events: none;
+}
+
+.technical-frame__sheet::before {
+  top: 0.7rem;
+  right: 0.7rem;
+  border-top: 1px solid;
+  border-right: 1px solid;
+}
+
+.technical-frame__sheet::after {
+  bottom: 0.7rem;
+  left: 0.7rem;
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+}
+
+.technical-frame__index {
+  position: absolute;
+  top: 0.85rem;
+  left: 1rem;
+  font-family: var(--display);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+.technical-frame img {
+  width: 100%;
+  max-height: 26rem;
+  object-fit: contain;
+  mix-blend-mode: multiply;
 }
 
 .screen-frame {
@@ -1061,23 +1123,87 @@ input {
   gap: clamp(2rem, 8vw, 8rem);
 }
 
-.portrait-placeholder {
+.portrait {
   position: sticky;
-  top: 2rem;
-  display: grid;
-  aspect-ratio: 4 / 5;
-  place-items: center;
-  background: var(--lime);
-  border: 1px solid var(--ink);
-  overflow: hidden;
+  top: calc(var(--header-h) + 1.5rem);
+  align-self: start;
+  margin: 0;
 }
 
-.portrait-placeholder svg {
-  width: 72%;
+.portrait__stage {
+  position: relative;
+  padding: 0 0.7rem 0.75rem 0;
+}
+
+.portrait__plate {
+  position: absolute;
+  inset: 1.1rem 0 0 1.1rem;
+  z-index: 0;
+  background: var(--lime);
+  transform: rotate(2.25deg);
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.portrait__frame {
+  position: relative;
+  z-index: 1;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border: 1px solid var(--ink);
+  background: var(--paper-deep);
+}
+
+.portrait__frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--lime);
+  mix-blend-mode: multiply;
+  opacity: 0.62;
+  pointer-events: none;
+  transition: opacity 450ms ease;
+}
+
+.portrait__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 20%;
+  filter: grayscale(0.2) contrast(1.08);
+  transform: scale(1.02);
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1), filter 450ms ease;
+}
+
+.portrait:hover .portrait__plate,
+.portrait:focus-within .portrait__plate {
+  transform: rotate(-1.5deg) translate(0.35rem, -0.2rem);
+}
+
+.portrait:hover .portrait__frame::after,
+.portrait:focus-within .portrait__frame::after {
+  opacity: 0;
+}
+
+.portrait:hover .portrait__img,
+.portrait:focus-within .portrait__img {
+  filter: none;
+  transform: scale(1.06);
+}
+
+.portrait__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.85rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 .about-copy > p:first-child {
   margin-top: 0;
+  margin-bottom: clamp(1.75rem, 3.5vw, 2.75rem);
   font-family: var(--serif);
   font-size: clamp(1.6rem, 3vw, 2.75rem);
   line-height: 1.18;
@@ -1243,7 +1369,7 @@ input {
   }
 
   .principle-copy,
-  .portrait-placeholder,
+  .portrait,
   .case-body > aside {
     position: static;
   }
@@ -1320,12 +1446,24 @@ input {
     transition-duration: 0.01ms !important;
   }
 
-  .slide-panel {
+  .slide-panel,
+  .slide-over {
     position: relative;
     top: auto;
     min-height: 0;
     box-shadow: none;
     transform: none;
+  }
+
+  .portrait:hover .portrait__img,
+  .portrait:focus-within .portrait__img {
+    filter: none;
+    transform: none;
+  }
+
+  .portrait:hover .portrait__plate,
+  .portrait:focus-within .portrait__plate {
+    transform: rotate(2.25deg);
   }
 
   .reveal {

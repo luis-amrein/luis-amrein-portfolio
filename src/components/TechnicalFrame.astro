@@ -1,0 +1,30 @@
+---
+import { withBase } from '../lib/paths';
+
+interface Props {
+  src: string;
+  alt: string;
+  caption?: string;
+  priority?: boolean;
+  number?: number;
+}
+
+const { src, alt, caption, priority = false, number = 1 } = Astro.props;
+const resolvedSrc = withBase(src);
+const figureNumber = String(number).padStart(2, '0');
+---
+
+<figure class="technical-frame">
+  <div class="technical-frame__sheet">
+    <span class="technical-frame__index" aria-hidden="true">FIG. {figureNumber}</span>
+    <img
+      src={resolvedSrc}
+      alt={alt}
+      width="1250"
+      height="700"
+      loading={priority ? 'eager' : 'lazy'}
+      decoding="async"
+    />
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>

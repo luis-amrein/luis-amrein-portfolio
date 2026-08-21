@@ -3,7 +3,7 @@ title: MEDWING Job Recommendations
 eyebrow: Matching · Data · B2C
 summary: Using personalised recommendations to re-engage healthcare professionals with relevant jobs.
 year: "2023"
-order: 5
+order: 7
 featured: false
 tags: ["B2C", "Data", "0→1"]
 role: Project lead for data and analytics
