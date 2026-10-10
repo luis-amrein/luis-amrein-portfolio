@@ -1,7 +1,7 @@
 ---
 title: Adjustable Knee Prosthesis
 eyebrow: Master's Thesis · Medical Engineering · Frugal Design
-summary: Designing an adjustable polycentric knee for transfemoral amputees in Ethiopia — from locally informed requirements to physical prototypes, production tooling, and an ISO test setup.
+summary: Designing an adjustable polycentric knee for transfemoral amputees in Ethiopia, from locally informed requirements to physical prototypes, production tooling, and an ISO test setup.
 year: "2020"
 order: 3
 featured: true
@@ -19,7 +19,7 @@ showcase:
   - type: image
     src: work/knee-prosthesis/physical-prototype.webp
     alt: Physical knee prosthesis prototype shown extended, flexed, from the front, and from the rear
-    caption: Concept 3 — physical prototype in four views
+    caption: "Concept 3: physical prototype in four views"
     frame: technical
   - type: image
     src: work/knee-prosthesis/adjustable-stability.webp
@@ -80,7 +80,7 @@ The resulting concept changes the knee's stability through interchangeable bumpe
 
 ## From system to prototypes
 
-I broke the knee into subsystems — interfaces, blocks, axes, linkages, bearings, damping, extension assist, and bumpers — then generated and evaluated alternatives before combining them.
+I broke the knee into subsystems (interfaces, blocks, axes, linkages, bearings, damping, extension assist, and bumpers), then generated and evaluated alternatives before combining them.
 
 Four prototype generations made the trade-offs tangible:
 

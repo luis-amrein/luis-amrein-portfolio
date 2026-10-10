@@ -9,7 +9,7 @@ const principles = [
   {
     title: 'Build to learn, then ship',
     detail:
-      'I prototype while the question is still open — four generations of a physical knee, an expanded marketplace demo, a native app I can install. When the bet is clear, I turn it into production-ready work: tickets, specs, and code a team can maintain.',
+      'I prototype while the question is still open: four generations of a physical knee, an expanded marketplace demo, a native app I can install. When the bet is clear, I turn it into production-ready work: tickets, specs, and code a team can maintain.',
   },
   {
     title: 'Make trade-offs visible',
@@ -24,7 +24,7 @@ const principles = [
   {
     title: 'Measure the change',
     detail:
-      'I define what should move before we build, then check it after — quantitative signals where they exist, qualitative feedback where they do not. An experiment, a field constraint, or someone actually using the thing all count.',
+      'I define what should move before we build, then check it after: quantitative signals where they exist, qualitative feedback where they do not. An experiment, a field constraint, or someone actually using the thing all count.',
   },
 ];
 

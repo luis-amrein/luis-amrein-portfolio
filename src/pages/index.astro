@@ -2,7 +2,6 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroAntigravity from '../components/HeroAntigravity';
-import ProductPrinciples from '../components/ProductPrinciples';
 import ProjectCard from '../components/ProjectCard.astro';
 
 const projects = (await getCollection('projects'))
@@ -18,14 +17,14 @@ const base = import.meta.env.BASE_URL;
         <HeroAntigravity client:only="react" />
       </div>
       <div>
-        <h1>Making products <em>make(s) sense.</em></h1>
+        <h1>Making products make(s) sense.</h1>
       </div>
       <div class="hero-bottom">
         <div>
           <p class="hero-intro">
             I am a Product Manager in Berlin, currently shaping digital health products at Caspar
-            Health. Previously carbon marketplaces and healthcare staffing. I like to build things —
-            this site is where I’ll publish them, step by step.
+            Health. Previously carbon marketplaces and healthcare staffing. I like to build things.
+            This site is where I’ll publish them, step by step.
           </p>
           <div class="button-row">
             <a class="button" href={`${base}work/`}>Explore selected work <span aria-hidden="true">↓</span></a>
@@ -49,17 +48,9 @@ const base = import.meta.env.BASE_URL;
     </section>
   </div>
 
-  <section class="section shell" aria-labelledby="principles">
-    <div class="section-heading reveal">
-      <p class="section-label">02 · How I work</p>
-      <h2 id="principles">How I get from a messy problem to something a team can ship.</h2>
-    </div>
-    <ProductPrinciples client:visible />
-  </section>
-
   <section class="section shell" aria-labelledby="background">
     <div class="section-heading reveal">
-      <p class="section-label">03 · Background</p>
+      <p class="section-label">02 · Background</p>
       <h2 id="background">From screws and sensors to screens and systems.</h2>
     </div>
     <div class="about-grid reveal">

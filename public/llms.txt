@@ -6,9 +6,9 @@ Luis Amrein is a Product Manager based in Berlin, Germany. He combines product j
 
 ## Primary pages
 
-- [Home](https://luis-amrein.github.io/luis-amrein-portfolio/): Positioning — builds prototypes and ships production code; selected work overview
-- [Work](https://luis-amrein.github.io/luis-amrein-portfolio/work/): Case study index — “Built enough to know.”
-- [About](https://luis-amrein.github.io/luis-amrein-portfolio/about/): Background — engineering training, product path, life outside work
+- [Home](https://luis-amrein.github.io/luis-amrein-portfolio/): Positioning: builds prototypes and ships production code; selected work overview
+- [Work](https://luis-amrein.github.io/luis-amrein-portfolio/work/): Case study index: “Built enough to know.”
+- [About](https://luis-amrein.github.io/luis-amrein-portfolio/about/): Background: engineering training, product path, life outside work
 - [Contact](mailto:luis.amrein@hotmail.de): Email luis.amrein@hotmail.de
 
 ## Case studies

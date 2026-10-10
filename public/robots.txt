@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 
-# AI / agent crawlers — explicit allow for retrieval and citation
+# AI / agent crawlers: explicit allow for retrieval and citation
 User-agent: GPTBot
 Allow: /
 

@@ -17,7 +17,7 @@ status: needs-update
 
 The Voluntary Carbon Credit Marketplace was designed to help corporate sustainability managers discover and purchase CO₂ certificates. I joined as the first Product Manager while the product was still an early demo.
 
-The immediate need was practical: make the experience convincing enough for investor conversations. The longer-term challenge was larger—define what should be built for a real launch, for whom, and in what order.
+The immediate need was practical: make the experience convincing enough for investor conversations. The longer-term challenge was larger: define what should be built for a real launch, for whom, and in what order.
 
 ## How I approached it
 

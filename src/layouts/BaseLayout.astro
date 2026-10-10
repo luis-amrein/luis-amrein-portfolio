@@ -9,7 +9,7 @@ interface Props {
 }
 
 const {
-  title = 'Luis Amrein — Product Manager in Berlin',
+  title = 'Luis Amrein: Product Manager in Berlin',
   description = 'Product Manager in Berlin who builds prototypes and ships production-ready products. Case studies across digital health, sustainability marketplaces, and consumer apps.',
   ogType = 'website',
   jsonLd = [],
@@ -119,7 +119,7 @@ const schemas = [personSchema, websiteSchema, profilePageSchema, ...extraSchemas
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:alt" content="Luis Amrein — Product Manager portfolio" />
+    <meta property="og:image:alt" content="Luis Amrein: Product Manager portfolio" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
@@ -134,14 +134,13 @@ const schemas = [personSchema, websiteSchema, profilePageSchema, ...extraSchemas
   <body>
     <div class="cursor-wash" aria-hidden="true"></div>
     <a class="skip-link" href="#main-content">Skip to content</a>
-    <header class="site-header shell">
-      <a class="wordmark" href={base} aria-label="Luis Amrein, home">Luis Amrein</a>
+    <header class="site-header">
       <nav class="main-nav" aria-label="Main navigation">
+        <a href={base} aria-current={isHome ? 'page' : undefined}>Home</a>
         <a href={`${base}work/`} aria-current={isWork ? 'page' : undefined}>Work</a>
         <a href={`${base}about/`} aria-current={relativePath === '/about/' ? 'page' : undefined}>About</a>
         <a href="mailto:luis.amrein@hotmail.de">Contact</a>
       </nav>
-      <span class="availability">Berlin, Germany</span>
     </header>
 
     <main id="main-content">
@@ -168,6 +167,36 @@ const schemas = [personSchema, websiteSchema, profilePageSchema, ...extraSchemas
 
     <script is:inline>
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // Keep the floating menu within the opening composition, clear of the copy below it.
+      const navigation = document.querySelector('.site-header');
+      const opening = document.querySelector('.hero, .page-hero');
+      const clearanceTarget = opening?.nextElementSibling;
+      if (navigation && clearanceTarget) {
+        navigation.classList.add('is-floating');
+        let navFrame = 0;
+        const updateNavigation = () => {
+          navFrame = 0;
+          const drift = reduceMotion ? 0 : Math.min(window.scrollY * 0.08, 24);
+          const menuBottom = navigation.offsetTop + navigation.offsetHeight / 2 + drift;
+          const clearance = clearanceTarget.getBoundingClientRect().top - menuBottom;
+          const progress = Math.max(0, Math.min(1, (220 - clearance) / 172));
+          navigation.style.setProperty('--nav-opacity', String(1 - progress));
+          navigation.style.setProperty('--nav-drift', `${drift}px`);
+          navigation.style.setProperty('--nav-exit', `${reduceMotion ? 0 : progress * 16}px`);
+          navigation.inert = progress >= 1;
+        };
+        const scheduleNavigation = () => {
+          if (!navFrame) navFrame = requestAnimationFrame(updateNavigation);
+        };
+        window.addEventListener('scroll', scheduleNavigation, { passive: true });
+        window.addEventListener('resize', scheduleNavigation);
+        window.addEventListener('pageshow', scheduleNavigation);
+        const navResizeObserver = new ResizeObserver(scheduleNavigation);
+        navResizeObserver.observe(opening);
+        navResizeObserver.observe(navigation);
+        updateNavigation();
+      }
+
       const reveals = document.querySelectorAll('.reveal');
       if (reduceMotion || !('IntersectionObserver' in window)) {
         reveals.forEach((item) => item.classList.add('is-visible'));

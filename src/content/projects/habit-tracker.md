@@ -39,7 +39,7 @@ The feature allows users to set an intention, record a habit, and see fulfilment
 
 ## What I learned
 
-The project reinforced that feature adoption and product value are not the same thing. A successful tracker would need to improve users’ ability to form habits—not merely increase the number of taps inside the app.
+The project reinforced that feature adoption and product value are not the same thing. A successful tracker would need to improve users’ ability to form habits, rather than merely increase the number of taps inside the app.
 
 ## Tools
 

@@ -37,7 +37,7 @@ The work therefore focused on progressive, relevant data capture: asking the rig
 
 ## What changed
 
-The work increased user-to-lead conversion by 40%. Beyond the metric, the team gained a more systematic loop from evidence to hypothesis to experiment — registration variants could be tailored and evaluated using conversion data and direct observations of user behaviour.
+The work increased user-to-lead conversion by 40%. Beyond the metric, the team gained a more systematic loop from evidence to hypothesis to experiment. Registration variants could be tailored and evaluated using conversion data and direct observations of user behaviour.
 
 ## Tools
 

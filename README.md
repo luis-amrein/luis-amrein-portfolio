@@ -1,4 +1,4 @@
-# Luis Amrein — Product Portfolio
+# Luis Amrein: Product Portfolio
 
 An editorial portfolio focused on product judgment, measurable outcomes, and the person behind the work.
 
