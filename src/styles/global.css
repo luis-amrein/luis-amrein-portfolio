@@ -157,6 +157,29 @@ input {
   transition: color 180ms ease;
 }
 
+.nav-character {
+  position: relative;
+  visibility: hidden;
+}
+
+.nav-character.is-written {
+  visibility: visible;
+}
+
+.nav-character.has-caret::after {
+  position: absolute;
+  top: 0;
+  right: -0.15em;
+  width: 1px;
+  height: 1em;
+  background: var(--signal);
+  content: '';
+}
+
+.main-nav a[data-empty="true"]::before {
+  visibility: hidden;
+}
+
 .main-nav a::before {
   position: absolute;
   left: 0;
@@ -613,6 +636,7 @@ input {
 }
 
 .page-hero {
+  min-height: max(100svh, calc(50svh + 20rem));
   padding-block: clamp(4rem, 10vw, 9rem);
   padding-right: calc(var(--gutter) + 7rem);
 }

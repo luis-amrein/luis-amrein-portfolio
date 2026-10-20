@@ -139,7 +139,6 @@ const schemas = [personSchema, websiteSchema, profilePageSchema, ...extraSchemas
         <a href={base} aria-current={isHome ? 'page' : undefined}>Home</a>
         <a href={`${base}work/`} aria-current={isWork ? 'page' : undefined}>Work</a>
         <a href={`${base}about/`} aria-current={relativePath === '/about/' ? 'page' : undefined}>About</a>
-        <a href="mailto:luis.amrein@hotmail.de">Contact</a>
       </nav>
     </header>
 
@@ -170,9 +169,29 @@ const schemas = [personSchema, websiteSchema, profilePageSchema, ...extraSchemas
       // Keep the floating menu within the opening composition, clear of the copy below it.
       const navigation = document.querySelector('.site-header');
       const opening = document.querySelector('.hero, .page-hero');
-      const clearanceTarget = opening?.nextElementSibling;
+      const clearanceTarget = opening?.nextElementSibling ?? document.querySelector('.site-footer');
       if (navigation && clearanceTarget) {
         navigation.classList.add('is-floating');
+        const navLinks = [...navigation.querySelectorAll('.main-nav a')];
+        const navCharacters = [];
+        const navRows = navLinks.map((link) => {
+          const label = link.textContent.trim();
+          link.setAttribute('aria-label', label);
+          const text = document.createElement('span');
+          text.className = 'nav-label';
+          text.setAttribute('aria-hidden', 'true');
+          const characters = [...label].map((character) => {
+            const span = document.createElement('span');
+            span.className = 'nav-character';
+            span.textContent = character;
+            text.appendChild(span);
+            navCharacters.push(span);
+            return span;
+          });
+          link.replaceChildren(text);
+          return { link, characters };
+        });
+        const typingStarted = performance.now();
         let navFrame = 0;
         const updateNavigation = () => {
           navFrame = 0;
@@ -180,10 +199,27 @@ const schemas = [personSchema, websiteSchema, profilePageSchema, ...extraSchemas
           const menuBottom = navigation.offsetTop + navigation.offsetHeight / 2 + drift;
           const clearance = clearanceTarget.getBoundingClientRect().top - menuBottom;
           const progress = Math.max(0, Math.min(1, (220 - clearance) / 172));
-          navigation.style.setProperty('--nav-opacity', String(1 - progress));
+          const entered = reduceMotion ? navCharacters.length : Math.max(0,
+            Math.floor((performance.now() - typingStarted - 180) / 85));
+          const visibleCount = Math.min(entered,
+            Math.ceil(navCharacters.length * (1 - progress)));
+          const typing = !reduceMotion && (entered < navCharacters.length || (progress > 0 && progress < 1));
+          navCharacters.forEach((character, index) => {
+            character.classList.toggle('is-written', reduceMotion || index < visibleCount);
+            character.classList.toggle('has-caret', typing && index === visibleCount - 1);
+          });
+          navRows.forEach(({ link, characters }) => {
+            const empty = !reduceMotion && !characters.some((character) => character.classList.contains('is-written'));
+            link.dataset.empty = String(empty);
+            link.inert = empty;
+          });
+          navigation.style.setProperty('--nav-opacity', reduceMotion ? String(1 - progress) : '1');
           navigation.style.setProperty('--nav-drift', `${drift}px`);
-          navigation.style.setProperty('--nav-exit', `${reduceMotion ? 0 : progress * 16}px`);
+          navigation.style.setProperty('--nav-exit', '0px');
           navigation.inert = progress >= 1;
+          if (!reduceMotion && entered < navCharacters.length) {
+            navFrame = requestAnimationFrame(updateNavigation);
+          }
         };
         const scheduleNavigation = () => {
           if (!navFrame) navFrame = requestAnimationFrame(updateNavigation);
