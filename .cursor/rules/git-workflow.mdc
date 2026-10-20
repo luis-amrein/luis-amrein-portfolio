@@ -1,0 +1,14 @@
+---
+description: Preserve portfolio history and deliver changes through reviewed pull requests.
+alwaysApply: true
+---
+
+# Portfolio Git workflow
+
+Follow the Git workflow in AGENTS.md for every task in this repository.
+Work on a feature, fix, chore or experiment branch, never directly on main.
+Preserve existing edits and create recoverable commits for useful checkpoints.
+On completion, validate, push the task branch and open or update its pull request,
+unless the user explicitly asks to keep the work local.
+Do not merge, publish, force-push, rewrite published history or delete checkpoint
+branches/tags without explicit user authorization for that action.
