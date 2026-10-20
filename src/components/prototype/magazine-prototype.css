@@ -28,3 +28,45 @@
 @media(orientation:portrait){.magazine-app{padding:0 5vw 110px}.reader-header{height:65px}.reader-edition{display:none}.spread-topline>span:last-child{display:none}.magazine-book{width:100%;aspect-ratio:auto;box-shadow:0 6px 20px #0002}.book-base{display:flex;flex-direction:column}.magazine-page{aspect-ratio:.84;height:auto;flex-shrink:0}.page-inner{height:100%}.book-spine,.edge-turn{display:none}.reader-controls{grid-template-columns:1fr auto;gap:5px}.interaction-hint{display:none}.paging{gap:9px}.motion-controls{font-size:8px}.motion-controls button{display:none}.prototype-switcher{width:calc(100% - 28px);gap:5px;padding:9px}.prototype-switcher>div{min-width:0;flex:1}.prototype-switcher>div>span{font-size:7px;white-space:normal}.prototype-badge{font-size:6px;padding:4px;margin-right:1px}.prototype-switcher strong{font-size:10px}.prototype-switcher button{padding:0 5px}.variant-count{font-size:8px}.contents-overlay{top:65px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}.turning-sheet{display:none}}
 astro-dev-toolbar{display:none}
+/* Closed cover → portrait and contents. The empty half is the room around the object. */
+.magazine-book.is-closed,.magazine-book.is-closing{background:transparent;box-shadow:none}
+.magazine-page.cover-whitespace{background:transparent}
+.closed-cover{box-shadow:0 23px 35px -19px #16171480,2px 3px 0 #e5e0d3,4px 4px 0 #b6b2a7,6px 6px 0 #e5e0d3}
+.closed-cover .folio{display:none}
+.is-closed .book-spine,.is-closing .book-spine{opacity:0}
+.cover-hitarea{position:absolute;z-index:9;inset:0 0 0 50%;width:50%;padding:0;cursor:grab}
+.open-invitation{position:absolute;z-index:14;left:0;top:0;width:50%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;isolation:isolate;touch-action:pan-y}
+.invitation-word{position:relative;font-family:var(--serif);font-size:clamp(30px,3.7vw,60px);font-style:italic;font-weight:400;letter-spacing:-.045em;color:rgba(49,81,67,.67);text-shadow:0 0 2px #fff,0 0 14px #fff,0 0 30px #ffffffef,0 0 52px #36ffb65c;animation:invitation-hover 6s ease-in-out infinite}
+.invitation-hint{position:relative;margin-top:18px;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#5d605899;animation:invitation-hover 6s ease-in-out infinite}
+.invitation-aura{position:absolute;z-index:-1;width:75%;max-width:340px;aspect-ratio:1;border-radius:50%;background:radial-gradient(ellipse at center,#fff 0%,#fffffff0 12%,#ffffffa0 30%,#36ffb615 47%,transparent 68%);filter:blur(11px);opacity:.85;animation:invitation-breathe 7s ease-in-out infinite}
+.invitation-aura:before{content:'';position:absolute;inset:-28% 15%;background:conic-gradient(from 0deg at 50% 50%,transparent 0deg,#ffffffab 4deg,transparent 8deg,transparent 172deg,#ffffff8a 180deg,transparent 188deg,transparent 352deg,#ffffffab 356deg,transparent 360deg);filter:blur(8px);transform:rotate(20deg)}
+.invitation-aura:after{content:'';position:absolute;inset:12% 16%;border:1px solid #ffffffb3;border-radius:50%;transform:rotate(-24deg) scaleY(.6);filter:blur(2px)}
+.invitation-spark{position:absolute;color:#ffffffcf;font-family:var(--serif);font-size:22px;text-shadow:0 0 8px #36ffb6aa,0 0 17px white;animation:invitation-spark 6s ease-in-out infinite;pointer-events:none}
+.spark-one{left:29%;top:37%;font-size:15px}.spark-two{left:67%;top:57%;animation-delay:-3s}
+.open-invitation:hover .invitation-word,.open-invitation:focus-visible .invitation-word{color:#315143d9;text-shadow:0 0 8px #fff,0 0 24px #fff,0 0 45px #36ffb68c}
+.open-invitation:hover .invitation-aura{opacity:1}
+.issue-contents-page .editorial-title{font-size:10cqw;line-height:.94;margin-top:5cqw}
+.issue-intro{font-size:2.1cqw;line-height:1.5;margin-top:3cqw;color:#5d6058}
+.issue-chapters{margin-top:auto;border-top:1.5px solid var(--ink)}
+.issue-chapters button{width:100%;display:grid;grid-template-columns:6cqw 1fr 3cqw;align-items:center;gap:2cqw;padding:2.4cqw 0;text-align:left;border-bottom:1px solid var(--rule);font-size:2.55cqw;line-height:1.2;min-height:8cqw}
+.issue-chapters button>span:first-child{font-family:var(--serif);font-style:italic;font-size:2.6cqw;color:var(--accent)}
+.issue-chapters button>span:last-child{font-size:2cqw;text-align:right}
+.issue-chapters button:hover{color:var(--accent)}
+@keyframes invitation-hover{0%,100%{transform:translateY(0);opacity:.78}50%{transform:translateY(-7px);opacity:1}}
+@keyframes invitation-breathe{0%,100%{transform:scale(.92) rotate(-5deg);opacity:.65}50%{transform:scale(1.08) rotate(5deg);opacity:.94}}
+@keyframes invitation-spark{0%,100%{opacity:.15;transform:translateY(3px) scale(.8)}50%{opacity:.8;transform:translateY(-5px) scale(1.1)}}
+@media(orientation:portrait){
+ .magazine-book.is-closed .book-base{display:grid;grid-template-columns:35% 65%;align-items:stretch}
+ .magazine-book.is-closed .cover-whitespace{height:100%;aspect-ratio:auto}
+ .magazine-book.is-closed .closed-cover{height:auto;aspect-ratio:.84}
+ .cover-hitarea{left:35%;width:65%}
+ .open-invitation{width:35%}
+ .invitation-word{font-size:27px;white-space:nowrap}
+ .invitation-hint{font-size:6px;letter-spacing:.07em;max-width:85px;line-height:1.8;text-align:center;margin-top:13px}
+ .invitation-aura{width:140%;max-width:none}
+ .spark-one{left:17%;top:32%}.spark-two{left:76%;top:68%;font-size:14px}
+}
+.issue-contents-page .editorial-title{font-size:8.5cqw;margin-top:4cqw}
+.issue-intro{margin-top:2cqw}
+.issue-chapters button{padding:1.8cqw 0;min-height:7cqw;font-size:2.4cqw}
+.magazine-book.is-closed{touch-action:none}

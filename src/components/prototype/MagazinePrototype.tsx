@@ -16,7 +16,7 @@ const pad=(n:number)=>String(n).padStart(2,'0');
 export default function MagazinePrototype({projects,portrait,base}:Props){
  const initial=new URLSearchParams(window.location.search).get('variant')||'D';
  const [variant,setVariant]=useState(directions.some(d=>d.key===initial)?initial:'D');
- const [spread,setSpread]=useState(0);
+ const [spread,setSpread]=useState(-1);
  const [turn,setTurn]=useState<Turn|null>(null);
  const [contents,setContents]=useState(false);
  const [slow,setSlow]=useState(false);
@@ -29,9 +29,10 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
   const motion = useRef<Motion | null>(null);
   const frame = useRef(0);
   const gesture = useRef<{ x: number; width: number; last: number; time: number } | null>(null);
+  const coverSwipe = useRef<{x:number;y:number;tapToOpen:boolean} | null>(null);
   const wheel = useRef({ last: 0, locked: false, timer: 0 });
   const total = projects.length + 3;
-  const names = ['Opening', 'Selected work', 'About Luis', ...projects.map(p => p.title)];
+  const names = ['Portrait & contents', 'Selected work', 'About Luis', ...projects.map(p => p.title)];
   const direction = directions.find(d => d.key === variant)!;
   const asset = (src: string) => `${base.replace(/\/$/, '')}/${src}`;
 
@@ -124,7 +125,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
   }
 
   function go(to: number) {
-    if (busy.current || to === spread || to < 0 || to >= total) return;
+    if (busy.current || to === spread || to < -1 || to >= total) return;
     setContents(false);
     if (reduced || portraitMode) {
       setSpread(to);
@@ -141,14 +142,14 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
         if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); switchVariant(e.key === 'ArrowRight' ? 1 : -1); }
       } else if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); go(spread + 1); }
       else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(spread - 1); }
-      else if (e.key === 'Home') { e.preventDefault(); go(0); }
+      else if (e.key === 'Home') { e.preventDefault(); go(-1); }
       else if (e.key === 'End') { e.preventDefault(); go(total - 1); }
       else if (e.key === 'Escape') setContents(false);
     };
     const onWheel = (e: WheelEvent) => {
       if (contents || e.ctrlKey || (e.target as HTMLElement).closest('.contents-overlay')) return;
-      const horizontal = e.shiftKey ? (e.deltaX || e.deltaY) : e.deltaX;
-      if (!e.shiftKey && Math.abs(horizontal) <= Math.abs(e.deltaY) * .75) return;
+      const horizontal = spread === -1 ? (Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY) : e.shiftKey ? (e.deltaX || e.deltaY) : e.deltaX;
+      if (spread !== -1 && !e.shiftKey && Math.abs(horizontal) <= Math.abs(e.deltaY) * .75) return;
       if (Math.abs(horizontal) < .1) return;
       e.preventDefault();
       const now = performance.now(), session = wheel.current;
@@ -160,7 +161,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
       if (busy.current && motion.current?.source !== 'wheel') { session.locked = true; return; }
       if (!motion.current) {
         const next = spread + Math.sign(delta);
-        if (next < 0 || next >= total) return;
+        if (next < -1 || next >= total) return;
         if (reduced || portraitMode) { session.locked = true; go(next); return; }
         beginTurn(next, 'wheel');
       }
@@ -181,11 +182,18 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
   }, [spread, variant, slow, reduced, portraitMode, contents]);
 
   function pointerDown(e: React.PointerEvent<HTMLDivElement>) {
-    if (busy.current || reduced || portraitMode || e.button !== 0 || (e.target as HTMLElement).closest('a,button')) return;
+    if (busy.current || e.button !== 0) return;
+    const target = e.target as HTMLElement;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width;
-    const d = x > .8 ? 1 : x < .2 ? -1 : 0;
-    if (!d || spread + d < 0 || spread + d >= total) return;
+    if (spread === -1) {
+      if (target.closest('a,button:not(.cover-hitarea):not(.open-invitation)')) return;
+      coverSwipe.current = { x:e.clientX, y:e.clientY, tapToOpen:!!target.closest('.open-invitation,.cover-hitarea') };
+      e.currentTarget.setPointerCapture(e.pointerId);
+      if (reduced || portraitMode || x < .5 || target.closest('.open-invitation')) return;
+    } else if (reduced || portraitMode || target.closest('a,button')) return;
+    const d = spread === -1 ? 1 : x > .8 ? 1 : x < .2 ? -1 : 0;
+    if (!d || spread + d < -1 || spread + d >= total) return;
     e.preventDefault();
     beginTurn(spread + d, 'drag', (e.clientY - rect.top) / rect.height * 2 - 1);
     gesture.current = { x: e.clientX, width: rect.width / 2, last: e.clientX, time: performance.now() };
@@ -201,7 +209,13 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
   }
 
   function pointerUp(e: React.PointerEvent<HTMLDivElement>, cancel = false) {
-    const g = gesture.current, m = motion.current; if (!g || !m) return;
+    const swipe = coverSwipe.current;
+    coverSwipe.current = null;
+    const g = gesture.current, m = motion.current;
+    if (!g || !m) {
+      if (!cancel && swipe && (Math.hypot(e.clientX-swipe.x,e.clientY-swipe.y)>30||swipe.tapToOpen)) go(0);
+      return;
+    }
     const tap = Math.abs(e.clientX - g.x) < 7;
     gesture.current = null;
     settle(m, !cancel && (tap || m.progress > .22 || m.velocity > .8), m.velocity);
@@ -211,7 +225,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     return <footer className="folio"><span>{side===0?'Luis Amrein':name}</span><span>{pad(index*2+side+1)}</span></footer>;
   }
   function Hero({side}:{side:number}){
-    return side===0?<div className="page-inner opening-copy"><div className="running-head"><span>Independent portfolio</span><span>Berlin, DE</span></div><div className="cover-title"><span className="edition">Volume 01 / A work in progress</span><h1>Making<br/>products<br/><em>make sense.</em></h1><span className="cover-star" aria-hidden="true">✳</span></div><div className="cover-bottom"><span className="byline">Luis<br/>Amrein</span><p>Product thinking.<br/>An engineering mind.<br/>A curious human.</p></div><Folio index={0} side={0} name="Opening"/></div>:<div className="page-inner opening-image"><img className="hero-portrait" src={portrait} alt="Luis Amrein" draggable="false"/><div className="image-annotation"><span>Fig. 01 — The person behind the products</span><span>52° 31′ N, 13° 24′ E</span></div><div className="cover-note"><span className="mini-label">A note from Luis</span><p>I work where people,<br/>systems, and <em>possibility</em><br/>meet.</p><span>Currently shaping digital health at Caspar Health.</span></div><div className="art-cover-word" aria-hidden="true">SENSE</div><Folio index={0} side={1} name="An introduction"/></div>;
+    return side===0?<div className="page-inner opening-copy"><div className="running-head"><span>Independent portfolio</span><span>Berlin, DE</span></div><div className="cover-title"><span className="edition">Volume 01 / A work in progress</span><h1>Making<br/>products<br/><em>make sense.</em></h1><span className="cover-star" aria-hidden="true">✳</span></div><div className="cover-bottom"><span className="byline">Luis<br/>Amrein</span><p>Product thinking.<br/>An engineering mind.<br/>A curious human.</p></div><Folio index={0} side={0} name="Opening"/></div>:<div className="page-inner opening-image"><img className="hero-portrait" src={portrait} alt="Luis Amrein" draggable="false"/><div className="image-annotation"><span>Fig. 01 — The person behind the products</span><span>52° 31′ N, 13° 24′ E</span></div><div className="cover-note"><span className="mini-label">A note from Luis</span><p>I work where people,<br/>systems, and <em>possibility</em><br/>meet.</p><span>Currently shaping digital health at Caspar Health.</span></div><div className="art-cover-word" aria-hidden="true">SENSE</div><Folio index={0} side={0} name="An introduction"/></div>;
   }
   function Work({side}:{side:number}){
     const list=side===0?projects.slice(0,4):projects.slice(4);
@@ -224,14 +238,41 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     const p=projects[index-3], image=p.showcase?.find(s=>s.type==='image');
     return <div className={`page-inner project-page project-${side}`}><div className="running-head"><span>Project / {pad(index-2)}</span><span>{p.year}</span></div>{side===0?<><span className="project-category">{p.eyebrow}</span><h2 className={`editorial-title project-title ${p.title.split(' ').some(w=>w.length>12)?'long-word':''}`}>{p.title}</h2><p className="project-summary">{p.summary}</p><div className="project-role"><span className="mini-label">My role</span><p>{p.role}</p></div><span className="project-number" aria-hidden="true">{pad(index-2)}</span></>:<>{image?<figure className={`project-visual ${p.id.includes('habbit')?'mobile-visual':''}`}><img src={asset(image.src)} alt={image.alt} draggable="false"/><figcaption>Fig. {pad(index-2)} / {p.title}</figcaption></figure>:<div className="project-type-art" aria-label={p.outcomeLabel}><span>{p.tags[0]}</span><strong>{p.id.includes('recommendations')?'3×':p.id.includes('registration')?'+40%':'0→1'}</strong><span>{p.outcomeLabel}</span></div>}<div className="project-story"><div><span className="mini-label">The question</span><p>{p.challenge}</p></div><div><span className="mini-label">The result</span><p>{p.outcome}</p></div></div></>}<Folio index={index} side={side} name={p.title}/></div>;
   }
+  function IssueContents() {
+    return <div className="page-inner issue-contents-page">
+      <div className="running-head"><span>No. 01 / Contents</span><span>A curious collection</span></div>
+      <h2 className="editorial-title">Inside<br/><em>this issue.</em></h2>
+      <p className="issue-intro">Product, people, and everything in between.<br/>Find a chapter. Follow your curiosity.</p>
+      <nav className="issue-chapters" aria-label="Table of contents">
+        {names.slice(1).map((name,i)=><button key={name} onClick={()=>go(i+1)}>
+          <span>{pad((i+1)*2+1)}</span><span>{name}</span><span aria-hidden="true">↗</span>
+        </button>)}
+      </nav>
+      <Folio index={0} side={1} name="Contents"/>
+    </div>;
+  }
   function Page({index,side,face=''}:{index:number;side:number;face?:string}){
-    return <div className={`magazine-page side-${side} ${face}`} aria-hidden={!!face||undefined} inert={!!face||undefined}>{index===0?<Hero side={side}/>:index===1?<Work side={side}/>:index===2?<About side={side}/>:<ProjectPage index={index} side={side}/>}</div>;
+    const kind = index===-1 ? (side===0?'cover-whitespace':'closed-cover') : '';
+    return <div className={`magazine-page side-${side} ${kind} ${face}`} aria-hidden={!!face||index===-1&&side===0||undefined} inert={!!face||undefined}>
+      {index===-1?(side===0?null:<Hero side={0}/>):index===0?(side===0?<Hero side={1}/>:<IssueContents/>):index===1?<Work side={side}/>:index===2?<About side={side}/>:<ProjectPage index={index} side={side}/>}
+    </div>;
   }
   return <div className={`magazine-app ${variant==='D'?'variant-C variant-D':`variant-${variant}`}`}>
     <header className="reader-header"><a href={base} className="reader-brand">LA<span> / PORTFOLIO</span></a><div className="reader-edition">The magazine experiment <span>— Issue No. 01</span></div><button className="contents-toggle" onClick={()=>setContents(!contents)} aria-expanded={contents} aria-controls="issue-contents">{contents?'Close':'Contents'} <span>{contents?'×':'☰'}</span></button></header>
-    <main className="reader-main"><div className="spread-topline"><span>{pad(spread+1)} / {names[spread]}</span><span>Product, people & everything in between.</span></div><div className={`magazine-book ${turn?'is-turning':''}`} ref={book} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={e=>pointerUp(e)} onPointerCancel={e=>pointerUp(e,true)} aria-label={`Magazine spread ${spread+1}: ${names[spread]}`}><div className="book-base"><Page index={turn&&turn.direction<0?turn.to:spread} side={0}/><Page index={turn&&turn.direction>0?turn.to:spread} side={1}/></div>{turn&&<div className={`turning-sheet ${turn.direction>0?'forward':'backward'}`} ref={sheet}><Page index={spread} side={turn.direction>0?1:0} face="sheet-front"/><Page index={turn.to} side={turn.direction>0?0:1} face="sheet-back"/><div className="turn-shading"/><div className="back-shading"/></div>}<div className="paper-scene-host" ref={sceneHost}/><div className="book-spine" aria-hidden="true"/>{!turn&&spread>0&&<button className="edge-turn edge-prev" aria-label="Turn to previous spread" onClick={()=>go(spread-1)}>↶</button>}{!turn&&spread<total-1&&<button className="edge-turn edge-next" aria-label="Turn to next spread" onClick={()=>go(spread+1)}>↷</button>}</div>
-    <div className="reader-controls"><div className="motion-controls"><span className="small-dot"/>{reduced?'Reduced motion':'Sculpted paper'}<button onClick={()=>setSlow(!slow)} aria-pressed={slow}>{slow?'Slow study':'Natural pace'}</button></div><div className="paging"><button onClick={()=>go(spread-1)} disabled={spread===0||!!turn} aria-label="Previous spread">←</button><span aria-live="polite">{pad(spread*2+1)} — {pad(spread*2+2)} <small>/ {pad(total*2)}</small></span><button onClick={()=>go(spread+1)} disabled={spread===total-1||!!turn} aria-label="Next spread">→</button></div><p className="interaction-hint">Scroll horizontally <span>or drag a page edge ↔</span></p></div></main>
+    <main className="reader-main"><div className="spread-topline"><span>{spread===-1?'The cover':`${pad(spread+1)} / ${names[spread]}`}</span><span>Product, people & everything in between.</span></div><div className={`magazine-book ${turn?'is-turning':''} ${spread===-1?'is-closed':''} ${turn?.to===-1?'is-closing':''}`} ref={book} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={e=>pointerUp(e)} onPointerCancel={e=>pointerUp(e,true)} aria-label={spread===-1?'Closed magazine cover':`Magazine spread ${spread+1}: ${names[spread]}`}><div className="book-base"><Page index={turn&&turn.direction<0?turn.to:spread} side={0}/><Page index={turn&&turn.direction>0?turn.to:spread} side={1}/></div>{turn&&<div className={`turning-sheet ${turn.direction>0?'forward':'backward'}`} ref={sheet}><Page index={spread} side={turn.direction>0?1:0} face="sheet-front"/><Page index={turn.to} side={turn.direction>0?0:1} face="sheet-back"/><div className="turn-shading"/><div className="back-shading"/></div>}<div className="paper-scene-host" ref={sceneHost}/>
+      {spread===-1&&!turn&&<>
+        <button className="open-invitation" onClick={()=>go(0)} aria-label="Open me — open the magazine">
+          <span className="invitation-aura" aria-hidden="true"/>
+          <span className="invitation-spark spark-one" aria-hidden="true">✧</span>
+          <span className="invitation-spark spark-two" aria-hidden="true">✧</span>
+          <span className="invitation-word">Open me</span>
+          <span className="invitation-hint">click, scroll or swipe</span>
+        </button>
+        <button className="cover-hitarea" onClick={()=>go(0)} aria-label="Open magazine cover"/>
+      </>}
+      <div className="book-spine" aria-hidden="true"/>{!turn&&spread>=0&&<button className="edge-turn edge-prev" aria-label="Turn to previous spread" onClick={()=>go(spread-1)}>↶</button>}{!turn&&spread>=0&&spread<total-1&&<button className="edge-turn edge-next" aria-label="Turn to next spread" onClick={()=>go(spread+1)}>↷</button>}</div>
+    <div className="reader-controls"><div className="motion-controls"><span className="small-dot"/>{reduced?'Reduced motion':'Sculpted paper'}<button onClick={()=>setSlow(!slow)} aria-pressed={slow}>{slow?'Slow study':'Natural pace'}</button></div><div className="paging"><button onClick={()=>go(spread-1)} disabled={spread===-1||!!turn} aria-label="Previous spread">←</button><span aria-live="polite">{spread===-1?'Cover':<>{pad(spread*2+1)} — {pad(spread*2+2)} <small>/ {pad(total*2)}</small></>}</span><button onClick={()=>go(spread+1)} disabled={spread===total-1||!!turn} aria-label="Next spread">→</button></div><p className="interaction-hint">{spread===-1?<>A little curiosity <span>opens a whole world.</span></>:<>Scroll horizontally <span>or drag a page edge ↔</span></>}</p></div></main>
     <div className="prototype-switcher" aria-label="Prototype design directions"><span className="prototype-badge">Prototype</span><button onClick={()=>switchVariant(-1)} aria-label="Previous design direction">‹</button><div><strong>{direction.key} — {direction.name}</strong><span>{direction.description}</span></div><button onClick={()=>switchVariant(1)} aria-label="Next design direction">›</button><span className="variant-count">{directions.findIndex(d=>d.key===variant)+1}/{directions.length}</span></div>
-    {contents&&<div className="contents-overlay" id="issue-contents"><div className="contents-heading"><span className="mini-label">Inside this issue</span><h2>Contents.</h2></div><nav aria-label="Magazine contents">{names.map((name,i)=><button key={i} onClick={()=>{setContents(false);go(i)}} aria-current={spread===i?'page':undefined}><span>{pad(i*2+1)}—{pad(i*2+2)}</span><strong>{name}</strong><span>↗</span></button>)}</nav><p>One spread per chapter. Take your time.</p></div>}
+    {contents&&<div className="contents-overlay" id="issue-contents"><div className="contents-heading"><span className="mini-label">Inside this issue</span><h2>Contents.</h2></div><nav aria-label="Magazine contents"><button onClick={()=>{setContents(false);go(-1)}} aria-current={spread===-1?'page':undefined}><span>Cover</span><strong>Return to the cover</strong><span>↶</span></button>{names.map((name,i)=><button key={i} onClick={()=>{setContents(false);go(i)}} aria-current={spread===i?'page':undefined}><span>{pad(i*2+1)}—{pad(i*2+2)}</span><strong>{name}</strong><span>↗</span></button>)}</nav><p>One spread per chapter. Take your time.</p></div>}
   </div>;
 }
