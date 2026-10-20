@@ -1,0 +1,27 @@
+---
+// Throwaway, development-only: three magazine directions and a physical page-turn study.
+import { getCollection } from 'astro:content';
+import MagazinePrototype from '../../components/prototype/MagazinePrototype';
+import portrait from '../../assets/luis-portrait.jpg';
+
+export function getStaticPaths() {
+  return import.meta.env.DEV ? [{ params: { experiment: 'magazine' } }] : [];
+}
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order)
+  .map(({ id, data }) => ({ id, ...data }));
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Magazine study — Luis Amrein</title>
+    <meta name="description" content="A throwaway magazine portfolio prototype. Three visual directions, two-page spreads, and a page-turn motion study." />
+  </head>
+  <body>
+    <MagazinePrototype client:only="react" projects={projects} portrait={portrait.src} base={import.meta.env.BASE_URL} />
+  </body>
+</html>
