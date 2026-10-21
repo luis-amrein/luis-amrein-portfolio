@@ -2,6 +2,8 @@
 
 Next-session ideas are saved in [NEXT-SESSION.md](./NEXT-SESSION.md).
 
+The desk material study now uses a generated photographic walnut texture, warm overhead light, a layered page block, stronger contact shadows, and a laminated cover highlight. The moving cover uses a clearcoat material; interior pages remain matte. Texture provenance and the exact generation prompt are saved in [ASSETS.md](./ASSETS.md).
+
 The landing state is a closed magazine: the Art Journal cover on the right and empty space on the left, with a translucent, softly floating ‘Open me’ invitation. Clicking the invitation or cover, scrolling down or horizontally forward, or swiping opens the magazine. The first numbered spread places the full-bleed Fashion Issue portrait on the left and a clickable table of contents on the right. Everything uses Luis's existing coral (#ff5a36), green (#36ffb6), ink (#161714), and paper (#f3f0e8).
 
 Run `pnpm prototype:magazine` (Node 22.12+), then open http://localhost:4352/luis-amrein-portfolio/prototype/magazine/?variant=D . Stop with `pnpm astro dev stop`.

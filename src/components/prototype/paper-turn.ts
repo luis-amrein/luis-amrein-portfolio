@@ -48,7 +48,7 @@ export async function createPaperScene(host:HTMLElement,front:HTMLElement,back:H
  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.8));renderer.setSize(cw,ch);renderer.setClearColor(0,0);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.VSMShadowMap;
  renderer.domElement.className='paper-webgl';renderer.domElement.setAttribute('aria-hidden','true');
  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(24,cw/ch,1,5000);camera.position.z=ch/(2*Math.tan(THREE.MathUtils.degToRad(12)));
- const light=new THREE.DirectionalLight(0xffffff,1.55);light.position.set(-w*.5,h*.8,w*2.8);light.castShadow=true;
+ const light=new THREE.DirectionalLight(0xffead1,1.55);light.position.set(-w*.15,h*1.25,w*3);light.castShadow=true;
  Object.assign(light.shadow.camera,{left:-w*2,right:w*2,top:h*1.3,bottom:-h*1.3,near:1,far:w*7});light.shadow.mapSize.set(2048,2048);light.shadow.bias=-.00015;light.shadow.normalBias=.4;light.shadow.radius=5;light.shadow.blurSamples=12;
  scene.add(light,new THREE.AmbientLight(0xffffff,1.8));
  const receiver=new THREE.Mesh(new THREE.PlaneGeometry(w*3.3,h*1.75),new THREE.ShadowMaterial({opacity:.25,depthWrite:false}));receiver.position.z=-.7;receiver.receiveShadow=true;scene.add(receiver);
@@ -58,7 +58,10 @@ export async function createPaperScene(host:HTMLElement,front:HTMLElement,back:H
   const uv=g.attributes.uv;for(let i=0;i<uv.count;i++){const s=uv.getX(i);uv.setX(i,(direction>0)!==!!face?s:1-s)}uv.needsUpdate=true;
   if(direction<0){const idx=g.index!;for(let i=0;i<idx.count;i+=3){const b=idx.getX(i+1);idx.setX(i+1,idx.getX(i+2));idx.setX(i+2,b)}}
  });
- const materials=textures.map((map,i)=>new THREE.MeshStandardMaterial({map,side:i===0?THREE.FrontSide:THREE.BackSide,roughness:.94,metalness:0,color:0xffffff,polygonOffset:true,polygonOffsetFactor:i===0?-1:1}));
+ const materials=textures.map((map,i)=>{
+  const cover=(i===0?front:back).classList.contains('closed-cover');
+  return new THREE.MeshPhysicalMaterial({map,side:i===0?THREE.FrontSide:THREE.BackSide,roughness:cover ? 0.46 : 0.94,clearcoat:cover ? 0.72 : 0,clearcoatRoughness:.24,metalness:0,color:0xffffff,polygonOffset:true,polygonOffsetFactor:i===0?-1:1});
+ });
  materials.forEach((material,i)=>{material.onBeforeCompile=shader=>{
   shader.uniforms.reversePrint={value:textures[1-i]};shader.fragmentShader='uniform sampler2D reversePrint;\n'+shader.fragmentShader;
   shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>

@@ -2,7 +2,7 @@
 
 Saved 21 October 2026. These are ideas to explore, not changes to implement yet. The order follows Luis's notes, rather than a priority ranking.
 
-1. **Desk setting on the landing page.** Place the closed magazine against a desk background, with directional light and shadows as if illuminated by a desk lamp.
+1. **Desk setting on the landing page.** First pass implemented: photographic walnut background, warm overhead light, dimensional cover edges, and contact shadows. Further lighting interaction remains open for exploration.
 2. **Dotted cover pattern.** Explore a dotted pattern on the magazine cover.
 3. **More magic through motion and video.** Explore animations and videos that make the magazine feel magical; one concrete example is a spinning star on the cover.
 4. **Two levels of navigation.** Use the primary navigation to reach Work, then offer additional navigation through the individual projects within the Work section.

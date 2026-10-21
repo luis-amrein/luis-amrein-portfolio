@@ -70,3 +70,64 @@ astro-dev-toolbar{display:none}
 .issue-intro{margin-top:2cqw}
 .issue-chapters button{padding:1.8cqw 0;min-height:7cqw;font-size:2.4cqw}
 .magazine-book.is-closed{touch-action:none}
+/* Material study: photographed walnut under a warm overhead lamp. */
+.desk-scene{
+ color:var(--paper);
+ background-color:#4b2c18;
+ background-image:radial-gradient(ellipse 85% 75% at 50% -10%,#ffe1a01c,transparent 72%),linear-gradient(180deg,#180b0405 0%,#160a0317 65%,#12080242 100%),var(--desk-texture);
+ background-position:center,center,center;
+ background-size:cover;
+ background-repeat:no-repeat;
+ background-attachment:fixed;
+}
+.desk-scene .magazine-page{color:var(--ink)}
+.desk-scene .reader-header{border-color:#f8e6ce38;color:#fff0daeb;text-shadow:0 1px 3px #180b0440}
+.desk-scene .reader-edition span{color:#f6dfbe94}
+.desk-scene .spread-topline{color:#fff0dad6;text-shadow:0 1px 3px #180b0480}
+.desk-scene .reader-controls{color:#ffeed7da;text-shadow:0 1px 2px #180b0480}
+.desk-scene .paging small{color:#ffead29c}
+.desk-scene .motion-controls button{border-color:#f6dfbe61;background:#2413091f}
+.desk-scene .motion-controls button[aria-pressed=true]{background:#161714b8}
+.desk-scene .interaction-hint{color:#fff0dab5}
+.desk-scene .contents-overlay{color:var(--ink);text-shadow:none}
+.desk-scene .magazine-book:not(.is-closed):not(.is-closing){box-shadow:0 2px 3px #1b0d0680,0 10px 16px -5px #1b0d0680,4px 29px 46px -16px #130802ab,3px 3px 0 #ddd2bd,6px 6px 0 #8b7860,7px 8px 0 #e3d9c5}
+.desk-scene .invitation-word{color:#fff5e4d9;text-shadow:0 2px 8px #28150773,0 0 16px #fff8e647,0 0 39px #36ffb63b}
+.desk-scene .invitation-hint{color:#fff0d6b3;text-shadow:0 1px 4px #2815078c}
+.desk-scene .invitation-aura{background:radial-gradient(ellipse at center,#fff8de75 0%,#fff6dc30 22%,#36ffb60d 45%,transparent 70%);mix-blend-mode:screen;filter:blur(16px);animation:desk-aura-breathe 7s ease-in-out infinite}
+.desk-scene .open-invitation:hover .invitation-word,.desk-scene .open-invitation:focus-visible .invitation-word{color:#fff8ec;text-shadow:0 1px 4px #28150780,0 0 18px #fff6d99c,0 0 42px #36ffb65e}
+@keyframes desk-aura-breathe{0%,100%{transform:scale(.93) rotate(-5deg);opacity:.45}50%{transform:scale(1.07) rotate(5deg);opacity:.72}}
+/* The page block and lower board sit below the laminated front face. */
+.desk-scene .closed-cover{
+ overflow:visible;
+ isolation:isolate;
+ z-index:1;
+ border-radius:1px 5px 4px 1px;
+ background:#a9482a;
+ box-shadow:0 2px 2px #1e0c028c,2px 7px 8px #1e0c0273,4px 22px 24px -9px #180902ab,10px 45px 58px -21px #120601b3;
+}
+.desk-scene .closed-cover:before{
+ content:'';position:absolute;inset:4px -7px -8px 7px;z-index:0;
+ border-radius:1px 4px 3px 1px;
+ background:repeating-linear-gradient(0deg,#ddcfb6 0px,#f2e9d7 .8px,#a99a81 1.1px,#e9dfca 1.8px);
+ box-shadow:inset -2px -1px 3px #71513780,1px 1px 1px #26120570;
+}
+.desk-scene .closed-cover:after{
+ content:'';position:absolute;left:2px;right:-6px;top:calc(100% + 7px);height:3px;z-index:0;
+ background:linear-gradient(180deg,#f3885e,#a3351f 60%,#59200f);border-radius:0 1px 3px 2px;
+ box-shadow:0 2px 2px #1e0c0266;
+}
+.desk-scene .closed-cover .opening-copy{
+ z-index:1;overflow:hidden;border-radius:1px 5px 4px 1px;
+ background-image:linear-gradient(145deg,#fff1c409,transparent 28%,#6f210621);
+ box-shadow:inset 0 1px 0 #fff4d994,inset -1px 0 0 #ffdeb26e,inset 0 -1px 0 #6d271a80;
+}
+.desk-scene .closed-cover .opening-copy:before{
+ content:'';position:absolute;inset:0;z-index:4;pointer-events:none;border-radius:inherit;
+ background:linear-gradient(90deg,#48140547 0%,#7c2b0c21 .65%,#ffe8c542 1.05%,#47170424 2.1%,transparent 5%,transparent 98.4%,#6c1c0c26 99.5%,#fff0c75e 100%);
+}
+.desk-scene .closed-cover .opening-copy:after{
+ content:'';position:absolute;inset:0;z-index:5;pointer-events:none;border-radius:inherit;
+ background:radial-gradient(ellipse 90% 48% at 36% -5%,#fff3cf4a,transparent 77%),linear-gradient(117deg,transparent 10%,#fff9eb05 35%,#fff6dc2b 46%,#fff9ec16 52%,transparent 66%);
+ box-shadow:inset 0 0 0 1px #fff0d217;
+}
+@media(orientation:portrait){.desk-scene{background-attachment:scroll;background-size:auto,auto,auto 100svh;background-repeat:no-repeat,no-repeat,repeat-y}.desk-scene .invitation-word{font-size:27px}}
