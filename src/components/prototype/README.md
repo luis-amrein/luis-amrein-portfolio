@@ -29,4 +29,4 @@ Visual decision captured: Art Journal left + Fashion Issue right, existing brand
 
 Opening flow decision: closed right-hand cover → portrait left / contents right. The translucent invitation uses paper-white light, a mint aura, faint sparkles, and a slow hover; reduced motion keeps it still. Detailed paper-motion tuning is deferred.
 
-The landing view hides all surrounding text and controls except the cover and “Open me”. A cropped LP (diameter tied to the magazine scale) spins at 33⅓ rpm. Click its raised tonearm to place the stylus and fade in the original jazz loop; click again to lift and pause. The record remains independent of chapter changes, and reduced motion stops the continuous spin.
+The landing view hides all surrounding text and controls except the cover and “Open me”. A cropped LP (diameter tied to the magazine scale) spins at 33⅓ rpm. Click its raised tonearm to place the stylus and fade in Kevin MacLeod’s “George Street Shuffle” (CC BY 4.0; credit in the contents overlay); click again to lift and pause. The record remains independent of chapter changes, and reduced motion stops the continuous spin.
