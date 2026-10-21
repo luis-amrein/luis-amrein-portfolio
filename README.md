@@ -90,3 +90,5 @@ Initial saved checkpoints:
 Uncommitted changes, ignored files and experiments saved outside this repository
 are not included in its GitHub backup. The separated skills constellation remains
 an external archive, not part of the website source.
+
+The magazine prototype includes a cropped black desk lamp base with a keyboard-accessible O/I rocker. It starts in warm light; switching off fades the desk and magazine into cool ambient darkness. State is in memory, and reduced-motion preferences bypass the lighting transition.

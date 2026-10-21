@@ -21,6 +21,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
  const [turn,setTurn]=useState<Turn|null>(null);
  const [contents,setContents]=useState(false);
  const [slow,setSlow]=useState(false);
+ const [lampOn,setLampOn]=useState(true);
  const [reduced,setReduced]=useState(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
  const [portraitMode,setPortraitMode]=useState(window.matchMedia('(orientation: portrait)').matches);
   const sheet = useRef<HTMLDivElement>(null);
@@ -258,7 +259,18 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
       {index===-1?(side===0?null:<Hero side={0}/>):index===0?(side===0?<Hero side={1}/>:<IssueContents/>):index===1?<Work side={side}/>:index===2?<About side={side}/>:<ProjectPage index={index} side={side}/>}
     </div>;
   }
-  return <div className={`magazine-app desk-scene ${variant==='D'?'variant-C variant-D':`variant-${variant}`}`} style={{'--desk-texture':`url("${asset('prototype/walnut-desk-v1.webp')}")`} as CSSProperties}>
+  return <div className={`magazine-app desk-scene ${lampOn?'lamp-on':'lamp-off'} ${variant==='D'?'variant-C variant-D':`variant-${variant}`}`} style={{'--desk-texture':`url("${asset('prototype/walnut-desk-v1.webp')}")`} as CSSProperties}>
+    <div className="desk-light-falloff" aria-hidden="true"/>
+    <aside className="desk-lamp" aria-label="Desk lamp">
+      <span className="lamp-stem" aria-hidden="true"/>
+      <div className="lamp-switch-recess">
+        <button className="lamp-rocker" role="switch" aria-checked={lampOn} aria-label="Desk light" onClick={()=>setLampOn(!lampOn)}>
+          <span className="rocker-symbol rocker-on" aria-hidden="true">I</span>
+          <span className="rocker-symbol rocker-off" aria-hidden="true">O</span>
+        </button>
+      </div>
+      <span className="lamp-status" aria-hidden="true">{lampOn?'LIGHT ON':'LIGHT OFF'}</span>
+    </aside>
     <header className="reader-header"><a href={base} className="reader-brand">LA<span> / PORTFOLIO</span></a><div className="reader-edition">The magazine experiment <span>— Issue No. 01</span></div><button className="contents-toggle" onClick={()=>setContents(!contents)} aria-expanded={contents} aria-controls="issue-contents">{contents?'Close':'Contents'} <span>{contents?'×':'☰'}</span></button></header>
     <main className="reader-main"><div className="spread-topline"><span>{spread===-1?'The cover':`${pad(spread+1)} / ${names[spread]}`}</span><span>Product, people & everything in between.</span></div><div className={`magazine-book ${turn?'is-turning':''} ${spread===-1?'is-closed':''} ${turn?.to===-1?'is-closing':''}`} ref={book} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={e=>pointerUp(e)} onPointerCancel={e=>pointerUp(e,true)} aria-label={spread===-1?'Closed magazine cover':`Magazine spread ${spread+1}: ${names[spread]}`}><div className="book-base"><Page index={turn&&turn.direction<0?turn.to:spread} side={0}/><Page index={turn&&turn.direction>0?turn.to:spread} side={1}/></div>{turn&&<div className={`turning-sheet ${turn.direction>0?'forward':'backward'}`} ref={sheet}><Page index={spread} side={turn.direction>0?1:0} face="sheet-front"/><Page index={turn.to} side={turn.direction>0?0:1} face="sheet-back"/><div className="turn-shading"/><div className="back-shading"/></div>}<div className="paper-scene-host" ref={sceneHost}/>
       {spread===-1&&!turn&&<>
