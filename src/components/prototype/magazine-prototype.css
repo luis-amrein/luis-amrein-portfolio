@@ -149,3 +149,35 @@ astro-dev-toolbar{display:none}
 .lamp-off .lamp-status{color:#c2c9cb}
 @media(orientation:portrait){.desk-scene .reader-header{padding-left:110px}.desk-scene .spread-topline{padding-left:110px}.desk-lamp{width:260px;height:260px;left:-140px;top:-140px}.lamp-switch-recess{left:163px;top:160px;transform:rotate(-28deg) scale(.85);transform-origin:center}.lamp-stem{top:-10px;left:82px}.lamp-status{left:43px;top:172px}.desk-scene .reader-brand span{display:none}.desk-scene .contents-toggle{gap:9px}}
 @media(prefers-reduced-motion:reduce){.desk-light-falloff,.desk-lamp,.lamp-rocker{transition:none}}
+
+/* LP diameter follows the magazine's physical scale; only its upper-right arc enters the desk. */
+.desk-record{--record-size:min(74vw,calc((100svh - 255px)*1.08));position:fixed;inset:0;z-index:22;pointer-events:none}
+.vinyl-platter{position:absolute;width:var(--record-size);height:var(--record-size);left:calc(var(--record-size)*-.58);bottom:calc(var(--record-size)*-.52);border-radius:50%;background:#080a09;box-shadow:0 2px 0 #5b5b4a,0 5px 0 #060907,10px 16px 22px #100b09b0;overflow:hidden}
+.vinyl-disc{position:absolute;inset:2px;border-radius:50%;background:repeating-radial-gradient(circle at center,transparent 0 1px,#9a9c8f22 1.3px 1.7px,transparent 2px 3.2px),conic-gradient(from 20deg,#111512,#30362d 18%,#0c100c 30%,#171d16 46%,#42463a 52%,#111710 66%,#272e23 83%,#111512);box-shadow:inset 0 0 0 3px #44473b,inset 0 0 0 6px #090d09;animation:vinyl-spin 1.8s linear infinite}
+.vinyl-disc:after{content:"";position:absolute;inset:30%;border-radius:50%;border:9px solid #090d09;box-shadow:0 0 0 1px #6b6c542e}
+.vinyl-label{position:absolute;inset:34%;z-index:1;border-radius:50%;background:#ef5838;box-shadow:inset 0 0 0 1px #0003;overflow:hidden}
+.vinyl-label-art{position:absolute;inset:0;background:conic-gradient(from 20deg,transparent 0 15%,#1b251d 15% 17%,transparent 17% 33%,#36ffb6 33% 56%,transparent 56%);opacity:.85}
+.vinyl-spindle{position:absolute;left:48%;top:48%;width:4%;height:4%;border-radius:50%;background:radial-gradient(circle at 30% 30%,#eee5ce,#777c6c 45%,#161c15 75%);box-shadow:1px 2px 3px #0009}
+.vinyl-reflection{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 58deg,transparent 0 13%,#fff2c118 15%,transparent 20% 61%,#fff0c91f 65%,transparent 70%);box-shadow:inset -8px 2px 12px #fff5c511;pointer-events:none}
+.tonearm{position:absolute;left:-25px;bottom:80px;width:260px;height:280px;padding:0;transform-origin:25px 35px;transform:rotate(-24deg);filter:drop-shadow(12px 19px 7px #070b08a6);transition:transform 1.05s cubic-bezier(.45,0,.2,1),filter 1.05s;pointer-events:none;touch-action:manipulation}
+.tonearm svg{display:block;width:100%;height:100%;overflow:visible;pointer-events:none}.tonearm-hit{pointer-events:stroke;cursor:pointer}
+.needle-down .tonearm{transform:rotate(0deg);filter:drop-shadow(3px 5px 2px #070b08b3)}
+.tonearm:focus-visible{outline:none}.tonearm:focus-visible svg{filter:drop-shadow(0 0 3px #36ffb6)}
+.desk-scene:not(.is-landing) .motion-controls{visibility:hidden}
+.is-landing .reader-header,.is-landing .spread-topline,.is-landing .reader-controls{visibility:hidden;pointer-events:none}
+.is-landing .prototype-switcher,.is-landing .invitation-hint{display:none}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@keyframes vinyl-spin{to{transform:rotate(360deg)}}
+@media(orientation:portrait){.desk-record{--record-size:min(84vw,480px)}.tonearm{bottom:20px;left:-25px;width:182px;height:196px;transform-origin:17.5px 24.5px}.desk-record .tonearm svg{width:100%;height:100%}}
+@media(orientation:landscape) and (max-height:600px){.tonearm{bottom:30px;width:182px;height:196px;transform-origin:17.5px 24.5px}}
+@media(prefers-reduced-motion:reduce){.vinyl-disc{animation:none}.tonearm{transition:none}}
+/* Let the opened magazine take the foreground without covering its print. */
+.desk-scene:not(.is-landing) .desk-record{transform:translate(-150px,90px)}
+@media(orientation:portrait){.desk-scene:not(.is-landing) .desk-record{transform:translate(-95px,100px)}}
+/* On narrow reading layouts, dock the player in the free space in the header. */
+@media(orientation:portrait){
+ .desk-scene:not(.is-landing) .desk-record{transform:none;--record-size:82px;inset:0 0 auto;height:80px}
+ .desk-scene:not(.is-landing) .vinyl-platter{left:calc(50% - 16px);top:-25px;bottom:auto}
+ .desk-scene:not(.is-landing) .tonearm{left:calc(50% - 35px);top:0;bottom:auto;width:78px;height:84px;transform-origin:7.5px 10.5px}
+ .desk-scene:not(.is-landing) .tonearm svg{width:100%;height:100%}
+}

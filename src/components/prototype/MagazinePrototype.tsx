@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import './magazine-prototype.css';
+import DeskRecord from './DeskRecord';
 import { createPaperScene } from './paper-turn';
 import type { PaperScene } from './paper-turn';
 type Project = { id:string; title:string; eyebrow:string; summary:string; year:string; role:string; challenge:string; outcome:string; outcomeLabel:string; tags:string[]; showcase?:{type:string;src:string;alt:string}[] };
@@ -149,7 +150,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
       else if (e.key === 'Escape') setContents(false);
     };
     const onWheel = (e: WheelEvent) => {
-      if (contents || e.ctrlKey || (e.target as HTMLElement).closest('.contents-overlay')) return;
+      if (contents || e.ctrlKey || (e.target as HTMLElement).closest('.contents-overlay,.desk-record,.desk-lamp')) return;
       const horizontal = spread === -1 ? (Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY) : e.shiftKey ? (e.deltaX || e.deltaY) : e.deltaX;
       if (spread !== -1 && !e.shiftKey && Math.abs(horizontal) <= Math.abs(e.deltaY) * .75) return;
       if (Math.abs(horizontal) < .1) return;
@@ -259,7 +260,8 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
       {index===-1?(side===0?null:<Hero side={0}/>):index===0?(side===0?<Hero side={1}/>:<IssueContents/>):index===1?<Work side={side}/>:index===2?<About side={side}/>:<ProjectPage index={index} side={side}/>}
     </div>;
   }
-  return <div className={`magazine-app desk-scene ${lampOn?'lamp-on':'lamp-off'} ${variant==='D'?'variant-C variant-D':`variant-${variant}`}`} style={{'--desk-texture':`url("${asset('prototype/walnut-desk-v1.webp')}")`} as CSSProperties}>
+  return <div className={`magazine-app desk-scene ${spread===-1?'is-landing':''} ${lampOn?'lamp-on':'lamp-off'} ${variant==='D'?'variant-C variant-D':`variant-${variant}`}`} style={{'--desk-texture':`url("${asset('prototype/walnut-desk-v1.webp')}")`} as CSSProperties}>
+    <DeskRecord src={asset('prototype/after-hours-jazz.mp3')}/>
     <div className="desk-light-falloff" aria-hidden="true"/>
     <aside className="desk-lamp" aria-label="Desk lamp">
       <span className="lamp-stem" aria-hidden="true"/>
