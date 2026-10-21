@@ -72,6 +72,7 @@ astro-dev-toolbar{display:none}
 .magazine-book.is-closed{touch-action:none}
 /* Material study: photographed walnut under a warm overhead lamp. */
 .desk-scene{
+ position:relative;isolation:isolate;
  color:var(--paper);
  background-color:#4b2c18;
  background-image:radial-gradient(ellipse 85% 75% at 50% -10%,#ffe1a01c,transparent 72%),linear-gradient(180deg,#180b0405 0%,#160a0317 65%,#12080242 100%),var(--desk-texture);
@@ -143,7 +144,7 @@ astro-dev-toolbar{display:none}
 .lamp-rocker[aria-checked=false]{transform:rotateX(13deg);background:linear-gradient(180deg,#55574e,#292c27 50%,#121511);box-shadow:0 -2px 3px #000a,inset 0 2px 2px #ffffff24}
 .rocker-symbol{font:13px/1 Arial,sans-serif;text-shadow:0 1px 1px #000}
 .rocker-on{font-size:15px}.lamp-status{display:none;position:absolute;left:64px;top:205px;font:6px/1 Arial,sans-serif;letter-spacing:.17em;color:#aeafa397}
-.desk-light-falloff{position:fixed;inset:0;z-index:45;pointer-events:none;background:linear-gradient(145deg,#07121b80,#03091396);opacity:0;transition:opacity .85s ease}
+.desk-light-falloff{position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(ellipse 90% 95% at 95% 0%,#466f823b,transparent 75%),linear-gradient(150deg,#101619c9,#28130bc2 47%,#080d12eb),var(--desk-texture);background-size:cover;background-position:center;opacity:0;transition:opacity 1.2s ease}
 .lamp-off .desk-light-falloff{opacity:1}
 .lamp-off .desk-lamp{filter:brightness(.65) saturate(.7)}
 .lamp-off .lamp-status{color:#c2c9cb}
@@ -180,3 +181,26 @@ astro-dev-toolbar{display:none}
  .desk-scene:not(.is-landing) .tonearm{left:calc(50% - 30px);top:-5px;bottom:auto;width:60px;height:90px}
 }
 @media(orientation:portrait){.needle-down .tonearm{transform:rotate(-22deg)}}
+
+/* Lights out changes each material's illumination, rather than tinting the whole screen. */
+.desk-scene .opening-copy,.desk-scene .opening-copy:after,.desk-scene .closed-cover:before,.desk-scene .magazine-page,.desk-scene .invitation-word,.desk-scene .vinyl-photograph,.desk-scene .platter-strobe,.desk-scene .tonearm img,.desk-scene .platter-light{transition:background-color 1.2s,color 1.2s,filter 1.2s,opacity 1.2s,box-shadow 1.2s}
+.lamp-off{--paper:#e2dfd6;--accent:#c04b33;--green:#72e6bd;--ink:#172321;--rule:#a4aaa1}
+.lamp-off .closed-cover{box-shadow:1px 3px 4px #000b,7px 16px 34px #0008,0 0 0 1px #839ca528}
+.lamp-off.variant-C .opening-copy{background-color:#ae3e2c;background-image:radial-gradient(ellipse at 100% 0%,#d6977840,transparent 65%),linear-gradient(135deg,#1c141754,transparent 45%,#47140b66);color:#f3e4cd;box-shadow:inset 0 1px 0 #bedbe344,inset -1px 0 0 #aecdd644}
+.lamp-off .closed-cover .opening-copy:after{opacity:.13}
+.lamp-off .closed-cover .opening-copy:before{opacity:.5}
+.lamp-off .closed-cover:before{filter:brightness(.65) sepia(.1)}
+.lamp-off .cover-star{color:#72e6bd;text-shadow:0 0 18px #36ffb619}
+.lamp-off .invitation-word{color:#e6fff4;text-shadow:0 0 10px #c2ffe9a6,0 0 30px #36ffb680,0 0 65px #36ffb64d}
+.lamp-off .invitation-aura{background:radial-gradient(ellipse,#a3ffdd4d, #36ffb61c 35%,transparent 70%);opacity:.7}
+.lamp-off .invitation-spark{color:#a3ffdd;filter:drop-shadow(0 0 5px #36ffb6)}
+.lamp-off .vinyl-photograph{filter:brightness(.4) saturate(.75)}
+.lamp-off .platter-strobe{filter:brightness(.55)}
+.lamp-off .platter-light{opacity:.18}
+.lamp-off .tonearm img{filter:brightness(.56) saturate(.75)}
+.lamp-off .vinyl-platter{box-shadow:0 3px 0 #202c2a,0 7px 0 #060a09,8px 15px 30px #000c}
+.lamp-off .desk-lamp{filter:brightness(.47) saturate(.8)}
+.lamp-off .lamp-rocker{color:#e2ebe5}
+.lamp-off .reader-header,.lamp-off .spread-topline,.lamp-off .reader-controls{color:#c6d8d3;text-shadow:0 1px 3px #0008;border-color:#c6d8d333}
+.lamp-off .contents-overlay{background:#182622;color:#e2e8df;--ink:#e2e8df;--rule:#52645b;--accent:#72e6bd}
+@media(prefers-reduced-motion:reduce){.desk-scene .opening-copy,.desk-scene .opening-copy:after,.desk-scene .closed-cover:before,.desk-scene .magazine-page,.desk-scene .invitation-word,.desk-scene .vinyl-photograph,.desk-scene .platter-strobe,.desk-scene .tonearm img,.desk-scene .platter-light{transition:none}}

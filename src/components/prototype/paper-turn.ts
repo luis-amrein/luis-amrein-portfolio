@@ -48,9 +48,10 @@ export async function createPaperScene(host:HTMLElement,front:HTMLElement,back:H
  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.8));renderer.setSize(cw,ch);renderer.setClearColor(0,0);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.VSMShadowMap;
  renderer.domElement.className='paper-webgl';renderer.domElement.setAttribute('aria-hidden','true');
  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(24,cw/ch,1,5000);camera.position.z=ch/(2*Math.tan(THREE.MathUtils.degToRad(12)));
- const light=new THREE.DirectionalLight(0xffead1,1.55);light.position.set(-w*.15,h*1.25,w*3);light.castShadow=true;
+ const dark=!!host.closest('.lamp-off');
+ const light=new THREE.DirectionalLight(dark?0xb8d4e0:0xffead1,dark?.55:1.55);light.position.set(dark?w*1.1:-w*.15,h*1.25,w*3);light.castShadow=true;
  Object.assign(light.shadow.camera,{left:-w*2,right:w*2,top:h*1.3,bottom:-h*1.3,near:1,far:w*7});light.shadow.mapSize.set(2048,2048);light.shadow.bias=-.00015;light.shadow.normalBias=.4;light.shadow.radius=5;light.shadow.blurSamples=12;
- scene.add(light,new THREE.AmbientLight(0xffffff,1.8));
+ scene.add(light,new THREE.AmbientLight(dark?0xb8d2d2:0xffffff,dark?1.35:1.8));
  const receiver=new THREE.Mesh(new THREE.PlaneGeometry(w*3.3,h*1.75),new THREE.ShadowMaterial({opacity:.25,depthWrite:false}));receiver.position.z=-.7;receiver.receiveShadow=true;scene.add(receiver);
  const textures=[frontPrint,backPrint].map(c=>{const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());return t});
  const cols=80,rows=24,geometry=new THREE.PlaneGeometry(w,h,cols,rows),backGeometry=geometry.clone();
