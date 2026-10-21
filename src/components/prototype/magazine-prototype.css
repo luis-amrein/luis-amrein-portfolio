@@ -153,14 +153,14 @@ astro-dev-toolbar{display:none}
 
 /* The photograph and its specular highlights stay fixed. Only label and strobe phase move. */
 .desk-record{--record-size:min(105vw,calc((100svh - 255px)*1.5));position:fixed;inset:0;z-index:22;pointer-events:none}
-.vinyl-platter{position:absolute;width:var(--record-size);height:var(--record-size);left:calc(var(--record-size)*-.6);bottom:calc(var(--record-size)*-.68);border-radius:50%;background:radial-gradient(circle,#111612 65%,#555950 69%,#101411 70%);box-shadow:0 3px 0 #44493e,0 7px 0 #11150f,10px 17px 24px #100b09a0;overflow:hidden}
+.vinyl-platter{position:absolute;width:var(--record-size);height:var(--record-size);left:calc(var(--record-size)*-.6);bottom:calc(var(--record-size)*-.57);border-radius:50%;background:radial-gradient(circle,#111612 65%,#555950 69%,#101411 70%);box-shadow:0 3px 0 #44493e,0 7px 0 #11150f,10px 17px 24px #100b09a0;overflow:hidden}
 .vinyl-photograph{position:absolute;inset:2%;width:96%;height:96%;object-fit:contain;pointer-events:none}
 .vinyl-label{position:absolute;inset:35.5%;border-radius:50%;overflow:hidden;background:#f5815c;animation:vinyl-spin 1.8s linear infinite;box-shadow:inset 0 0 8px #692a1826}
 .vinyl-label-art{position:absolute;inset:0;background:conic-gradient(from 20deg,transparent 0 15%,#1b251d 15% 17%,transparent 17% 33%,#36ffb6 33% 56%,transparent 56%);opacity:.8}
 .platter-strobe{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.strobe-row{transform-origin:500px 500px;animation:strobe-drift 540s linear infinite}.strobe-row-1{animation-duration:720s}.strobe-row-2{animation-duration:420s}
+.strobe-row{transform-origin:500px 500px;animation:strobe-drift 18s linear infinite}.strobe-row-1{animation-duration:22s}.strobe-row-2{animation-duration:26s}
 .platter-light{position:absolute;inset:0;border-radius:50%;pointer-events:none;background:conic-gradient(from 20deg,#fff4d438,transparent 20%,#0005 38%,transparent 58%,#fff4d426 80%,#fff4d438);mask:radial-gradient(circle,transparent 64%,#000 65%)}
-.tonearm{position:absolute;left:-121px;bottom:8px;width:260px;height:390px;padding:0;transform-origin:35% 15%;transform:rotate(-58deg);filter:drop-shadow(15px 22px 9px #070b0899);transition:transform 1.2s cubic-bezier(.45,0,.2,1),filter 1.2s;pointer-events:auto;touch-action:manipulation}
+.tonearm{position:absolute;left:-121px;bottom:8px;width:260px;height:390px;padding:0;transform-origin:35% 15%;transform:rotate(-64deg);filter:drop-shadow(15px 22px 9px #070b0899);transition:transform 1.2s cubic-bezier(.45,0,.2,1),filter 1.2s;pointer-events:auto;touch-action:manipulation}
 .tonearm img{display:block;width:100%;height:100%;max-width:none;pointer-events:none;user-select:none}
 .needle-down .tonearm{transform:rotate(-35deg);filter:drop-shadow(3px 5px 2px #070b08a6)}
 .tonearm:focus-visible{outline:none}.tonearm:focus-visible img{filter:drop-shadow(0 0 3px #36ffb6)}
@@ -172,7 +172,7 @@ astro-dev-toolbar{display:none}
 @keyframes strobe-drift{to{transform:rotate(-360deg)}}
 @media(orientation:portrait){.desk-record{--record-size:125vw}.tonearm{bottom:-8px;left:-92px;width:200px;height:300px}}
 @media(orientation:landscape) and (max-height:600px){.desk-record{--record-size:115svh}.tonearm{bottom:-10px;left:-92px;width:200px;height:300px}}
-@media(prefers-reduced-motion:reduce){.vinyl-label,.strobe-row{animation:none}.tonearm{transition:none}}
+@media(prefers-reduced-motion:reduce){.vinyl-label,.vinyl-surface-motion,.strobe-row{animation:none}.tonearm{transition:none}}
 /* Keep the larger hardware outside the open magazine's print. */
 .desk-scene:not(.is-landing) .desk-record{transform:translate(-250px,115px)}
 @media(orientation:portrait){
@@ -204,3 +204,7 @@ astro-dev-toolbar{display:none}
 .lamp-off .reader-header,.lamp-off .spread-topline,.lamp-off .reader-controls{color:#c6d8d3;text-shadow:0 1px 3px #0008;border-color:#c6d8d333}
 .lamp-off .contents-overlay{background:#182622;color:#e2e8df;--ink:#e2e8df;--rule:#52645b;--accent:#72e6bd}
 @media(prefers-reduced-motion:reduce){.desk-scene .opening-copy,.desk-scene .opening-copy:after,.desk-scene .closed-cover:before,.desk-scene .magazine-page,.desk-scene .invitation-word,.desk-scene .vinyl-photograph,.desk-scene .platter-strobe,.desk-scene .tonearm img,.desk-scene .platter-light{transition:none}}
+
+.vinyl-surface-motion{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;animation:vinyl-spin 1.8s linear infinite}
+.lamp-off .vinyl-surface-motion{opacity:.45}
+@media(prefers-reduced-motion:reduce){.vinyl-surface-motion{animation:none}}

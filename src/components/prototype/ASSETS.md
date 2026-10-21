@@ -25,3 +25,5 @@ Use case: photorealistic-natural. Asset type: background photograph for an inter
 ## Photographic turntable v2
 
 See [TURNTABLE-ASSETS.md](TURNTABLE-ASSETS.md) for both saved assets, built-in generation mode, exact prompts, and the distinction between stationary light reflections and animated strobe-dot phases.
+
+Tonearm v3 replaces the displayed arm with a version without a visible cue mechanism or side handle. See [TONEARM-V3.md](TONEARM-V3.md) for the saved path, built-in edit mode and exact prompt.

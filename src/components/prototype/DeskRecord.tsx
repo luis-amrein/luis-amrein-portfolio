@@ -33,6 +33,16 @@ export default function DeskRecord({src,artBase}:{src:string;artBase:string}) {
     <audio ref={player} src={src} preload="none" loop/>
     <div className="vinyl-platter" aria-hidden="true">
       <img className="vinyl-photograph" src={`${artBase}/vinyl-photo-v2.webp`} alt=""/>
+      <svg className="vinyl-surface-motion" viewBox="0 0 1000 1000" fill="none">
+        {Array.from({length:42},(_,i)=>{
+          const radius=220+(i*47%220),a=i*2.399963,b=a+.015+(i%4)*.007;
+          const x=500+radius*Math.cos(a),y=500+radius*Math.sin(a);
+          return <g key={i}>
+            <path d={`M${x} ${y}A${radius} ${radius} 0 0 1 ${500+radius*Math.cos(b)} ${500+radius*Math.sin(b)}`} stroke={i%3?'#d7ddcd':'#020503'} strokeWidth={i%3?.65:1.1} opacity={i%3?.22:.4}/>
+            {i%4===0&&<circle cx={x} cy={y} r=".85" fill="#e2e2cc" opacity=".28"/>}
+          </g>
+        })}
+      </svg>
       <div className="vinyl-label"><span className="vinyl-label-art"/></div>
       <svg className="platter-strobe" viewBox="0 0 1000 1000" fill="none">
         <defs><linearGradient id="rim-silver" x1="100" y1="0" x2="900" y2="1000" gradientUnits="userSpaceOnUse"><stop stopColor="#ece4cc"/><stop offset=".3" stopColor="#777c73"/><stop offset=".55" stopColor="#e1ded1"/><stop offset="1" stopColor="#474d45"/></linearGradient></defs>
@@ -46,7 +56,7 @@ export default function DeskRecord({src,artBase}:{src:string;artBase:string}) {
       <div className="platter-light"/>
     </div>
     <button className="tonearm" onClick={toggle} aria-label={engaged?'Lift needle and pause jazz':'Lower needle and play smooth jazz'} aria-pressed={engaged}>
-      <img src={`${artBase}/tonearm-photo-v2.webp`} alt="" draggable={false}/>
+      <img src={`${artBase}/tonearm-photo-v3.webp`} alt="" draggable={false}/>
     </button>
     <span className="sr-only" role="status">{failed?'Music could not start. Click the tonearm to retry.':engaged?'Jazz playing':'Jazz paused'}</span>
   </aside>;
