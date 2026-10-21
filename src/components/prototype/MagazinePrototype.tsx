@@ -261,7 +261,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     </div>;
   }
   return <div className={`magazine-app desk-scene ${spread===-1?'is-landing':''} ${lampOn?'lamp-on':'lamp-off'} ${variant==='D'?'variant-C variant-D':`variant-${variant}`}`} style={{'--desk-texture':`url("${asset('prototype/walnut-desk-v1.webp')}")`} as CSSProperties}>
-    <DeskRecord src={asset('prototype/george-street-shuffle.mp3')}/>
+    <DeskRecord src={asset('prototype/george-street-shuffle.mp3')} artBase={asset('prototype')}/>
     <div className="desk-light-falloff" aria-hidden="true"/>
     <aside className="desk-lamp" aria-label="Desk lamp">
       <span className="lamp-stem" aria-hidden="true"/>

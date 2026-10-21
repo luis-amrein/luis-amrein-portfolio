@@ -30,3 +30,5 @@ Visual decision captured: Art Journal left + Fashion Issue right, existing brand
 Opening flow decision: closed right-hand cover → portrait left / contents right. The translucent invitation uses paper-white light, a mint aura, faint sparkles, and a slow hover; reduced motion keeps it still. Detailed paper-motion tuning is deferred.
 
 The landing view hides all surrounding text and controls except the cover and “Open me”. A cropped LP (diameter tied to the magazine scale) spins at 33⅓ rpm. Click its raised tonearm to place the stylus and fade in Kevin MacLeod’s “George Street Shuffle” (CC BY 4.0; credit in the contents overlay); click again to lift and pause. The record remains independent of chapter changes, and reduced motion stops the continuous spin.
+
+Turntable v2 uses photographic vinyl and chrome hardware assets. The LP diameter is now 1.5× the magazine page height in landscape, giving a broader, larger arc. Reflections remain fixed; only the label and reverse-drifting strobe-dot rows animate. This reproduces the visual impression of platter strobe dots without flashing the screen. See TURNTABLE-ASSETS.md for generation provenance.

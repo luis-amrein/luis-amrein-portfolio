@@ -21,3 +21,7 @@ Use case: photorealistic-natural. Asset type: background photograph for an inter
 - Project asset: `public/prototype/george-street-shuffle.mp3`.
 - Change: full recording re-encoded at 128 kbps for web playback; no composition changes. Playback volume fades in/out with the tonearm.
 - Visible attribution appears in the magazine contents overlay. The generated placeholder track has been replaced.
+
+## Photographic turntable v2
+
+See [TURNTABLE-ASSETS.md](TURNTABLE-ASSETS.md) for both saved assets, built-in generation mode, exact prompts, and the distinction between stationary light reflections and animated strobe-dot phases.
