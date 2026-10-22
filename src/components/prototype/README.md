@@ -59,3 +59,6 @@ The wood background and both desk objects now share the camera transform derived
 
 ### Camera typography handoff
 The book keeps its compositor layer after the camera settles, with matching 3D identity transforms at both ends of the animation. Text autosizing is fixed at 100% and macOS font smoothing stays consistent. Browser measurements confirm that contents heading font family and computed size remain unchanged across the zoom completion; cover type remains proportional to its page width.
+
+### Organic invitation comparison
+Five numbered Open me buttons compare breathing droplets, flowing reflections, a letter wave, soft mercury deformation and coral/mint iridescence. Each opens the same issue. The invitation is gated by camera completion, so it stays absent during both the cover close and reverse zoom. Reduced motion freezes the continuous studies.

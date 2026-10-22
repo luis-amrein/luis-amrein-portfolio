@@ -315,3 +315,31 @@ astro-dev-toolbar{display:none}
 .magazine-app{-webkit-text-size-adjust:100%;text-size-adjust:100%;-webkit-font-smoothing:antialiased}
 .magazine-book{transform:translate3d(0,0,0);will-change:transform}
 .magazine-page{-webkit-backface-visibility:hidden;backface-visibility:hidden}
+
+/* Five liquid invitation studies, shown only after the return camera settles. */
+.invitation-gallery{position:absolute;inset:3% 50% 3% 0;z-index:14;display:flex;flex-direction:column;animation:invitation-arrive .65s ease both}
+.invitation-gallery .open-invitation{position:relative;inset:auto;width:100%;height:auto;flex:1;min-height:0}
+.invitation-gallery .invitation-word{font-size:clamp(28px,4vw,62px);display:inline-block;will-change:transform}
+.invitation-number{position:absolute;left:9%;top:50%;transform:translateY(-50%);font:9px/1 var(--sans);letter-spacing:.1em;color:#fff4dc70}
+.liquid-1 .invitation-word{animation:liquid-breathe 5.7s ease-in-out infinite!important}
+.liquid-2 .invitation-word{background-image:linear-gradient(110deg,#ffffff09 10%,#fff4df85 30%,#ffffff0a 46%,#fff9ecac 57%,#ffffff0a 72%)!important;background-size:240% 100%!important;animation:liquid-flow 8s ease-in-out infinite!important}
+.invitation-gallery .liquid-3 .invitation-word{background:none;-webkit-text-stroke:.5px #fff5df61}
+.invitation-letter{display:inline-block;background:linear-gradient(175deg,#fff9ef9c,#ffffff12 40%,#ffffff05 68%,#fff8df94);background-clip:text;-webkit-background-clip:text;animation:liquid-tide 4.8s ease-in-out infinite;animation-delay:calc(var(--letter)*-.27s)}
+.liquid-4 .invitation-word{background-image:linear-gradient(177deg,#fffdf4c7,#ffffff10 24%,#3b302826 48%,#fff9d9b8 65%,#ffffff12 85%)!important;animation:liquid-mercury 7s ease-in-out infinite!important;transform-origin:50% 70%}
+.liquid-5 .invitation-word{background-image:linear-gradient(125deg,#36ffb64d,#fff9ec0d 27%,#ff5a3642 48%,#fff9ec7d 62%,#36ffb61f 85%)!important;background-size:200% 180%!important;animation:liquid-iridescence 9s ease-in-out infinite!important}
+@keyframes invitation-arrive{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@keyframes liquid-breathe{0%,100%{transform:translate3d(0,2px,0) scale(1.015,.985)}50%{transform:translate3d(0,-3px,0) scale(.985,1.025)}}
+@keyframes liquid-flow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes liquid-tide{0%,100%{transform:translate3d(0,2px,0) rotate(-1deg)}50%{transform:translate3d(0,-3px,0) rotate(1deg)}}
+@keyframes liquid-mercury{0%,100%{transform:scale(1.025,.98) skewX(-1deg)}50%{transform:scale(.98,1.03) skewX(1deg)}}
+@keyframes liquid-iridescence{0%,100%{background-position:0% 0%;transform:translateY(1px)}50%{background-position:100% 100%;transform:translateY(-2px)}}
+@media(orientation:portrait){
+ .invitation-gallery{inset:-8% 50% -8% 0}
+ .invitation-gallery .invitation-word{font-size:clamp(20px,5.7vw,32px)}
+ .invitation-number{left:1%;font-size:6px}
+}
+@media(prefers-reduced-motion:reduce){.invitation-gallery,.invitation-gallery .invitation-word,.invitation-letter{animation:none!important}}
+@media(orientation:portrait){
+ .invitation-gallery{inset:10% 50% -20% 0}
+ .desk-scene:not(.reader-open) .invitation-gallery .open-invitation{width:100%}
+}
