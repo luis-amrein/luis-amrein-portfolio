@@ -224,11 +224,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     <main className="reader-main"><div className="spread-topline"><span>{spread===-1?'The cover':`${pad(spread+1)} / ${names[spread]}`}</span><span>Product, people & everything in between.</span></div><div className={`magazine-book ${turn?'is-turning':''} ${spread===-1?'is-closed':''} ${turn?.to===-1?'is-closing':''}`} ref={book} onPointerDown={pointerDown} onPointerUp={e=>pointerUp(e)} onPointerCancel={e=>pointerUp(e,true)} aria-label={spread===-1?'Closed magazine cover':`Magazine spread ${spread+1}: ${names[spread]}`}><div className="book-base">{Page({index:turn&&(portraitMode||turn.direction<0)?turn.to:spread,side:0})}{Page({index:turn&&(portraitMode||turn.direction>0)?turn.to:spread,side:1})}</div>{turn&&<div className={`turning-sheet ${turn.direction>0?'forward':'backward'}`} ref={sheet}>{Page({index:spread,side:spread===-1?1:portraitMode?0:turn.direction>0?1:0,face:"sheet-front"})}{Page({index:turn.to,side:turn.to===-1?1:portraitMode?0:turn.direction>0?0:1,face:"sheet-back"})}<div className="turn-shading"/><div className="back-shading"/></div>}
       {spread===-1&&!turn&&<>
         <button className="open-invitation" onClick={()=>go(0)} aria-label="Open me — open the magazine">
-          <span className="invitation-aura" aria-hidden="true"/>
-          <span className="invitation-spark spark-one" aria-hidden="true">✧</span>
-          <span className="invitation-spark spark-two" aria-hidden="true">✧</span>
           <span className="invitation-word">Open me</span>
-          <span className="invitation-hint">click, scroll or swipe</span>
         </button>
         <button className="cover-hitarea" onClick={()=>go(0)} aria-label="Open magazine cover"/>
       </>}

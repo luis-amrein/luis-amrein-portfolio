@@ -259,3 +259,21 @@ astro-dev-toolbar{display:none}
 .desk-scene .is-turning .opening-copy:after,.desk-scene .is-closed .opening-copy:after{transition:none}
 .desk-scene .magazine-book.is-closed,.desk-scene .magazine-book.is-closing{background:transparent;box-shadow:none}
 .desk-scene .cover-whitespace{background:transparent;box-shadow:none;transition:none}
+
+/* Clear glass lettering: the desk remains visible through the letter bodies. */
+.desk-scene .invitation-word{
+ font-size:clamp(42px,5.6vw,88px);white-space:nowrap;line-height:1.25;
+ color:transparent;-webkit-text-fill-color:transparent;
+ background:linear-gradient(165deg,#fff7e99c 0%,#fff8e842 18%,#ffffff12 32%,#ffffff08 46%,#fff9e89c 48%,#ffffff14 52%,#ffffff08 72%,#fff5df70 100%);
+ background-clip:text;-webkit-background-clip:text;
+ -webkit-text-stroke:.45px #fff6e75c;
+ text-shadow:0 1px 0 #ffffff21,1px 2px 2px #24120755;
+ filter:drop-shadow(0 -1px 0 #fff9ed26);
+ animation:none;transition:filter .4s ease;
+}
+.desk-scene .open-invitation:hover .invitation-word,
+.desk-scene .open-invitation:focus-visible .invitation-word{
+ color:transparent;text-shadow:0 1px 0 #ffffff30,1px 2px 2px #24120755;filter:brightness(1.2);
+}
+.lamp-off .invitation-word{-webkit-text-stroke-color:#b8dbd35e;filter:brightness(.78)}
+@media(orientation:portrait){.desk-scene .invitation-word{font-size:clamp(29px,7.7vw,48px)}}
