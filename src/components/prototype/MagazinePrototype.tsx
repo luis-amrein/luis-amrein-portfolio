@@ -26,7 +26,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
  const immersiveRef=useRef(immersive);
  const zoomFrom=useRef<DOMRect|null>(null);
  const zoomAnimation=useRef<Animation|null>(null);
- const [slow,setSlow]=useState(false);
+ const [slow,setSlow]=useState(new URLSearchParams(window.location.search).get('motion')==='slow');
  const [lampOn,setLampOn]=useState(true);
  const [reduced,setReduced]=useState(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
  const [portraitMode,setPortraitMode]=useState(window.matchMedia('(orientation: portrait)').matches);

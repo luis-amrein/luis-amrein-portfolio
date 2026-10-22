@@ -76,12 +76,15 @@ export async function createPaperScene(host:HTMLElement,front:HTMLElement,back:H
  const lease=Symbol();leases.set(renderer,lease);
  host.dataset.renderPixels=String(Math.round(cw*ch*pixelRatio*pixelRatio));
  renderer.domElement.className='paper-webgl';renderer.domElement.setAttribute('aria-hidden','true');
- const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(24,cw/ch,1,5000);camera.position.z=ch/(2*Math.tan(THREE.MathUtils.degToRad(12)));
+ // Keep depth precision around the sheet, not a near=1/far=5000 volume.
+ const distance=ch/(2*Math.tan(THREE.MathUtils.degToRad(12)));
+ const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(24,cw/ch,Math.max(10,distance-w*1.5),distance+w*.5);
+ camera.position.z=distance;
  const dark=!!host.closest('.lamp-off');
  const light=new THREE.DirectionalLight(dark?0xb8d4e0:0xffead1,dark?.55:1.55);light.position.set(dark?w*1.1:-w*.15,h*1.25,w*3);light.castShadow=true;
- Object.assign(light.shadow.camera,{left:-w*2,right:w*2,top:h*1.3,bottom:-h*1.3,near:1,far:w*7});light.shadow.mapSize.set(1024,1024);light.shadow.bias=-.00015;light.shadow.normalBias=.4;light.shadow.radius=5;light.shadow.blurSamples=1;
+ Object.assign(light.shadow.camera,{left:-w*2,right:w*2,top:h*1.3,bottom:-h*1.3,near:1,far:w*7});light.shadow.mapSize.set(1024,1024);light.shadow.bias=.00015;light.shadow.normalBias=.15;light.shadow.radius=5;light.shadow.blurSamples=1;
  scene.add(light,new THREE.AmbientLight(dark?0xb8d2d2:0xffffff,dark?1.35:1.8));
- const receiver=new THREE.Mesh(new THREE.PlaneGeometry(w*3.3,h*1.75),new THREE.ShadowMaterial({opacity:.25,depthWrite:false}));receiver.position.z=-.7;receiver.receiveShadow=true;scene.add(receiver);
+ const receiver=new THREE.Mesh(new THREE.PlaneGeometry(w*3.3,h*1.75),new THREE.ShadowMaterial({opacity:.25,depthWrite:false}));receiver.position.z=-Math.max(2,w*.003);receiver.receiveShadow=true;scene.add(receiver);
  const textures=[frontPrint,backPrint].map(c=>{if(gpuTextures.has(c))return gpuTextures.get(c)!;const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());gpuTextures.set(c,t);return t});
  const cols=48,rows=12,geometry=new THREE.PlaneGeometry(w,h,cols,rows),backGeometry=geometry.clone();
  [geometry,backGeometry].forEach((g,face)=>{
@@ -94,7 +97,7 @@ export async function createPaperScene(host:HTMLElement,front:HTMLElement,back:H
  backGeometry.setAttribute('normal',geometry.attributes.normal);
  const materials=textures.map((map,i)=>{
   const cover=(i===0?front:back).classList.contains('closed-cover');
-  return new THREE.MeshPhysicalMaterial({map,side:i===0?THREE.FrontSide:THREE.BackSide,roughness:cover ? 0.46 : 0.94,clearcoat:cover ? 0.72 : 0,clearcoatRoughness:.24,metalness:0,color:0xffffff,polygonOffset:true,polygonOffsetFactor:i===0?-1:1});
+  return new THREE.MeshPhysicalMaterial({map,side:i===0?THREE.FrontSide:THREE.BackSide,roughness:cover ? 0.46 : 0.94,clearcoat:cover ? 0.72 : 0,clearcoatRoughness:.24,metalness:0,color:0xffffff,polygonOffset:false});
  });
  materials.forEach((material,i)=>{material.onBeforeCompile=shader=>{
   shader.uniforms.reversePrint={value:textures[1-i]};shader.fragmentShader='uniform sampler2D reversePrint;\n'+shader.fragmentShader;
@@ -103,7 +106,8 @@ export async function createPaperScene(host:HTMLElement,front:HTMLElement,back:H
    float bleed=dot(texture2D(reversePrint,vec2(1.-vMapUv.x,vMapUv.y)).rgb,vec3(.3333));
    diffuseColor.rgb*=(0.997+fibre*0.006)*mix(1.,0.97+bleed*0.03,0.45);`);
  }});
- const face=new THREE.Mesh(geometry,materials[0]),reverse=new THREE.Mesh(backGeometry,materials[1]);face.castShadow=true;reverse.castShadow=true;face.frustumCulled=false;reverse.frustumCulled=false;scene.add(face,reverse);
+ const face=new THREE.Mesh(geometry,materials[0]),reverse=new THREE.Mesh(backGeometry,materials[1]);// A single double-sided caster avoids coplanar depth writes from both faces.
+ materials[0].shadowSide=THREE.DoubleSide;face.castShadow=true;reverse.castShadow=false;face.frustumCulled=false;reverse.frustumCulled=false;scene.add(face,reverse);
  function paint(raw:number,corner=.5){
   const p=Math.max(0,Math.min(1,raw)),lift=Math.sin(Math.PI*p),flutter=Math.min(.025,Math.max(0,raw-1))*7,positions=geometry.attributes.position as THREE.BufferAttribute;
   for(let row=0;row<=rows;row++){const v=row/rows;let x=0,z=0;for(let col=0;col<=cols;col++){
