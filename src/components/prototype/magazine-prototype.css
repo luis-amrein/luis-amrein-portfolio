@@ -277,3 +277,21 @@ astro-dev-toolbar{display:none}
 }
 .lamp-off .invitation-word{-webkit-text-stroke-color:#b8dbd35e;filter:brightness(.78)}
 @media(orientation:portrait){.desk-scene .invitation-word{font-size:clamp(29px,7.7vw,48px)}}
+
+/* Leave a clear tabletop footprint for the fully opened issue. */
+@media(orientation:landscape){
+ .desk-scene:not(.reader-open) .magazine-book{width:min(72vw,calc((100svh - 340px)*1.68));margin-left:auto;margin-right:3vw}
+}
+/* Rounded liquid edges, with a fine highlight and a lower refracted rim. */
+.desk-scene .invitation-word{
+ background-image:linear-gradient(175deg,#fff9efb3 0%,#ffffff38 19%,#ffffff08 38%,#ffffff12 57%,#26130724 76%,#fff7de87 95%,#ffffff38 100%);
+ -webkit-text-stroke:.65px #fff7e761;
+ text-shadow:0 -1px 1px #fffae966,0 1px 1px #3d230a70,0 2px 1px #fff1d24d,1px 4px 3px #21110452;
+}
+@media(orientation:portrait){
+ .desk-scene:not(.reader-open) .magazine-book{aspect-ratio:1.68;height:auto}
+ .desk-scene:not(.reader-open) .magazine-book .book-base{display:grid;grid-template-columns:1fr 1fr;height:100%}
+ .desk-scene:not(.reader-open) .book-base>.magazine-page{height:100%;min-height:0;aspect-ratio:auto}
+ .desk-scene:not(.reader-open) .open-invitation{width:50%}
+ .desk-scene:not(.reader-open) .magazine-book.is-closed.is-turning .turning-sheet{width:50%;left:50%!important}
+}

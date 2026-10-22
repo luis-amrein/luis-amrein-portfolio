@@ -84,14 +84,23 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     window.history.replaceState({}, '', url);
   }
 
-  function finishTurn(m:Motion,committed:boolean){
+  async function finishTurn(m:Motion,committed:boolean){
     if(motion.current!==m)return;
+    const opening=committed&&m.from===-1&&m.to>=0;
     flushSync(()=>{
       if(committed)setSpread(m.to);
-      readingView((committed?m.to:m.from)>=0);
+      if(!opening)readingView((committed?m.to:m.from)>=0);
       setTurn(null);
     });
     m.animation?.cancel();m.shading?.cancel();
+    if(opening){
+      // Let the complete spread rest on the desk before the camera moves.
+      await new Promise(resolve=>window.setTimeout(resolve,220));
+      if(motion.current!==m)return;
+      flushSync(()=>readingView(true));
+      await zoomAnimation.current?.finished.catch(()=>{});
+      if(motion.current!==m)return;
+    }
     motion.current=null;busy.current=false;swipe.current=null;
   }
 
@@ -103,7 +112,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     const m:Motion={to,from:spread,direction:to>spread?1:-1,corner:0};
     motion.current=m;
     if(portraitMode&&book.current)book.current.scrollTop=0;
-    readingView(to>=0);
+    if(spread!==-1)readingView(to>=0);
     setTurn({to,direction:m.direction,corner:0});
   }
 
