@@ -295,3 +295,18 @@ astro-dev-toolbar{display:none}
  .desk-scene:not(.reader-open) .open-invitation{width:50%}
  .desk-scene:not(.reader-open) .magazine-book.is-closed.is-turning .turning-sheet{width:50%;left:50%!important}
 }
+
+/* One camera transform for the entire tabletop, including its wood grain. */
+.desk-scene{background-image:none;overflow-x:clip}
+.desk-world{position:fixed;inset:0;z-index:-1;transform-origin:0 0;pointer-events:none;will-change:transform;
+ background-color:#4b2c18;
+ background-image:radial-gradient(ellipse 85% 75% at 50% -10%,#ffe1a01c,transparent 72%),linear-gradient(180deg,#180b0405 0%,#160a0317 65%,#12080242 100%),var(--desk-texture);
+ background-position:center;background-size:cover;background-repeat:no-repeat;
+}
+.desk-world .desk-lamp,.desk-world .desk-record{position:absolute;transition:filter 1.2s;transform:none;opacity:1}
+.desk-world .desk-lamp{pointer-events:auto}
+.reader-open .desk-world .desk-lamp,.reader-open .desk-world .desk-record{transform:none;opacity:1;pointer-events:none}
+.desk-world .desk-light-falloff{position:absolute;z-index:0}
+.reader-open .magazine-book.is-closed .book-base{display:grid;grid-template-columns:1fr 1fr;height:100%}
+.reader-open .magazine-book.is-closed .book-base>.magazine-page{height:100%;min-height:0;aspect-ratio:auto}
+.is-landing .reader-exit{visibility:hidden;pointer-events:none}

@@ -53,3 +53,6 @@ Preset playback pass: every turn uses the same 860ms transform/opacity timeline 
 
 ### Tabletop opening sequence
 The cover now turns completely on the desk before a short 220 ms pause and the camera zoom. The landscape book footprint leaves clearance from the lamp and record player; decorations only move away when the zoom starts. The input lock spans both phases. The invitation has rounded, translucent liquid lettering.
+
+### Shared tabletop camera
+The wood background and both desk objects now share the camera transform derived from the magazine footprint. They move out of frame through magnification, without independent slides or fades. Closing first folds the cover in the immersive view (right half cover, left half magnified wood), holds briefly, then reverses the camera to reveal the desk objects.

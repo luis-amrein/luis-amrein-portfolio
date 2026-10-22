@@ -24,6 +24,9 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
  const immersiveRef=useRef(immersive);
  const zoomFrom=useRef<DOMRect|null>(null);
  const zoomAnimation=useRef<Animation|null>(null);
+ const deskWorld=useRef<HTMLDivElement>(null);
+ const worldAnimation=useRef<Animation|null>(null);
+ const worldZoom=useRef('translate(0px,0px) scale(1,1)');
  const [slow,setSlow]=useState(new URLSearchParams(window.location.search).get('motion')==='slow');
  const [lampOn,setLampOn]=useState(true);
  const [reduced,setReduced]=useState(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -49,7 +52,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     preference.addEventListener('change', sync); orientation.addEventListener('change', sync);
     return () => {
       preference.removeEventListener('change', sync); orientation.removeEventListener('change', sync);
-      zoomAnimation.current?.cancel();
+      zoomAnimation.current?.cancel();worldAnimation.current?.cancel();
       motion.current?.animation?.cancel();motion.current?.shading?.cancel();motion.current=null;busy.current=false;
     };
   }, []);
@@ -66,11 +69,26 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     if(!element||!from)return;
     zoomFrom.current=null;
     const to=element.getBoundingClientRect();
-    if(reduced||!to.width||!to.height)return;
+    if(!to.width||!to.height)return;
+    const world=deskWorld.current;
+    const previousWorld=worldZoom.current;
+    if(immersive){
+      const sx=to.width/from.width,sy=to.height/from.height;
+      worldZoom.current=`translate(${-from.left*sx}px,${-from.top*sy}px) scale(${sx},${sy})`;
+    }
+    const targetWorld=immersive?worldZoom.current:'translate(0px,0px) scale(1,1)';
+    worldAnimation.current?.cancel();
+    if(world)world.style.transform=targetWorld;
+    if(reduced)return;
+    const timing={duration:immersive?1450:1100,easing:immersive?'cubic-bezier(.22,.72,.12,1)':'cubic-bezier(.32,0,.18,1)',fill:'none' as FillMode};
     zoomAnimation.current=element.animate([
       {transform:`translate(${from.left-to.left}px,${from.top-to.top}px) scale(${from.width/to.width},${from.height/to.height})`},
       {transform:'translate(0,0) scale(1,1)'}
-    ],{duration:immersive?1450:1100,easing:immersive?'cubic-bezier(.22,.72,.12,1)':'cubic-bezier(.32,0,.18,1)',fill:'none'});
+    ],timing);
+    if(world)worldAnimation.current=world.animate([
+      {transform:immersive?'translate(0px,0px) scale(1,1)':previousWorld},
+      {transform:targetWorld}
+    ],timing);
   },[immersive,reduced]);
   useEffect(()=>{
     if(portraitMode&&book.current)book.current.scrollTop=0;
@@ -86,18 +104,18 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
 
   async function finishTurn(m:Motion,committed:boolean){
     if(motion.current!==m)return;
-    const opening=committed&&m.from===-1&&m.to>=0;
+    const cameraChange=committed&&(m.from===-1||m.to===-1);
     flushSync(()=>{
       if(committed)setSpread(m.to);
-      if(!opening)readingView((committed?m.to:m.from)>=0);
+      if(!cameraChange)readingView((committed?m.to:m.from)>=0);
       setTurn(null);
     });
     m.animation?.cancel();m.shading?.cancel();
-    if(opening){
+    if(cameraChange){
       // Let the complete spread rest on the desk before the camera moves.
       await new Promise(resolve=>window.setTimeout(resolve,220));
       if(motion.current!==m)return;
-      flushSync(()=>readingView(true));
+      flushSync(()=>readingView(m.to>=0));
       await zoomAnimation.current?.finished.catch(()=>{});
       if(motion.current!==m)return;
     }
@@ -112,7 +130,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     const m:Motion={to,from:spread,direction:to>spread?1:-1,corner:0};
     motion.current=m;
     if(portraitMode&&book.current)book.current.scrollTop=0;
-    if(spread!==-1)readingView(to>=0);
+    if(spread!==-1&&to!==-1)readingView(to>=0);
     setTurn({to,direction:m.direction,corner:0});
   }
 
@@ -217,6 +235,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
   }
   return <div className={`magazine-app desk-scene ${immersive?'reader-open':''} ${spread===-1?'is-landing':''} ${lampOn?'lamp-on':'lamp-off'} ${variant==='D'?'variant-C variant-D':`variant-${variant}`}`} style={{'--desk-texture':`url("${asset('prototype/walnut-desk-v1.webp')}")`} as CSSProperties}>
     {immersive&&<button className="reader-exit" onClick={()=>go(-1)} aria-label="Close magazine and return to the desk" title="Back to desk">↙</button>}
+    <div className="desk-world" ref={deskWorld}>
     <DeskRecord src={asset('prototype/backbay-lounge.mp3')} artBase={asset('prototype')} inactive={immersive}/>
     <div className="desk-light-falloff" aria-hidden="true"/>
     <aside className="desk-lamp" aria-label="Desk lamp" inert={immersive||undefined} aria-hidden={immersive||undefined}>
@@ -229,9 +248,10 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
       </div>
       <span className="lamp-status" aria-hidden="true">{lampOn?'LIGHT ON':'LIGHT OFF'}</span>
     </aside>
+    </div>
     <header className="reader-header"><a href={base} className="reader-brand">LA<span> / PORTFOLIO</span></a><div className="reader-edition">The magazine experiment <span>— Issue No. 01</span></div><button className="contents-toggle" onClick={()=>setContents(!contents)} aria-expanded={contents} aria-controls="issue-contents">{contents?'Close':'Contents'} <span>{contents?'×':'☰'}</span></button></header>
     <main className="reader-main"><div className="spread-topline"><span>{spread===-1?'The cover':`${pad(spread+1)} / ${names[spread]}`}</span><span>Product, people & everything in between.</span></div><div className={`magazine-book ${turn?'is-turning':''} ${spread===-1?'is-closed':''} ${turn?.to===-1?'is-closing':''}`} ref={book} onPointerDown={pointerDown} onPointerUp={e=>pointerUp(e)} onPointerCancel={e=>pointerUp(e,true)} aria-label={spread===-1?'Closed magazine cover':`Magazine spread ${spread+1}: ${names[spread]}`}><div className="book-base">{Page({index:turn&&(portraitMode||turn.direction<0)?turn.to:spread,side:0})}{Page({index:turn&&(portraitMode||turn.direction>0)?turn.to:spread,side:1})}</div>{turn&&<div className={`turning-sheet ${turn.direction>0?'forward':'backward'}`} ref={sheet}>{Page({index:spread,side:spread===-1?1:portraitMode?0:turn.direction>0?1:0,face:"sheet-front"})}{Page({index:turn.to,side:turn.to===-1?1:portraitMode?0:turn.direction>0?0:1,face:"sheet-back"})}<div className="turn-shading"/><div className="back-shading"/></div>}
-      {spread===-1&&!turn&&<>
+      {spread===-1&&!turn&&!immersive&&<>
         <button className="open-invitation" onClick={()=>go(0)} aria-label="Open me — open the magazine">
           <span className="invitation-word">Open me</span>
         </button>
