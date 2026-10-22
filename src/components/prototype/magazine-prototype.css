@@ -346,3 +346,10 @@ astro-dev-toolbar{display:none}
 
 .invitation-selected{animation:invitation-arrive .65s ease both}
 @media(prefers-reduced-motion:reduce){.invitation-selected,.invitation-selected .invitation-word{animation:none!important}}
+
+/* Keep the interactive hardware above the app background. Empty layout space
+   must not intercept the tonearm, which extends beyond the book footprint. */
+.desk-world{z-index:0}
+.reader-main{position:relative;z-index:1;pointer-events:none}
+.magazine-book,.reader-controls{pointer-events:auto}
+.reader-header{position:relative;z-index:2}

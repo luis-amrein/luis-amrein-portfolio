@@ -64,3 +64,6 @@ The book keeps its compositor layer after the camera settles, with matching 3D i
 Five numbered Open me buttons compare breathing droplets, flowing reflections, a letter wave, soft mercury deformation and coral/mint iridescence. Each opens the same issue. The invitation is gated by camera completion, so it stays absent during both the cover close and reverse zoom. Reduced motion freezes the continuous studies.
 
 Selected invitation: variation 02, flowing glass reflection. The five-study comparison is preserved in commit 447329c; the landing now shows a single larger invitation and retains the post-camera reveal gate.
+
+### Interaction recovery
+The desk scene now sits above the app background, and unused reader layout space does not intercept hardware clicks. Page turns no longer wait for an unrelated previous camera animation. Both flip and camera completion have a bounded fallback so a missing Web Animations completion event cannot permanently hold the navigation lock.

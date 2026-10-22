@@ -14,6 +14,15 @@ const directions = [
  {key:'C',name:'The Art Journal',description:'Coral · graphic compositions · radical scale'}
 ];
 const pad=(n:number)=>String(n).padStart(2,'0');
+// A delayed/cancelled Web Animations completion must never lock navigation.
+function animationComplete(animation:Animation|undefined|null,duration:number){
+  if(!animation)return Promise.resolve();
+  return new Promise<void>(resolve=>{
+    const done=()=>{window.clearTimeout(timeout);resolve()};
+    const timeout=window.setTimeout(done,duration+250);
+    animation.finished.then(done,done);
+  });
+}
 export default function MagazinePrototype({projects,portrait,base}:Props){
  const initial=new URLSearchParams(window.location.search).get('variant')||'D';
  const [variant,setVariant]=useState(directions.some(d=>d.key===initial)?initial:'D');
@@ -117,7 +126,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
       await new Promise(resolve=>window.setTimeout(resolve,220));
       if(motion.current!==m)return;
       flushSync(()=>readingView(m.to>=0));
-      await zoomAnimation.current?.finished.catch(()=>{});
+      await animationComplete(zoomAnimation.current,m.to>=0?1450:1100);
       if(motion.current!==m)return;
     }
     motion.current=null;busy.current=false;swipe.current=null;
@@ -152,8 +161,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     m.animation=element.animate(keyframes,{duration:slow?1800:860,easing:'cubic-bezier(.4,.05,.2,1)',fill:'forwards'});
     const shade=element.querySelector<HTMLElement>('.turn-shading');
     if(shade)m.shading=shade.animate([{opacity:0},{opacity:.65,offset:.5},{opacity:0}],{duration:slow?1800:860,easing:'ease-in-out',fill:'forwards'});
-    const camera=zoomAnimation.current;
-    Promise.all([m.animation.finished,camera?.finished.catch(()=>{})]).then(()=>finishTurn(m,true)).catch(()=>{});
+    animationComplete(m.animation,slow?1800:860).then(()=>finishTurn(m,true));
   },[turn]);
 
   useEffect(() => {
