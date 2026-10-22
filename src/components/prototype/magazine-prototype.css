@@ -251,3 +251,11 @@ astro-dev-toolbar{display:none}
  .turning-sheet .sheet-back{display:none}
  .reader-open .magazine-book.is-closed.is-turning .turning-sheet{width:65%;left:35%!important}
 }
+
+/* Page replacement is structural, not a day/night material transition.
+   Interpolating ivory to transparent left a ghost page over the desk. */
+.desk-scene .magazine-page{transition:filter 1.2s,color 1.2s}
+.desk-scene .is-turning .opening-copy,.desk-scene .is-closed .opening-copy,
+.desk-scene .is-turning .opening-copy:after,.desk-scene .is-closed .opening-copy:after{transition:none}
+.desk-scene .magazine-book.is-closed,.desk-scene .magazine-book.is-closing{background:transparent;box-shadow:none}
+.desk-scene .cover-whitespace{background:transparent;box-shadow:none;transition:none}

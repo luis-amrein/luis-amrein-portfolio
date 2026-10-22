@@ -14,12 +14,12 @@ Use case: photorealistic-natural. Asset type: background photograph for an inter
 
 ## Jazz recording
 
-- Track: **George Street Shuffle**, Kevin MacLeod (incompetech.com), ISRC USUAN1300035.
-- Source and licence statement: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1300035
-- Original MP3: https://incompetech.com/music/royalty-free/mp3-royaltyfree/George%20Street%20Shuffle.mp3
+- Track: **Backbay Lounge**, Kevin MacLeod (incompetech.com), ISRC USUAN1700068.
+- Source and licence statement: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1700068
+- Original MP3: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Backbay%20Lounge.mp3
 - Licence: Creative Commons Attribution 4.0, https://creativecommons.org/licenses/by/4.0/
-- Project asset: `public/prototype/george-street-shuffle.mp3`.
-- Change: full recording re-encoded at 128 kbps for web playback; no composition changes. Playback volume fades in/out with the tonearm.
+- Project asset: `public/prototype/backbay-lounge.mp3`.
+- Change: original full MP3 recording; no composition changes. Playback volume fades in/out with the tonearm.
 - Visible attribution appears in the magazine contents overlay. The generated placeholder track has been replaced.
 
 ## Photographic turntable v2

@@ -70,7 +70,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     zoomAnimation.current=element.animate([
       {transform:`translate(${from.left-to.left}px,${from.top-to.top}px) scale(${from.width/to.width},${from.height/to.height})`},
       {transform:'translate(0,0) scale(1,1)'}
-    ],{duration:1450,easing:'cubic-bezier(.22,.72,.12,1)',fill:'none'});
+    ],{duration:immersive?1450:1100,easing:immersive?'cubic-bezier(.22,.72,.12,1)':'cubic-bezier(.32,0,.18,1)',fill:'none'});
   },[immersive,reduced]);
   useEffect(()=>{
     if(portraitMode&&book.current)book.current.scrollTop=0;
@@ -202,13 +202,13 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
   }
   function Page({index,side,face=''}:{index:number;side:number;face?:string}){
     const kind = index===-1 ? (side===0?'cover-whitespace':'closed-cover') : '';
-    return <div className={`magazine-page side-${side} ${kind} ${face}`} aria-hidden={!!face||index===-1&&side===0||undefined} inert={!!face||undefined}>
+    return <div key={`${index}:${side}:${face}`} className={`magazine-page side-${side} ${kind} ${face}`} aria-hidden={!!face||index===-1&&side===0||undefined} inert={!!face||undefined}>
       {index===-1?(side===0?null:Hero({side:0})):index===0?(side===0?Hero({side:1}):IssueContents()):index===1?Work({side}):index===2?About({side}):ProjectPage({index,side})}
     </div>;
   }
   return <div className={`magazine-app desk-scene ${immersive?'reader-open':''} ${spread===-1?'is-landing':''} ${lampOn?'lamp-on':'lamp-off'} ${variant==='D'?'variant-C variant-D':`variant-${variant}`}`} style={{'--desk-texture':`url("${asset('prototype/walnut-desk-v1.webp')}")`} as CSSProperties}>
     {immersive&&<button className="reader-exit" onClick={()=>go(-1)} aria-label="Close magazine and return to the desk" title="Back to desk">↙</button>}
-    <DeskRecord src={asset('prototype/george-street-shuffle.mp3')} artBase={asset('prototype')} inactive={immersive}/>
+    <DeskRecord src={asset('prototype/backbay-lounge.mp3')} artBase={asset('prototype')} inactive={immersive}/>
     <div className="desk-light-falloff" aria-hidden="true"/>
     <aside className="desk-lamp" aria-label="Desk lamp" inert={immersive||undefined} aria-hidden={immersive||undefined}>
       <span className="lamp-stem" aria-hidden="true"/>
@@ -235,6 +235,6 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
       <div className="book-spine" aria-hidden="true"/>{!turn&&spread>=0&&<button className="edge-turn edge-prev" aria-label="Turn to previous spread" onClick={()=>go(spread-1)}>↶</button>}{!turn&&spread>=0&&spread<total-1&&<button className="edge-turn edge-next" aria-label="Turn to next spread" onClick={()=>go(spread+1)}>↷</button>}</div>
     <div className="reader-controls"><div className="motion-controls"><span className="small-dot"/>{reduced?'Reduced motion':'Sculpted paper'}<button onClick={()=>setSlow(!slow)} aria-pressed={slow}>{slow?'Slow study':'Natural pace'}</button></div><div className="paging"><button onClick={()=>go(spread-1)} disabled={spread===-1||!!turn} aria-label="Previous spread">←</button><span aria-live="polite">{spread===-1?'Cover':<>{pad(spread*2+1)} — {pad(spread*2+2)} <small>/ {pad(total*2)}</small></>}</span><button onClick={()=>go(spread+1)} disabled={spread===total-1||!!turn} aria-label="Next spread">→</button></div><p className="interaction-hint">{spread===-1?<>A little curiosity <span>opens a whole world.</span></>:<>Scroll horizontally <span>or swipe to turn ↔</span></>}</p></div></main>
     <div className="prototype-switcher" aria-label="Prototype design directions"><span className="prototype-badge">Prototype</span><button onClick={()=>switchVariant(-1)} aria-label="Previous design direction">‹</button><div><strong>{direction.key} — {direction.name}</strong><span>{direction.description}</span></div><button onClick={()=>switchVariant(1)} aria-label="Next design direction">›</button><span className="variant-count">{directions.findIndex(d=>d.key===variant)+1}/{directions.length}</span></div>
-    {contents&&<div className="contents-overlay" id="issue-contents"><div className="contents-heading"><span className="mini-label">Inside this issue</span><h2>Contents.</h2></div><nav aria-label="Magazine contents"><button onClick={()=>{setContents(false);go(-1)}} aria-current={spread===-1?'page':undefined}><span>Cover</span><strong>Return to the cover</strong><span>↶</span></button>{names.map((name,i)=><button key={i} onClick={()=>{setContents(false);go(i)}} aria-current={spread===i?'page':undefined}><span>{pad(i*2+1)}—{pad(i*2+2)}</span><strong>{name}</strong><span>↗</span></button>)}</nav><p>One spread per chapter. Take your time.</p><p className="music-credit">Music: <a href="https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1300035" target="_blank" rel="noreferrer">“George Street Shuffle” — Kevin MacLeod (incompetech.com)</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>. Re-encoded for web playback.</p></div>}
+    {contents&&<div className="contents-overlay" id="issue-contents"><div className="contents-heading"><span className="mini-label">Inside this issue</span><h2>Contents.</h2></div><nav aria-label="Magazine contents"><button onClick={()=>{setContents(false);go(-1)}} aria-current={spread===-1?'page':undefined}><span>Cover</span><strong>Return to the cover</strong><span>↶</span></button>{names.map((name,i)=><button key={i} onClick={()=>{setContents(false);go(i)}} aria-current={spread===i?'page':undefined}><span>{pad(i*2+1)}—{pad(i*2+2)}</span><strong>{name}</strong><span>↗</span></button>)}</nav><p>One spread per chapter. Take your time.</p><p className="music-credit">Music: <a href="https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1700068" target="_blank" rel="noreferrer">“Backbay Lounge” — Kevin MacLeod (incompetech.com)</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>. Playback volume fades in and out.</p></div>}
   </div>;
 }
