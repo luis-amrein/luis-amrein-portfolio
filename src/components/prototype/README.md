@@ -56,3 +56,6 @@ The cover now turns completely on the desk before a short 220 ms pause and the c
 
 ### Shared tabletop camera
 The wood background and both desk objects now share the camera transform derived from the magazine footprint. They move out of frame through magnification, without independent slides or fades. Closing first folds the cover in the immersive view (right half cover, left half magnified wood), holds briefly, then reverses the camera to reveal the desk objects.
+
+### Camera typography handoff
+The book keeps its compositor layer after the camera settles, with matching 3D identity transforms at both ends of the animation. Text autosizing is fixed at 100% and macOS font smoothing stays consistent. Browser measurements confirm that contents heading font family and computed size remain unchanged across the zoom completion; cover type remains proportional to its page width.

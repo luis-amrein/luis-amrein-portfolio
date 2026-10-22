@@ -310,3 +310,8 @@ astro-dev-toolbar{display:none}
 .reader-open .magazine-book.is-closed .book-base{display:grid;grid-template-columns:1fr 1fr;height:100%}
 .reader-open .magazine-book.is-closed .book-base>.magazine-page{height:100%;min-height:0;aspect-ratio:auto}
 .is-landing .reader-exit{visibility:hidden;pointer-events:none}
+
+/* Keep glyph rasterization consistent when the camera animation releases. */
+.magazine-app{-webkit-text-size-adjust:100%;text-size-adjust:100%;-webkit-font-smoothing:antialiased}
+.magazine-book{transform:translate3d(0,0,0);will-change:transform}
+.magazine-page{-webkit-backface-visibility:hidden;backface-visibility:hidden}

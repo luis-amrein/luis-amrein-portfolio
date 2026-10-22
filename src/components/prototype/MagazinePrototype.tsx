@@ -82,8 +82,8 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     if(reduced)return;
     const timing={duration:immersive?1450:1100,easing:immersive?'cubic-bezier(.22,.72,.12,1)':'cubic-bezier(.32,0,.18,1)',fill:'none' as FillMode};
     zoomAnimation.current=element.animate([
-      {transform:`translate(${from.left-to.left}px,${from.top-to.top}px) scale(${from.width/to.width},${from.height/to.height})`},
-      {transform:'translate(0,0) scale(1,1)'}
+      {transform:`translate3d(${from.left-to.left}px,${from.top-to.top}px,0) scale(${from.width/to.width},${from.height/to.height})`},
+      {transform:'translate3d(0,0,0) scale(1,1)'}
     ],timing);
     if(world)worldAnimation.current=world.animate([
       {transform:immersive?'translate(0px,0px) scale(1,1)':previousWorld},
