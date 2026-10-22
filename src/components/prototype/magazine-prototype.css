@@ -232,3 +232,22 @@ astro-dev-toolbar{display:none}
 .reader-open .vinyl-label,.reader-open .vinyl-surface-motion,.reader-open .strobe-row{animation-play-state:paused}
 /* The WebGL receiver supplies the moving shadow; avoid repainting a CSS shadow every frame. */
 .magazine-book.is-turning{box-shadow:0 20px 35px -22px #16171466,0 3px 5px #16171433}
+
+/* Preset-only flip experiment: no live mesh, snapshots, spring or drag scrubbing. */
+.turn-shading,.back-shading{box-shadow:none;opacity:0}
+.back-shading{background:linear-gradient(90deg,#0002,transparent 45%,#fff1)}
+.turning-sheet .closed-cover:before,.turning-sheet .closed-cover:after{display:none}
+@media(orientation:portrait){
+ .turning-sheet{width:100%;left:0!important;transform-origin:left center!important}
+ .turning-sheet .magazine-page{height:100svh;aspect-ratio:auto}
+}
+
+@media(orientation:portrait){
+ .reader-open .magazine-book.is-closed.is-turning .book-base{display:flex;flex-direction:column}
+ .magazine-book.is-closing .book-base{display:grid;grid-template-columns:35% 65%;align-items:stretch}
+ .magazine-book.is-closing .cover-whitespace{height:100%;aspect-ratio:auto}
+ .magazine-book.is-closing .closed-cover{height:auto;aspect-ratio:.84}
+ .turning-sheet .magazine-page{height:100%!important;aspect-ratio:auto}
+ .turning-sheet .sheet-back{display:none}
+ .reader-open .magazine-book.is-closed.is-turning .turning-sheet{width:65%;left:35%!important}
+}

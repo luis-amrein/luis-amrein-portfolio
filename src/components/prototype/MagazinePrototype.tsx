@@ -3,12 +3,10 @@ import type { CSSProperties } from 'react';
 import { flushSync } from 'react-dom';
 import './magazine-prototype.css';
 import DeskRecord from './DeskRecord';
-import { createPaperScene, releasePaperRenderer } from './paper-turn';
-import type { PaperScene } from './paper-turn';
 type Project = { id:string; title:string; eyebrow:string; summary:string; year:string; role:string; challenge:string; outcome:string; outcomeLabel:string; tags:string[]; showcase?:{type:string;src:string;alt:string}[] };
 type Props = { projects:Project[]; portrait:string; base:string };
 type Turn = { to:number; direction:number; corner:number };
-type Motion = Turn & {from:number;progress:number;velocity:number;source:'click'|'drag'|'wheel';ready:Promise<void>;scene?:PaperScene};
+type Motion = Turn & {from:number;animation?:Animation;shading?:Animation};
 const directions = [
  {key:'D',name:'The Luis Issue',description:'Art journal × fashion issue · coral & green · sculpted paper'},
  {key:'A',name:'The Editorial',description:'Warm paper · serif headlines · quiet tension'},
@@ -32,21 +30,16 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
  const [portraitMode,setPortraitMode]=useState(window.matchMedia('(orientation: portrait)').matches);
   const sheet = useRef<HTMLDivElement>(null);
   const book = useRef<HTMLDivElement>(null);
-  const sceneHost = useRef<HTMLDivElement>(null);
   const busy = useRef(false);
   const motion = useRef<Motion | null>(null);
-  const frame = useRef(0);
-  const renderFrame=useRef(0);
-  const gesture = useRef<{ x: number; width: number; last: number; time: number } | null>(null);
-  const coverSwipe = useRef<{x:number;y:number;tapToOpen:boolean} | null>(null);
-  const wheel = useRef({ last: 0, locked: false, timer: 0 });
+  const swipe=useRef<{x:number;y:number}|null>(null);
+  const wheel=useRef({last:0,locked:false,amount:0});
   const total = projects.length + 3;
   const names = ['Portrait & contents', 'Selected work', 'About Luis', ...projects.map(p => p.title)];
   const direction = directions.find(d => d.key === variant)!;
   const asset = (src: string) => `${base.replace(/\/$/, '')}/${src}`;
 
   useEffect(() => {
-    const rendererHost=sceneHost.current;
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
     const orientation = window.matchMedia('(orientation: portrait)');
     const sync = () => {
@@ -57,9 +50,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     return () => {
       preference.removeEventListener('change', sync); orientation.removeEventListener('change', sync);
       zoomAnimation.current?.cancel();
-      cancelAnimationFrame(renderFrame.current);
-      cancelAnimationFrame(frame.current); clearTimeout(wheel.current.timer); motion.current?.scene?.dispose(); motion.current=null; busy.current=false;
-      if(rendererHost)releasePaperRenderer(rendererHost);
+      motion.current?.animation?.cancel();motion.current?.shading?.cancel();motion.current=null;busy.current=false;
     };
   }, []);
 
@@ -93,98 +84,47 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     window.history.replaceState({}, '', url);
   }
 
-  function paint(m: Motion, progress: number) {
-    m.progress = Math.max(0, Math.min(1.065, progress));
-    if(renderFrame.current)return;
-    renderFrame.current=requestAnimationFrame(()=>{
-      renderFrame.current=0;
-      if(motion.current!==m)return;
-      if (m.scene) m.scene.paint(m.progress, m.corner);
-      else if (sheet.current) sheet.current.style.transform = `rotateY(${-180 * m.direction * Math.min(1, m.progress)}deg)`;
-    });
-
-  }
-
-  function finishTurn(m: Motion, committed: boolean) {
-    if (motion.current !== m) return;
-    cancelAnimationFrame(frame.current);
-    cancelAnimationFrame(renderFrame.current);renderFrame.current=0;
-    // Commit the destination DOM before hiding the last rendered sheet.
+  function finishTurn(m:Motion,committed:boolean){
+    if(motion.current!==m)return;
     flushSync(()=>{
-      if (committed) setSpread(m.to);
+      if(committed)setSpread(m.to);
       readingView((committed?m.to:m.from)>=0);
       setTurn(null);
     });
-    m.scene?.dispose();
-    book.current?.classList.remove('paper-live');
-    motion.current = null; busy.current = false; gesture.current = null;
-
+    m.animation?.cancel();m.shading?.cancel();
+    motion.current=null;busy.current=false;swipe.current=null;
   }
 
-  function beginTurn(to: number, source: Motion['source'], corner = .6) {
-    busy.current = true;
-    readingView(to>=0);
-    let prepared!: () => void;
-    const m: Motion = { to, from:spread, direction: to > spread ? 1 : -1, corner, progress: 0, velocity: 0, source,
-      ready: new Promise<void>(resolve => { prepared = resolve; }) };
-    motion.current = m;
-    setTurn({ to, direction: m.direction, corner });
-    requestAnimationFrame(() => requestAnimationFrame(async () => {
-      try {
-        const front = sheet.current?.querySelector<HTMLElement>('.sheet-front');
-        const back = sheet.current?.querySelector<HTMLElement>('.sheet-back');
-        if (front && back && sceneHost.current) {
-          const scene = await createPaperScene(sceneHost.current, front, back, m.direction,()=>motion.current===m);
-          if (motion.current !== m || m.progress>.3) { scene.dispose(); prepared(); return; }
-          m.scene = scene;
-          book.current?.classList.add('paper-live');
-          paint(m, m.progress);
-        }
-      } catch (error) { if(!(error instanceof DOMException&&error.name==='AbortError'))console.warn('Paper rendering fallback:', error); }
-      prepared();
-    }));
-    return m;
-  }
-
-  async function settle(m: Motion, commit: boolean, velocity = 0) {
-    // Respond immediately with the compositor-driven sheet while artwork is prepared.
-    if (motion.current !== m) return;
-    cancelAnimationFrame(frame.current);
-    const target = commit ? 1 : 0;
-    let speed = Math.max(-2.5, Math.min(2.5, velocity));
-    let previous = performance.now(), start = previous;
-    const intervals:number[]=[];
-    const stiffness = slow ? 16 : 52, damping = slow ? 6.6 : 11.5;
-    const tick = (now: number) => {
-      if (motion.current !== m) return;
-      intervals.push(now-previous);
-      const dt = Math.min(.032, (now - previous) / 1000); previous = now;
-      speed += ((target - m.progress) * stiffness - speed * damping) * dt;
-      paint(m, m.progress + speed * dt);
-      if ((Math.abs(target - m.progress) < .0008 && Math.abs(speed) < .008) || now - start > (slow ? 4200 : 2300)) {
-        if(book.current&&intervals.length){
-          const sorted=[...intervals].sort((a,b)=>a-b);
-          book.current.dataset.meanFrameMs=(intervals.reduce((sum,n)=>sum+n,0)/intervals.length).toFixed(1);
-          book.current.dataset.p95FrameMs=sorted[Math.min(sorted.length-1,Math.floor(sorted.length*.95))].toFixed(1);
-        }
-        finishTurn(m, commit); return;
-      }
-      frame.current = requestAnimationFrame(tick);
-    };
-    frame.current = requestAnimationFrame(tick);
-  }
-
-  function go(to: number) {
-    if (busy.current || to === spread || to < -1 || to >= total) return;
+  function go(to:number){
+    if(busy.current||to===spread||to< -1||to>=total)return;
     setContents(false);
-    if (reduced || portraitMode) {
-      readingView(to>=0);
-      setSpread(to);
-      if (portraitMode) window.scrollTo({ top: 0, behavior: 'auto' });
-      return;
-    }
-    settle(beginTurn(to, 'click'), true);
+    if(reduced){readingView(to>=0);setSpread(to);return;}
+    busy.current=true;
+    const m:Motion={to,from:spread,direction:to>spread?1:-1,corner:0};
+    motion.current=m;
+    if(portraitMode&&book.current)book.current.scrollTop=0;
+    readingView(to>=0);
+    setTurn({to,direction:m.direction,corner:0});
   }
+
+  useLayoutEffect(()=>{
+    const m=motion.current,element=sheet.current;
+    if(!turn||!m||!element)return;
+    const sign=-m.direction;
+    // The browser replays the same transform-only timeline for every turn.
+    const keyframes:Keyframe[]=portraitMode?[{transform:'translateX(0)',opacity:1},{transform:`translateX(${sign*100}%)`,opacity:0}]:[
+      {transform:'rotateY(0deg) rotateZ(0deg)',offset:0},
+      {transform:`rotateY(${sign*32}deg) rotateZ(${sign*.5}deg)`,offset:.25},
+      {transform:`rotateY(${sign*90}deg) rotateZ(${sign*.9}deg)`,offset:.5},
+      {transform:`rotateY(${sign*151}deg) rotateZ(${sign*.35}deg)`,offset:.75},
+      {transform:`rotateY(${sign*180}deg) rotateZ(0deg)`,offset:1}
+    ];
+    m.animation=element.animate(keyframes,{duration:slow?1800:860,easing:'cubic-bezier(.4,.05,.2,1)',fill:'forwards'});
+    const shade=element.querySelector<HTMLElement>('.turn-shading');
+    if(shade)m.shading=shade.animate([{opacity:0},{opacity:.65,offset:.5},{opacity:0}],{duration:slow?1800:860,easing:'ease-in-out',fill:'forwards'});
+    const camera=zoomAnimation.current;
+    Promise.all([m.animation.finished,camera?.finished.catch(()=>{})]).then(()=>finishTurn(m,true)).catch(()=>{});
+  },[turn]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -203,73 +143,31 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
       if (spread !== -1 && !e.shiftKey && Math.abs(horizontal) <= Math.abs(e.deltaY) * .75) return;
       if (Math.abs(horizontal) < .1) return;
       e.preventDefault();
-      const now = performance.now(), session = wheel.current;
-      const gap = now - session.last;
-      if (gap > 260) session.locked = false;
-      session.last = now;
-      if (session.locked) return;
-      const delta = horizontal * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerWidth : 1);
-      if (busy.current && motion.current?.source !== 'wheel') { session.locked = true; return; }
-      if (!motion.current) {
-        const next = spread + Math.sign(delta);
-        if (next < -1 || next >= total) return;
-        if (reduced || portraitMode) { session.locked = true; go(next); return; }
-        beginTurn(next, 'wheel');
-      }
-      const m = motion.current!;
-      const change = delta * m.direction / ((book.current?.offsetWidth || 900) * .52);
-      m.velocity = m.velocity * .65 + change / Math.max(.016, Math.min(.1, gap / 1000)) * .35;
-      paint(m, Math.max(0, Math.min(1, m.progress + change)));
-      clearTimeout(session.timer);
-      if (m.progress > .97) { session.locked = true; settle(m, true, m.velocity); }
-      else session.timer = window.setTimeout(() => {
-        session.locked = true;
-        settle(m, m.progress > .16 || (m.progress > .065 && m.velocity > .5), m.velocity);
-      }, 160);
+      const now=performance.now(),session=wheel.current;
+      if(now-session.last>300){session.locked=false;session.amount=0;}
+      session.last=now;
+      if(session.locked||busy.current)return;
+      session.amount+=horizontal*(e.deltaMode===1?16:e.deltaMode===2?window.innerWidth:1);
+      if(Math.abs(session.amount)<24)return;
+      session.locked=true;
+      go(spread+Math.sign(session.amount));
     };
     window.addEventListener('keydown', onKey);
     window.addEventListener('wheel', onWheel, { passive: false });
     return () => { window.removeEventListener('keydown', onKey); window.removeEventListener('wheel', onWheel); };
   }, [spread, variant, slow, reduced, portraitMode, contents]);
 
-  function pointerDown(e: React.PointerEvent<HTMLDivElement>) {
-    if (busy.current || e.button !== 0) return;
-    const target = e.target as HTMLElement;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width;
-    if (spread === -1) {
-      if (target.closest('a,button:not(.cover-hitarea):not(.open-invitation)')) return;
-      coverSwipe.current = { x:e.clientX, y:e.clientY, tapToOpen:!!target.closest('.open-invitation,.cover-hitarea') };
-      e.currentTarget.setPointerCapture(e.pointerId);
-      if (reduced || portraitMode || x < .5 || target.closest('.open-invitation')) return;
-    } else if (reduced || portraitMode || target.closest('a,button')) return;
-    const d = spread === -1 ? 1 : x > .8 ? 1 : x < .2 ? -1 : 0;
-    if (!d || spread + d < -1 || spread + d >= total) return;
-    e.preventDefault();
-    beginTurn(spread + d, 'drag', (e.clientY - rect.top) / rect.height * 2 - 1);
-    gesture.current = { x: e.clientX, width: rect.width / 2, last: e.clientX, time: performance.now() };
+  function pointerDown(e:React.PointerEvent<HTMLDivElement>){
+    if(busy.current||e.button!==0||(e.target as HTMLElement).closest('a,button:not(.cover-hitarea)'))return;
+    swipe.current={x:e.clientX,y:e.clientY};
     e.currentTarget.setPointerCapture(e.pointerId);
   }
-
-  function pointerMove(e: React.PointerEvent<HTMLDivElement>) {
-    const g = gesture.current, m = motion.current; if (!g || !m) return;
-    const now = performance.now();
-    m.velocity = (g.last - e.clientX) * m.direction / g.width / Math.max(.016, (now - g.time) / 1000);
-    g.last = e.clientX; g.time = now;
-    paint(m, Math.max(0, Math.min(1, (g.x - e.clientX) * m.direction / g.width)));
-  }
-
-  function pointerUp(e: React.PointerEvent<HTMLDivElement>, cancel = false) {
-    const swipe = coverSwipe.current;
-    coverSwipe.current = null;
-    const g = gesture.current, m = motion.current;
-    if (!g || !m) {
-      if (!cancel && swipe && (Math.hypot(e.clientX-swipe.x,e.clientY-swipe.y)>30||swipe.tapToOpen)) go(0);
-      return;
-    }
-    const tap = Math.abs(e.clientX - g.x) < 7;
-    gesture.current = null;
-    settle(m, !cancel && (tap || m.progress > .22 || m.velocity > .8), m.velocity);
+  function pointerUp(e:React.PointerEvent<HTMLDivElement>,cancel=false){
+    const start=swipe.current;swipe.current=null;
+    if(!start||cancel||busy.current)return;
+    const dx=e.clientX-start.x,dy=e.clientY-start.y;
+    if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy))go(spread+(dx<0?1:-1));
+    else if(spread===-1&&Math.hypot(dx,dy)<12)go(0);
   }
 
   function Folio({index,side,name}:{index:number;side:number;name:string}){
@@ -323,7 +221,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
       <span className="lamp-status" aria-hidden="true">{lampOn?'LIGHT ON':'LIGHT OFF'}</span>
     </aside>
     <header className="reader-header"><a href={base} className="reader-brand">LA<span> / PORTFOLIO</span></a><div className="reader-edition">The magazine experiment <span>— Issue No. 01</span></div><button className="contents-toggle" onClick={()=>setContents(!contents)} aria-expanded={contents} aria-controls="issue-contents">{contents?'Close':'Contents'} <span>{contents?'×':'☰'}</span></button></header>
-    <main className="reader-main"><div className="spread-topline"><span>{spread===-1?'The cover':`${pad(spread+1)} / ${names[spread]}`}</span><span>Product, people & everything in between.</span></div><div className={`magazine-book ${turn?'is-turning':''} ${spread===-1?'is-closed':''} ${turn?.to===-1?'is-closing':''}`} ref={book} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={e=>pointerUp(e)} onPointerCancel={e=>pointerUp(e,true)} aria-label={spread===-1?'Closed magazine cover':`Magazine spread ${spread+1}: ${names[spread]}`}><div className="book-base">{Page({index:turn&&turn.direction<0?turn.to:spread,side:0})}{Page({index:turn&&turn.direction>0?turn.to:spread,side:1})}</div>{turn&&<div className={`turning-sheet ${turn.direction>0?'forward':'backward'}`} ref={sheet}>{Page({index:spread,side:turn.direction>0?1:0,face:"sheet-front"})}{Page({index:turn.to,side:turn.direction>0?0:1,face:"sheet-back"})}<div className="turn-shading"/><div className="back-shading"/></div>}<div className="paper-scene-host" ref={sceneHost}/>
+    <main className="reader-main"><div className="spread-topline"><span>{spread===-1?'The cover':`${pad(spread+1)} / ${names[spread]}`}</span><span>Product, people & everything in between.</span></div><div className={`magazine-book ${turn?'is-turning':''} ${spread===-1?'is-closed':''} ${turn?.to===-1?'is-closing':''}`} ref={book} onPointerDown={pointerDown} onPointerUp={e=>pointerUp(e)} onPointerCancel={e=>pointerUp(e,true)} aria-label={spread===-1?'Closed magazine cover':`Magazine spread ${spread+1}: ${names[spread]}`}><div className="book-base">{Page({index:turn&&(portraitMode||turn.direction<0)?turn.to:spread,side:0})}{Page({index:turn&&(portraitMode||turn.direction>0)?turn.to:spread,side:1})}</div>{turn&&<div className={`turning-sheet ${turn.direction>0?'forward':'backward'}`} ref={sheet}>{Page({index:spread,side:spread===-1?1:portraitMode?0:turn.direction>0?1:0,face:"sheet-front"})}{Page({index:turn.to,side:turn.to===-1?1:portraitMode?0:turn.direction>0?0:1,face:"sheet-back"})}<div className="turn-shading"/><div className="back-shading"/></div>}
       {spread===-1&&!turn&&<>
         <button className="open-invitation" onClick={()=>go(0)} aria-label="Open me — open the magazine">
           <span className="invitation-aura" aria-hidden="true"/>
@@ -335,7 +233,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
         <button className="cover-hitarea" onClick={()=>go(0)} aria-label="Open magazine cover"/>
       </>}
       <div className="book-spine" aria-hidden="true"/>{!turn&&spread>=0&&<button className="edge-turn edge-prev" aria-label="Turn to previous spread" onClick={()=>go(spread-1)}>↶</button>}{!turn&&spread>=0&&spread<total-1&&<button className="edge-turn edge-next" aria-label="Turn to next spread" onClick={()=>go(spread+1)}>↷</button>}</div>
-    <div className="reader-controls"><div className="motion-controls"><span className="small-dot"/>{reduced?'Reduced motion':'Sculpted paper'}<button onClick={()=>setSlow(!slow)} aria-pressed={slow}>{slow?'Slow study':'Natural pace'}</button></div><div className="paging"><button onClick={()=>go(spread-1)} disabled={spread===-1||!!turn} aria-label="Previous spread">←</button><span aria-live="polite">{spread===-1?'Cover':<>{pad(spread*2+1)} — {pad(spread*2+2)} <small>/ {pad(total*2)}</small></>}</span><button onClick={()=>go(spread+1)} disabled={spread===total-1||!!turn} aria-label="Next spread">→</button></div><p className="interaction-hint">{spread===-1?<>A little curiosity <span>opens a whole world.</span></>:<>Scroll horizontally <span>or drag a page edge ↔</span></>}</p></div></main>
+    <div className="reader-controls"><div className="motion-controls"><span className="small-dot"/>{reduced?'Reduced motion':'Sculpted paper'}<button onClick={()=>setSlow(!slow)} aria-pressed={slow}>{slow?'Slow study':'Natural pace'}</button></div><div className="paging"><button onClick={()=>go(spread-1)} disabled={spread===-1||!!turn} aria-label="Previous spread">←</button><span aria-live="polite">{spread===-1?'Cover':<>{pad(spread*2+1)} — {pad(spread*2+2)} <small>/ {pad(total*2)}</small></>}</span><button onClick={()=>go(spread+1)} disabled={spread===total-1||!!turn} aria-label="Next spread">→</button></div><p className="interaction-hint">{spread===-1?<>A little curiosity <span>opens a whole world.</span></>:<>Scroll horizontally <span>or swipe to turn ↔</span></>}</p></div></main>
     <div className="prototype-switcher" aria-label="Prototype design directions"><span className="prototype-badge">Prototype</span><button onClick={()=>switchVariant(-1)} aria-label="Previous design direction">‹</button><div><strong>{direction.key} — {direction.name}</strong><span>{direction.description}</span></div><button onClick={()=>switchVariant(1)} aria-label="Next design direction">›</button><span className="variant-count">{directions.findIndex(d=>d.key===variant)+1}/{directions.length}</span></div>
     {contents&&<div className="contents-overlay" id="issue-contents"><div className="contents-heading"><span className="mini-label">Inside this issue</span><h2>Contents.</h2></div><nav aria-label="Magazine contents"><button onClick={()=>{setContents(false);go(-1)}} aria-current={spread===-1?'page':undefined}><span>Cover</span><strong>Return to the cover</strong><span>↶</span></button>{names.map((name,i)=><button key={i} onClick={()=>{setContents(false);go(i)}} aria-current={spread===i?'page':undefined}><span>{pad(i*2+1)}—{pad(i*2+2)}</span><strong>{name}</strong><span>↗</span></button>)}</nav><p>One spread per chapter. Take your time.</p><p className="music-credit">Music: <a href="https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1300035" target="_blank" rel="noreferrer">“George Street Shuffle” — Kevin MacLeod (incompetech.com)</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>. Re-encoded for web playback.</p></div>}
   </div>;

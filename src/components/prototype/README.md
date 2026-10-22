@@ -1,3 +1,5 @@
+> Current motion experiment: fixed, browser-replayed page turns. Each click, wheel gesture or completed swipe triggers one complete preset animation. Drag scrubbing, live WebGL rendering, page rasterization and spring physics are no longer used by the active reader. The earlier `paper-turn.ts` study remains in the experiment for reference.
+
 # Magazine portfolio — isolated prototype
 
 Next-session ideas are saved in [NEXT-SESSION.md](./NEXT-SESSION.md).
@@ -46,3 +48,5 @@ Flips start immediately with the compositor-driven DOM sheet while artwork is pr
 Wheel/drag painting is coalesced into one scheduled render per animation frame, so high-frequency trackpad events do not submit multiple GPU frames between display refreshes. The record component is memoized so page state changes do not reconcile hundreds of strobe dots.
 
 Depth-artifact fix: the paper camera clips tightly around the sheet instead of using near=1/far=5000. The shadow receiver has a small physical separation, polygon depth offsets are removed, and only one double-sided sheet casts the shadow. This avoids competing coplanar depth/shadow writes as a turned page settles flat, without increasing render resolution or mesh complexity. Add `&motion=slow` to the prototype URL to inspect turns in slow study mode.
+
+Preset playback pass: every turn uses the same 860ms transform/opacity timeline (1.8s in slow study mode), with an atomic handoff to the destination spread. Inputs are locked during playback, and trackpad momentum cannot skip multiple chapters. Swipe direction is evaluated only on release, never used to hold or deform the sheet. Opening/closing retains the camera zoom and waits for both timelines before unlocking navigation. Portrait also uses a fixed full-page turn; reduced motion switches directly.
