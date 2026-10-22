@@ -173,13 +173,6 @@ astro-dev-toolbar{display:none}
 @media(orientation:portrait){.desk-record{--record-size:125vw}.tonearm{bottom:-8px;left:-92px;width:200px;height:300px}}
 @media(orientation:landscape) and (max-height:600px){.desk-record{--record-size:115svh}.tonearm{bottom:-10px;left:-92px;width:200px;height:300px}}
 @media(prefers-reduced-motion:reduce){.vinyl-label,.vinyl-surface-motion,.strobe-row{animation:none}.tonearm{transition:none}}
-/* Keep the larger hardware outside the open magazine's print. */
-.desk-scene:not(.is-landing) .desk-record{transform:translate(-250px,115px)}
-@media(orientation:portrait){
- .desk-scene:not(.is-landing) .desk-record{transform:none;--record-size:82px;inset:0 0 auto;height:80px}
- .desk-scene:not(.is-landing) .vinyl-platter{left:calc(50% - 16px);top:-25px;bottom:auto}
- .desk-scene:not(.is-landing) .tonearm{left:calc(50% - 30px);top:-5px;bottom:auto;width:60px;height:90px}
-}
 @media(orientation:portrait){.needle-down .tonearm{transform:rotate(-22deg)}}
 
 /* Lights out changes each material's illumination, rather than tinting the whole screen. */
@@ -208,3 +201,25 @@ astro-dev-toolbar{display:none}
 .vinyl-surface-motion{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;animation:vinyl-spin 1.8s linear infinite}
 .lamp-off .vinyl-surface-motion{opacity:.45}
 @media(prefers-reduced-motion:reduce){.vinyl-surface-motion{animation:none}}
+
+/* One camera move carries the opening spread from the desk into the viewport. */
+.magazine-book{transform-origin:0 0}
+.reader-open .magazine-book{position:fixed;inset:0;width:100vw;height:100svh;aspect-ratio:auto;margin:0;z-index:28;border-radius:0;box-shadow:none!important}
+.desk-lamp{transition:transform 1.45s cubic-bezier(.22,.72,.12,1),opacity .85s ease,filter 1.2s}
+.desk-record{transform-origin:0 100%;transition:transform 1.45s cubic-bezier(.22,.72,.12,1),opacity .9s ease}
+.reader-open .desk-lamp{transform:translate(-170px,-170px) rotate(-12deg);opacity:0;pointer-events:none}
+.reader-open .desk-record{transform:translate(-36vw,40svh) rotate(-8deg);opacity:0;pointer-events:none}
+.reader-open .tonearm{pointer-events:none}
+.reader-open .reader-header,.reader-open .spread-topline,.reader-open .prototype-switcher,.reader-open .interaction-hint{visibility:hidden;pointer-events:none}
+.reader-open .reader-controls{position:fixed;left:50%;bottom:12px;z-index:35;transform:translateX(-50%);margin:0;display:flex;gap:0;padding:3px 8px;border-radius:30px;background:#101b16b3;color:#f3f0e8;backdrop-filter:blur(12px);box-shadow:0 2px 15px #0002;text-shadow:none}
+.reader-open .motion-controls{display:none}
+.reader-open .paging{font-size:10px;gap:12px}.reader-open .paging small{color:#d3dfd5}
+.reader-exit{position:fixed;left:12px;top:12px;z-index:35;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:#101b16b3;color:#f3f0e8;font-size:21px;backdrop-filter:blur(12px);box-shadow:0 2px 15px #0002}
+.reader-exit:hover{background:#173a2ae6}
+@media(orientation:portrait){
+ .reader-open .magazine-book{overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
+ .reader-open .book-base{height:auto}
+ .reader-open .book-base>.magazine-page{height:100svh;min-height:100svh;aspect-ratio:auto}
+ .reader-open .reader-controls{bottom:10px}
+}
+@media(prefers-reduced-motion:reduce){.desk-lamp,.desk-record{transition:none}}

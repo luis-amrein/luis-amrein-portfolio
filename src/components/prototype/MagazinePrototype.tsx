@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import './magazine-prototype.css';
 import DeskRecord from './DeskRecord';
@@ -7,7 +7,7 @@ import type { PaperScene } from './paper-turn';
 type Project = { id:string; title:string; eyebrow:string; summary:string; year:string; role:string; challenge:string; outcome:string; outcomeLabel:string; tags:string[]; showcase?:{type:string;src:string;alt:string}[] };
 type Props = { projects:Project[]; portrait:string; base:string };
 type Turn = { to:number; direction:number; corner:number };
-type Motion = Turn & {progress:number;velocity:number;source:'click'|'drag'|'wheel';ready:Promise<void>;scene?:PaperScene};
+type Motion = Turn & {from:number;progress:number;velocity:number;source:'click'|'drag'|'wheel';ready:Promise<void>;scene?:PaperScene};
 const directions = [
  {key:'D',name:'The Luis Issue',description:'Art journal × fashion issue · coral & green · sculpted paper'},
  {key:'A',name:'The Editorial',description:'Warm paper · serif headlines · quiet tension'},
@@ -21,6 +21,10 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
  const [spread,setSpread]=useState(-1);
  const [turn,setTurn]=useState<Turn|null>(null);
  const [contents,setContents]=useState(false);
+ const [immersive,setImmersive]=useState(false);
+ const immersiveRef=useRef(immersive);
+ const zoomFrom=useRef<DOMRect|null>(null);
+ const zoomAnimation=useRef<Animation|null>(null);
  const [slow,setSlow]=useState(false);
  const [lampOn,setLampOn]=useState(true);
  const [reduced,setReduced]=useState(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -49,9 +53,32 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     preference.addEventListener('change', sync); orientation.addEventListener('change', sync);
     return () => {
       preference.removeEventListener('change', sync); orientation.removeEventListener('change', sync);
+      zoomAnimation.current?.cancel();
       cancelAnimationFrame(frame.current); clearTimeout(wheel.current.timer); motion.current?.scene?.dispose(); motion.current=null; busy.current=false;
     };
   }, []);
+
+  function readingView(open:boolean) {
+    if(open===immersiveRef.current)return;
+    immersiveRef.current=open;
+    zoomFrom.current=book.current?.getBoundingClientRect()||null;
+    zoomAnimation.current?.cancel();
+    setImmersive(open);
+  }
+  useLayoutEffect(()=>{
+    const element=book.current,from=zoomFrom.current;
+    if(!element||!from)return;
+    zoomFrom.current=null;
+    const to=element.getBoundingClientRect();
+    if(reduced||!to.width||!to.height)return;
+    zoomAnimation.current=element.animate([
+      {transform:`translate(${from.left-to.left}px,${from.top-to.top}px) scale(${from.width/to.width},${from.height/to.height})`},
+      {transform:'translate(0,0) scale(1,1)'}
+    ],{duration:1450,easing:'cubic-bezier(.22,.72,.12,1)',fill:'none'});
+  },[immersive,reduced]);
+  useEffect(()=>{
+    if(portraitMode&&book.current)book.current.scrollTop=0;
+  },[spread,portraitMode]);
 
   function switchVariant(step: number) {
     if (busy.current) return;
@@ -75,6 +102,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     if (motion.current !== m) return;
     cancelAnimationFrame(frame.current);
     if (committed) setSpread(m.to);
+    readingView((committed?m.to:m.from)>=0);
     m.scene?.dispose();
     book.current?.classList.remove('paper-live');
     book.current?.removeAttribute('data-turn-progress');
@@ -84,8 +112,9 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
 
   function beginTurn(to: number, source: Motion['source'], corner = .6) {
     busy.current = true;
+    readingView(to>=0);
     let prepared!: () => void;
-    const m: Motion = { to, direction: to > spread ? 1 : -1, corner, progress: 0, velocity: 0, source,
+    const m: Motion = { to, from:spread, direction: to > spread ? 1 : -1, corner, progress: 0, velocity: 0, source,
       ready: new Promise<void>(resolve => { prepared = resolve; }) };
     motion.current = m;
     setTurn({ to, direction: m.direction, corner });
@@ -131,6 +160,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     if (busy.current || to === spread || to < -1 || to >= total) return;
     setContents(false);
     if (reduced || portraitMode) {
+      readingView(to>=0);
       setSpread(to);
       if (portraitMode) window.scrollTo({ top: 0, behavior: 'auto' });
       return;
@@ -260,10 +290,11 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
       {index===-1?(side===0?null:<Hero side={0}/>):index===0?(side===0?<Hero side={1}/>:<IssueContents/>):index===1?<Work side={side}/>:index===2?<About side={side}/>:<ProjectPage index={index} side={side}/>}
     </div>;
   }
-  return <div className={`magazine-app desk-scene ${spread===-1?'is-landing':''} ${lampOn?'lamp-on':'lamp-off'} ${variant==='D'?'variant-C variant-D':`variant-${variant}`}`} style={{'--desk-texture':`url("${asset('prototype/walnut-desk-v1.webp')}")`} as CSSProperties}>
-    <DeskRecord src={asset('prototype/george-street-shuffle.mp3')} artBase={asset('prototype')}/>
+  return <div className={`magazine-app desk-scene ${immersive?'reader-open':''} ${spread===-1?'is-landing':''} ${lampOn?'lamp-on':'lamp-off'} ${variant==='D'?'variant-C variant-D':`variant-${variant}`}`} style={{'--desk-texture':`url("${asset('prototype/walnut-desk-v1.webp')}")`} as CSSProperties}>
+    {immersive&&<button className="reader-exit" onClick={()=>go(-1)} aria-label="Close magazine and return to the desk" title="Back to desk">↙</button>}
+    <DeskRecord src={asset('prototype/george-street-shuffle.mp3')} artBase={asset('prototype')} inactive={immersive}/>
     <div className="desk-light-falloff" aria-hidden="true"/>
-    <aside className="desk-lamp" aria-label="Desk lamp">
+    <aside className="desk-lamp" aria-label="Desk lamp" inert={immersive||undefined} aria-hidden={immersive||undefined}>
       <span className="lamp-stem" aria-hidden="true"/>
       <div className="lamp-switch-recess">
         <button className="lamp-rocker" role="switch" aria-checked={lampOn} aria-label="Desk light" onClick={()=>setLampOn(!lampOn)}>

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-export default function DeskRecord({src,artBase}:{src:string;artBase:string}) {
+export default function DeskRecord({src,artBase,inactive=false}:{src:string;artBase:string;inactive?:boolean}) {
   const player = useRef<HTMLAudioElement>(null);
   const fade = useRef(0);
   const active = useRef(false);
@@ -29,7 +29,7 @@ export default function DeskRecord({src,artBase}:{src:string;artBase:string}) {
     };
     fade.current=requestAnimationFrame(step);
   }
-  return <aside className={`desk-record ${engaged?'needle-down':''}`} aria-label="Record player">
+  return <aside className={`desk-record ${engaged?'needle-down':''}`} aria-label="Record player" inert={inactive||undefined} aria-hidden={inactive||undefined}>
     <audio ref={player} src={src} preload="none" loop/>
     <div className="vinyl-platter" aria-hidden="true">
       <img className="vinyl-photograph" src={`${artBase}/vinyl-photo-v2.webp`} alt=""/>
