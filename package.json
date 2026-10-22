@@ -11,7 +11,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "validate": "pnpm check && pnpm build",
-    "astro": "astro"
+    "astro": "astro",
+    "prototype:magazine": "astro dev --background --config astro.prototype.config.mjs --port 4352"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.2",
@@ -28,6 +29,8 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4"
+    "@types/react-dom": "^19.2.4",
+    "@types/three": "^0.180.0",
+    "typescript": "~5.9.3"
   }
 }

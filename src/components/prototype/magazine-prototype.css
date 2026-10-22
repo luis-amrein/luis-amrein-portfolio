@@ -1,0 +1,355 @@
+/* Throwaway magazine experiment. No production stylesheet imports. */
+*{box-sizing:border-box}body{margin:0}button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}button:disabled{opacity:.25;cursor:default}button:focus-visible,a:focus-visible{outline:2px solid #ff5a36;outline-offset:4px}a{color:inherit}img{display:block;max-width:100%}h1,h2,p,figure{margin:0}html{overscroll-behavior-x:none}
+.magazine-app{--paper:#f3f0e8;--ink:#161714;--accent:#ff5a36;--green:#36ffb6;--rule:#c4bfb2;--serif:'Bodoni 72','Bodoni MT',Didot,'Times New Roman',serif;--sans:'Helvetica Neue',Arial,sans-serif;min-height:100svh;background:#e5e0d3 radial-gradient(ellipse at 50% 35%,#f3f0e8,transparent 75%);color:var(--ink);font-family:var(--sans);padding:0 3.4vw 100px;overscroll-behavior-x:none}
+.reader-header{height:72px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #b8b7af;font-size:10px;letter-spacing:.08em;text-transform:uppercase}.reader-brand{font-size:21px;font-weight:800;letter-spacing:-.08em;text-decoration:none}.reader-brand span{font-size:9px;font-weight:500;letter-spacing:.06em;margin-left:9px}.reader-edition{margin-left:-65px}.reader-edition span{color:#72736b}.contents-toggle{display:flex;gap:20px;align-items:center;font-size:10px;text-transform:uppercase;letter-spacing:.08em;padding:12px 0 12px 12px}.contents-toggle span{font-size:17px}
+.reader-main{max-width:1450px;margin:auto}.spread-topline{height:42px;display:flex;justify-content:space-between;align-items:center;font-size:9px;text-transform:uppercase;letter-spacing:.1em}.spread-topline>span:last-child{font-family:var(--serif);font-style:italic;text-transform:none;font-size:13px;letter-spacing:0}
+.magazine-book{position:relative;width:min(100%,calc((100svh - 255px)*1.68));aspect-ratio:1.68;margin:auto;perspective:2400px;touch-action:pan-y;isolation:isolate;box-shadow:0 25px 36px -23px #16171466,0 3px 5px #16171433,3px 3px 0 #e5e0d3,5px 5px 0 #b6b2a7,7px 7px 0 #e5e0d3;background:var(--paper)}
+.book-base{display:grid;grid-template-columns:1fr 1fr;height:100%;position:relative}.magazine-page{container-type:inline-size;min-width:0;height:100%;position:relative;background:var(--paper);overflow:hidden}.page-inner{position:relative;height:100%;padding:6.5cqw;padding-bottom:11cqw;display:flex;flex-direction:column}.running-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:2.2cqw;border-bottom:1px solid var(--rule);font-size:1.65cqw;text-transform:uppercase;letter-spacing:.1em}.folio{display:flex;justify-content:space-between;position:absolute;bottom:3.3cqw;left:6.5cqw;right:6.5cqw;border-top:1px solid var(--rule);padding-top:1.8cqw;font-size:1.65cqw;text-transform:uppercase;letter-spacing:.07em}.folio>span:last-child{font-family:var(--serif);font-size:2.2cqw;line-height:1}
+.book-spine{position:absolute;pointer-events:none;top:0;bottom:0;left:50%;width:50px;transform:translateX(-50%);z-index:8;background:linear-gradient(90deg,transparent,rgba(53,45,29,.035) 30%,rgba(48,37,20,.15) 47%,rgba(48,37,20,.24) 50%,rgba(255,255,255,.23) 52%,rgba(48,37,20,.07) 66%,transparent)}
+.turning-sheet{position:absolute;top:0;width:50%;height:100%;z-index:10;transform-style:preserve-3d;will-change:transform}.turning-sheet.forward{left:50%;transform-origin:left center}.turning-sheet.backward{left:0;transform-origin:right center}.turning-sheet .magazine-page{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}.sheet-front{transform:translateZ(.3px)}.sheet-back{transform:rotateY(180deg) translateZ(.3px)}.turn-shading,.back-shading{position:absolute;inset:0;pointer-events:none;backface-visibility:hidden;transform:translateZ(1px);background:linear-gradient(90deg,#0003,transparent 25%,#fff1 60%,#0001);box-shadow:15px 8px 35px #0003}.back-shading{transform:rotateY(180deg) translateZ(1px)}.is-turning{cursor:grabbing}
+.paper-scene-host{position:absolute;inset:0;pointer-events:none;z-index:12}.paper-webgl{position:absolute;left:-35%;top:-40%;width:170%!important;height:180%!important;pointer-events:none}.paper-live .turning-sheet{visibility:hidden}.magazine-book.is-turning{box-shadow:0 calc(25px + var(--turn-lift,0)*5px) calc(36px + var(--turn-lift,0)*9px) -23px #16171466,0 3px 5px #16171433,3px 3px 0 #e5e0d3,5px 5px 0 #b6b2a7,7px 7px 0 #e5e0d3}
+.edge-turn{position:absolute;bottom:0;width:7%;height:13%;z-index:9;opacity:0;font-size:19px;padding-top:6%;transition:opacity .2s}.edge-prev{left:0}.edge-next{right:0}.edge-turn:hover,.edge-turn:focus-visible{opacity:1;background:linear-gradient(135deg,transparent 48%,#0001 49%,#fff6)}
+.cover-title{position:relative;margin-top:7cqw}.edition{font-size:1.8cqw;letter-spacing:.06em;text-transform:uppercase}.cover-title h1{font-family:var(--serif);font-weight:400;font-size:14.5cqw;letter-spacing:-.075em;line-height:.94;margin-top:5.6cqw}.cover-title h1 em{font-weight:400;white-space:nowrap;font-size:12.1cqw;letter-spacing:-.06em;color:var(--accent)}.cover-star{position:absolute;right:-1cqw;top:8cqw;font-size:12cqw;color:var(--accent);transform:rotate(12deg)}.cover-bottom{margin-top:auto;display:flex;align-items:end;justify-content:space-between;padding-top:6cqw}.byline{font-size:6.5cqw;letter-spacing:-.06em;line-height:.9;font-weight:500}.cover-bottom p{font-size:2.2cqw;line-height:1.5}
+.opening-image{padding-top:6.5cqw}.hero-portrait{width:100%;height:65%;object-fit:cover;object-position:50% 38%;filter:grayscale(1) contrast(.92)}.image-annotation{display:flex;justify-content:space-between;font-size:1.35cqw;margin-top:1.5cqw;text-transform:uppercase;letter-spacing:.05em}.cover-note{margin-top:4.5cqw}.mini-label{font-size:1.65cqw;text-transform:uppercase;letter-spacing:.12em;font-weight:500}.cover-note p{font-family:var(--serif);font-size:5.5cqw;line-height:1.02;letter-spacing:-.035em;margin-top:1.7cqw}.cover-note>span:last-child{display:block;font-size:1.75cqw;margin-top:2cqw}.art-cover-word{display:none}
+.editorial-title{font-family:var(--serif);font-size:10.4cqw;line-height:.94;font-weight:400;letter-spacing:-.055em;margin-top:5cqw}.editorial-title em{color:var(--accent)}.work-0 .editorial-title{font-size:10cqw}.section-intro{max-width:68cqw;font-size:2.2cqw;line-height:1.5;margin-top:4cqw}.contents-list{margin-top:auto;border-top:1px solid var(--ink)}.contents-list button{display:grid;grid-template-columns:5cqw 1fr auto;align-items:start;text-align:left;width:100%;padding:2.8cqw 0;border-bottom:1px solid var(--rule);gap:2cqw;font-size:2.3cqw}.contents-list button:hover{color:var(--accent)}.contents-list button>span:first-child{font-family:var(--serif);font-style:italic;font-size:2.3cqw}.contents-list button>span:last-child{font-size:1.7cqw}.contents-list small{display:block;margin-top:.8cqw;font-size:1.45cqw;text-transform:uppercase;letter-spacing:.05em;color:#5d6058}.work-feature{padding:0;text-align:left;margin-top:5cqw}.phone-composition{position:relative;height:49cqw;background:var(--green);overflow:hidden}.composition-word{position:absolute;left:5cqw;top:4cqw;font-family:var(--serif);font-size:10.5cqw;line-height:.85;letter-spacing:-.06em}.phone-composition img{position:absolute;top:10%;left:48%;height:80%;width:auto;max-width:43%;object-fit:contain;border:4px solid var(--ink);border-radius:3.5cqw;transform:rotate(12deg);box-shadow:3cqw 3cqw 5cqw #0003}.feature-caption{display:flex;justify-content:space-between;margin-top:2cqw;font-size:1.7cqw}.secondary-list button{padding:2.5cqw 0}
+.about-photo{margin-top:5cqw;position:relative;width:78%;height:68cqw}.about-photo img{width:100%;height:100%;object-fit:cover;object-position:center 30%;filter:grayscale(1)}.about-photo>span{position:absolute;right:-4cqw;top:0;writing-mode:vertical-rl;font-size:1.6cqw;text-transform:uppercase;letter-spacing:.05em}.about-0 .editorial-title{margin-top:auto;font-size:11.7cqw}.about-pullquote{font-family:var(--serif);font-size:8.5cqw;line-height:.98;letter-spacing:-.06em;margin-top:8cqw}.about-pullquote em{color:var(--accent)}.article-columns{display:grid;grid-template-columns:1fr 1fr;gap:4cqw;margin-top:6cqw;font-family:var(--serif);font-size:2.65cqw;line-height:1.4}.article-columns p:first-child::first-letter{float:left;font-size:8cqw;line-height:.8;padding:.6cqw 1cqw 0 0}.off-clock{margin-top:auto;border-top:1px solid var(--rule);padding-top:3cqw}.off-clock p{font-family:var(--serif);font-style:italic;font-size:3.7cqw;margin-top:1.7cqw;line-height:1.2}.editorial-link{font-size:1.9cqw;text-decoration:none;margin-top:4cqw;padding-bottom:1cqw}
+.project-category{font-size:1.8cqw;text-transform:uppercase;letter-spacing:.08em;margin-top:7cqw}.project-title{font-size:11cqw;line-height:.98;overflow-wrap:anywhere}.project-title.long-word{font-size:8.1cqw!important}.project-summary{font-family:var(--serif);font-size:3.7cqw;line-height:1.2;letter-spacing:-.015em;margin-top:6cqw;max-width:75cqw}.project-role{margin-top:auto;position:relative;z-index:1;max-width:55cqw}.project-role p{font-size:2.3cqw;line-height:1.3;margin-top:1.6cqw}.project-number{font-family:var(--serif);font-style:italic;font-size:28cqw;line-height:.7;position:absolute;right:6cqw;bottom:12cqw;color:var(--accent);opacity:.2}.project-visual{height:68cqw;display:flex;align-items:center;justify-content:center;flex-direction:column;margin-top:5cqw;background:#e5e0d3;padding:4cqw}.project-visual img{width:100%;height:90%;object-fit:contain;mix-blend-mode:multiply}.project-visual figcaption{font-size:1.5cqw;align-self:start;margin-top:3cqw}.mobile-visual{background:var(--green)}.mobile-visual img{border-radius:3cqw;width:auto;max-width:65%;mix-blend-mode:normal;box-shadow:2cqw 2cqw 3cqw #0002}.project-type-art{height:64cqw;margin-top:5cqw;background:var(--accent);color:var(--paper);display:flex;flex-direction:column;justify-content:space-between;padding:5cqw}.project-type-art>span{font-size:2cqw;max-width:60cqw;line-height:1.3}.project-type-art strong{font-family:var(--serif);font-weight:400;letter-spacing:-.08em;font-size:27cqw}.project-story{display:grid;grid-template-columns:1fr 1fr;gap:4cqw;margin-top:auto;padding-top:3cqw}.project-story p{font-family:var(--serif);font-size:2.5cqw;line-height:1.3;margin-top:2cqw}
+.reader-controls{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px;margin:16px auto 0;font-size:9px;letter-spacing:.04em}.motion-controls{display:flex;align-items:center;gap:7px}.small-dot{width:4px;height:4px;border-radius:50%;background:var(--accent)}.motion-controls button{font-size:9px;margin-left:7px;padding:7px 10px;border:1px solid #b8b7af;border-radius:2px}.motion-controls button[aria-pressed=true]{background:var(--ink);color:var(--paper)}.paging{display:flex;gap:22px;align-items:center;font-size:12px;font-variant-numeric:tabular-nums}.paging small{color:#7b7c72;font-size:10px;margin-left:8px}.paging button{font-size:20px;padding:4px 8px}.interaction-hint{text-align:right;color:#5d6058}.interaction-hint span{margin-left:10px}
+.prototype-switcher{position:fixed;bottom:19px;left:50%;transform:translateX(-50%);z-index:30;display:flex;align-items:center;background:var(--ink);color:var(--paper);border-top:2px solid var(--accent);padding:7px 12px;gap:10px;border-radius:4px;box-shadow:0 8px 30px #0003;white-space:nowrap}.prototype-badge{font-size:8px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--green);padding:5px 7px;margin-right:6px;color:var(--green)}.prototype-switcher button{font-size:25px;font-weight:300;padding:0 8px}.prototype-switcher>div{min-width:280px;text-align:center}.prototype-switcher strong{display:block;font-size:11px;font-weight:500}.prototype-switcher>div>span{display:block;font-size:8px;color:#b2b3a7;margin-top:4px}.variant-count{font-size:9px;color:#96998a;margin-left:4px}
+.contents-overlay{position:fixed;z-index:25;top:72px;right:0;bottom:0;width:min(600px,100%);padding:40px 5vw 100px;background:var(--paper);box-shadow:-30px 0 70px #0002;overflow-y:auto}.contents-heading .mini-label{font-size:10px}.contents-heading h2{font-family:var(--serif);font-weight:400;font-size:65px;letter-spacing:-.06em;margin:8px 0 30px}.contents-overlay nav{border-top:1px solid var(--ink)}.contents-overlay nav button{width:100%;display:grid;grid-template-columns:55px 1fr 15px;text-align:left;gap:12px;padding:17px 0;border-bottom:1px solid var(--rule);align-items:center}.contents-overlay nav button strong{font-size:14px;font-weight:400}.contents-overlay nav button>span{font-size:9px}.contents-overlay nav button:hover,.contents-overlay nav button[aria-current]{color:var(--accent)}.contents-overlay>p{font-family:var(--serif);font-style:italic;font-size:15px;margin-top:24px}
+/* B — fashion issue. */
+.variant-B .opening-copy{background:var(--ink);color:var(--paper)}.variant-B .opening-copy .running-head,.variant-B .opening-copy .folio{border-color:#5d6058}.variant-B .cover-title{margin-top:auto;margin-bottom:auto}.variant-B .cover-title h1{font-family:var(--sans);font-size:15cqw;font-weight:800;letter-spacing:-.09em;line-height:.87;text-transform:uppercase}.variant-B .cover-title h1 em{font-family:var(--serif);font-size:14cqw;text-transform:none;font-weight:400;white-space:normal;color:var(--green);line-height:.9}.variant-B .cover-star{display:none}.variant-B .edition{display:block;border-left:2px solid var(--green);padding-left:2cqw;margin-bottom:6cqw}.variant-B .cover-bottom{margin-top:0}
+/* C — art journal. D inherits its left page. */
+.variant-C .opening-copy{background:var(--accent);color:var(--paper)}.variant-C .opening-copy .running-head,.variant-C .opening-copy .folio{border-color:#16171445}.variant-C .cover-title{margin-top:5cqw;display:flex;flex-direction:column-reverse}.variant-C .cover-title h1{font-family:var(--sans);font-weight:800;text-transform:uppercase;font-size:14cqw;line-height:.82;letter-spacing:-.085em;margin-top:0;writing-mode:vertical-rl;transform:rotate(180deg);height:70cqw;align-self:flex-start}.variant-C .cover-title h1 em{color:var(--ink);font-size:12.4cqw;white-space:normal;font-style:normal}.variant-C .edition{position:absolute;top:0;right:0;writing-mode:vertical-rl}.variant-C .cover-star{right:-1cqw;top:50cqw;color:var(--green);font-size:23cqw}.variant-C .cover-bottom{position:absolute;bottom:12cqw;right:6cqw;left:6cqw}.variant-C .byline{font-family:var(--serif);font-style:italic;font-size:8cqw}.variant-C .cover-bottom p{font-size:1.9cqw}.variant-C .opening-image{padding-top:10cqw}.variant-C .hero-portrait{width:69%;height:56%;object-position:center;align-self:center;transform:rotate(-5deg);filter:grayscale(1);border:3cqw solid #fff9}.variant-C .image-annotation{margin-top:6cqw}.variant-C .cover-note{margin-top:4cqw}.variant-C .cover-note p{font-size:5cqw}.variant-C .cover-note>span:last-child{display:none}.variant-C .art-cover-word{display:block;position:absolute;right:4cqw;top:10cqw;writing-mode:vertical-rl;font-size:15cqw;letter-spacing:-.1em;font-weight:800;mix-blend-mode:multiply}.variant-C .editorial-title{font-family:var(--sans);font-weight:800;text-transform:uppercase;font-size:10.5cqw;letter-spacing:-.08em;line-height:.86}.variant-C .editorial-title em{font-family:var(--serif);font-weight:400;text-transform:none;letter-spacing:-.04em}.variant-C .contents-list{border-top:3px solid var(--ink)}.variant-C .composition-word{font-family:var(--sans);font-weight:800;letter-spacing:-.08em}.variant-C .phone-composition img{transform:rotate(-14deg)}.variant-C .about-photo{width:70%;height:65cqw;transform:rotate(-5deg);margin:7cqw 0 0 5cqw}.variant-C .about-pullquote{font-family:var(--sans);font-weight:700;letter-spacing:-.07em;font-size:8cqw}.variant-C .about-pullquote em{font-family:var(--serif);font-weight:400}.variant-C .project-title{font-size:10.5cqw;line-height:.9}.variant-C .project-type-art strong{font-family:var(--sans);font-weight:800}.variant-C .project-number{opacity:.8;font-family:var(--sans);font-weight:800;font-style:normal;font-size:24cqw;bottom:11cqw}.variant-C .project-role{max-width:45cqw}
+/* D — selected hybrid, with B's full-bleed second page. */
+.variant-D .opening-image,.variant-B .opening-image{padding:0;background:var(--ink);color:var(--paper)}.variant-D .hero-portrait,.variant-B .hero-portrait{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;filter:grayscale(1) contrast(1.1);transform:none;border:0;align-self:auto}.variant-D .opening-image:after,.variant-B .opening-image:after{content:'';position:absolute;inset:0;background:linear-gradient(transparent 35%,#16171435 55%,#161714dd 100%);pointer-events:none}.variant-D .cover-note,.variant-B .cover-note{position:absolute;bottom:15cqw;left:6.5cqw;right:6.5cqw;z-index:1;margin:0}.variant-D .cover-note p,.variant-B .cover-note p{font-size:7cqw;line-height:1.02}.variant-D .cover-note p em,.variant-B .cover-note p em,.variant-D .cover-note .mini-label,.variant-B .cover-note .mini-label{color:var(--green)}.variant-D .cover-note>span:last-child{display:block;font-size:1.75cqw;margin-top:2.5cqw}.variant-D .image-annotation,.variant-B .image-annotation{position:absolute;left:6cqw;right:6cqw;top:5cqw;margin:0;z-index:1;color:var(--ink)}.variant-D .opening-image .folio,.variant-B .opening-image .folio{z-index:1;border-color:#f3f0e860}.variant-D .art-cover-word{display:none}
+@media(min-width:1700px){.magazine-book{max-width:1450px}.reader-header{height:82px}.spread-topline{height:50px}}
+@media(orientation:landscape) and (max-height:600px){.reader-header{height:44px}.spread-topline{height:25px}.magazine-book{width:min(100%,calc((100svh - 170px)*1.68))}.reader-controls{margin-top:8px}.prototype-switcher{bottom:8px;padding-block:4px}.magazine-app{padding-bottom:60px}}
+@media(orientation:portrait){.magazine-app{padding:0 5vw 110px}.reader-header{height:65px}.reader-edition{display:none}.spread-topline>span:last-child{display:none}.magazine-book{width:100%;aspect-ratio:auto;box-shadow:0 6px 20px #0002}.book-base{display:flex;flex-direction:column}.magazine-page{aspect-ratio:.84;height:auto;flex-shrink:0}.page-inner{height:100%}.book-spine,.edge-turn{display:none}.reader-controls{grid-template-columns:1fr auto;gap:5px}.interaction-hint{display:none}.paging{gap:9px}.motion-controls{font-size:8px}.motion-controls button{display:none}.prototype-switcher{width:calc(100% - 28px);gap:5px;padding:9px}.prototype-switcher>div{min-width:0;flex:1}.prototype-switcher>div>span{font-size:7px;white-space:normal}.prototype-badge{font-size:6px;padding:4px;margin-right:1px}.prototype-switcher strong{font-size:10px}.prototype-switcher button{padding:0 5px}.variant-count{font-size:8px}.contents-overlay{top:65px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}.turning-sheet{display:none}}
+astro-dev-toolbar{display:none}
+/* Closed cover → portrait and contents. The empty half is the room around the object. */
+.magazine-book.is-closed,.magazine-book.is-closing{background:transparent;box-shadow:none}
+.magazine-page.cover-whitespace{background:transparent}
+.closed-cover{box-shadow:0 23px 35px -19px #16171480,2px 3px 0 #e5e0d3,4px 4px 0 #b6b2a7,6px 6px 0 #e5e0d3}
+.closed-cover .folio{display:none}
+.is-closed .book-spine,.is-closing .book-spine{opacity:0}
+.cover-hitarea{position:absolute;z-index:9;inset:0 0 0 50%;width:50%;padding:0;cursor:grab}
+.open-invitation{position:absolute;z-index:14;left:0;top:0;width:50%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;isolation:isolate;touch-action:pan-y}
+.invitation-word{position:relative;font-family:var(--serif);font-size:clamp(30px,3.7vw,60px);font-style:italic;font-weight:400;letter-spacing:-.045em;color:rgba(49,81,67,.67);text-shadow:0 0 2px #fff,0 0 14px #fff,0 0 30px #ffffffef,0 0 52px #36ffb65c;animation:invitation-hover 6s ease-in-out infinite}
+.invitation-hint{position:relative;margin-top:18px;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#5d605899;animation:invitation-hover 6s ease-in-out infinite}
+.invitation-aura{position:absolute;z-index:-1;width:75%;max-width:340px;aspect-ratio:1;border-radius:50%;background:radial-gradient(ellipse at center,#fff 0%,#fffffff0 12%,#ffffffa0 30%,#36ffb615 47%,transparent 68%);filter:blur(11px);opacity:.85;animation:invitation-breathe 7s ease-in-out infinite}
+.invitation-aura:before{content:'';position:absolute;inset:-28% 15%;background:conic-gradient(from 0deg at 50% 50%,transparent 0deg,#ffffffab 4deg,transparent 8deg,transparent 172deg,#ffffff8a 180deg,transparent 188deg,transparent 352deg,#ffffffab 356deg,transparent 360deg);filter:blur(8px);transform:rotate(20deg)}
+.invitation-aura:after{content:'';position:absolute;inset:12% 16%;border:1px solid #ffffffb3;border-radius:50%;transform:rotate(-24deg) scaleY(.6);filter:blur(2px)}
+.invitation-spark{position:absolute;color:#ffffffcf;font-family:var(--serif);font-size:22px;text-shadow:0 0 8px #36ffb6aa,0 0 17px white;animation:invitation-spark 6s ease-in-out infinite;pointer-events:none}
+.spark-one{left:29%;top:37%;font-size:15px}.spark-two{left:67%;top:57%;animation-delay:-3s}
+.open-invitation:hover .invitation-word,.open-invitation:focus-visible .invitation-word{color:#315143d9;text-shadow:0 0 8px #fff,0 0 24px #fff,0 0 45px #36ffb68c}
+.open-invitation:hover .invitation-aura{opacity:1}
+.issue-contents-page .editorial-title{font-size:10cqw;line-height:.94;margin-top:5cqw}
+.issue-intro{font-size:2.1cqw;line-height:1.5;margin-top:3cqw;color:#5d6058}
+.issue-chapters{margin-top:auto;border-top:1.5px solid var(--ink)}
+.issue-chapters button{width:100%;display:grid;grid-template-columns:6cqw 1fr 3cqw;align-items:center;gap:2cqw;padding:2.4cqw 0;text-align:left;border-bottom:1px solid var(--rule);font-size:2.55cqw;line-height:1.2;min-height:8cqw}
+.issue-chapters button>span:first-child{font-family:var(--serif);font-style:italic;font-size:2.6cqw;color:var(--accent)}
+.issue-chapters button>span:last-child{font-size:2cqw;text-align:right}
+.issue-chapters button:hover{color:var(--accent)}
+@keyframes invitation-hover{0%,100%{transform:translateY(0);opacity:.78}50%{transform:translateY(-7px);opacity:1}}
+@keyframes invitation-breathe{0%,100%{transform:scale(.92) rotate(-5deg);opacity:.65}50%{transform:scale(1.08) rotate(5deg);opacity:.94}}
+@keyframes invitation-spark{0%,100%{opacity:.15;transform:translateY(3px) scale(.8)}50%{opacity:.8;transform:translateY(-5px) scale(1.1)}}
+@media(orientation:portrait){
+ .magazine-book.is-closed .book-base{display:grid;grid-template-columns:35% 65%;align-items:stretch}
+ .magazine-book.is-closed .cover-whitespace{height:100%;aspect-ratio:auto}
+ .magazine-book.is-closed .closed-cover{height:auto;aspect-ratio:.84}
+ .cover-hitarea{left:35%;width:65%}
+ .open-invitation{width:35%}
+ .invitation-word{font-size:27px;white-space:nowrap}
+ .invitation-hint{font-size:6px;letter-spacing:.07em;max-width:85px;line-height:1.8;text-align:center;margin-top:13px}
+ .invitation-aura{width:140%;max-width:none}
+ .spark-one{left:17%;top:32%}.spark-two{left:76%;top:68%;font-size:14px}
+}
+.issue-contents-page .editorial-title{font-size:8.5cqw;margin-top:4cqw}
+.issue-intro{margin-top:2cqw}
+.issue-chapters button{padding:1.8cqw 0;min-height:7cqw;font-size:2.4cqw}
+.magazine-book.is-closed{touch-action:none}
+/* Material study: photographed walnut under a warm overhead lamp. */
+.desk-scene{
+ position:relative;isolation:isolate;
+ color:var(--paper);
+ background-color:#4b2c18;
+ background-image:radial-gradient(ellipse 85% 75% at 50% -10%,#ffe1a01c,transparent 72%),linear-gradient(180deg,#180b0405 0%,#160a0317 65%,#12080242 100%),var(--desk-texture);
+ background-position:center,center,center;
+ background-size:cover;
+ background-repeat:no-repeat;
+ background-attachment:fixed;
+}
+.desk-scene .magazine-page{color:var(--ink)}
+.desk-scene .reader-header{border-color:#f8e6ce38;color:#fff0daeb;text-shadow:0 1px 3px #180b0440}
+.desk-scene .reader-edition span{color:#f6dfbe94}
+.desk-scene .spread-topline{color:#fff0dad6;text-shadow:0 1px 3px #180b0480}
+.desk-scene .reader-controls{color:#ffeed7da;text-shadow:0 1px 2px #180b0480}
+.desk-scene .paging small{color:#ffead29c}
+.desk-scene .motion-controls button{border-color:#f6dfbe61;background:#2413091f}
+.desk-scene .motion-controls button[aria-pressed=true]{background:#161714b8}
+.desk-scene .interaction-hint{color:#fff0dab5}
+.desk-scene .contents-overlay{color:var(--ink);text-shadow:none}
+.desk-scene .magazine-book:not(.is-closed):not(.is-closing){box-shadow:0 2px 3px #1b0d0680,0 10px 16px -5px #1b0d0680,4px 29px 46px -16px #130802ab,3px 3px 0 #ddd2bd,6px 6px 0 #8b7860,7px 8px 0 #e3d9c5}
+.desk-scene .invitation-word{color:#fff5e4d9;text-shadow:0 2px 8px #28150773,0 0 16px #fff8e647,0 0 39px #36ffb63b}
+.desk-scene .invitation-hint{color:#fff0d6b3;text-shadow:0 1px 4px #2815078c}
+.desk-scene .invitation-aura{background:radial-gradient(ellipse at center,#fff8de75 0%,#fff6dc30 22%,#36ffb60d 45%,transparent 70%);mix-blend-mode:screen;filter:blur(16px);animation:desk-aura-breathe 7s ease-in-out infinite}
+.desk-scene .open-invitation:hover .invitation-word,.desk-scene .open-invitation:focus-visible .invitation-word{color:#fff8ec;text-shadow:0 1px 4px #28150780,0 0 18px #fff6d99c,0 0 42px #36ffb65e}
+@keyframes desk-aura-breathe{0%,100%{transform:scale(.93) rotate(-5deg);opacity:.45}50%{transform:scale(1.07) rotate(5deg);opacity:.72}}
+/* The page block and lower board sit below the laminated front face. */
+.desk-scene .closed-cover{
+ overflow:visible;
+ isolation:isolate;
+ z-index:1;
+ border-radius:1px 5px 4px 1px;
+ background:#a9482a;
+ box-shadow:0 2px 2px #1e0c028c,2px 7px 8px #1e0c0273,4px 22px 24px -9px #180902ab,10px 45px 58px -21px #120601b3;
+}
+.desk-scene .closed-cover:before{
+ content:'';position:absolute;inset:4px -7px -8px 7px;z-index:0;
+ border-radius:1px 4px 3px 1px;
+ background:repeating-linear-gradient(0deg,#ddcfb6 0px,#f2e9d7 .8px,#a99a81 1.1px,#e9dfca 1.8px);
+ box-shadow:inset -2px -1px 3px #71513780,1px 1px 1px #26120570;
+}
+.desk-scene .closed-cover:after{
+ content:'';position:absolute;left:2px;right:-6px;top:calc(100% + 7px);height:3px;z-index:0;
+ background:linear-gradient(180deg,#f3885e,#a3351f 60%,#59200f);border-radius:0 1px 3px 2px;
+ box-shadow:0 2px 2px #1e0c0266;
+}
+.desk-scene .closed-cover .opening-copy{
+ z-index:1;overflow:hidden;border-radius:1px 5px 4px 1px;
+ background-image:linear-gradient(145deg,#fff1c409,transparent 28%,#6f210621);
+ box-shadow:inset 0 1px 0 #fff4d994,inset -1px 0 0 #ffdeb26e,inset 0 -1px 0 #6d271a80;
+}
+.desk-scene .closed-cover .opening-copy:before{
+ content:'';position:absolute;inset:0;z-index:4;pointer-events:none;border-radius:inherit;
+ background:linear-gradient(90deg,#48140547 0%,#7c2b0c21 .65%,#ffe8c542 1.05%,#47170424 2.1%,transparent 5%,transparent 98.4%,#6c1c0c26 99.5%,#fff0c75e 100%);
+}
+.desk-scene .closed-cover .opening-copy:after{
+ content:'';position:absolute;inset:0;z-index:5;pointer-events:none;border-radius:inherit;
+ background:radial-gradient(ellipse 90% 48% at 36% -5%,#fff3cf4a,transparent 77%),linear-gradient(117deg,transparent 10%,#fff9eb05 35%,#fff6dc2b 46%,#fff9ec16 52%,transparent 66%);
+ box-shadow:inset 0 0 0 1px #fff0d217;
+}
+@media(orientation:portrait){.desk-scene{background-attachment:scroll;background-size:auto,auto,auto 100svh;background-repeat:no-repeat,no-repeat,repeat-y}.desk-scene .invitation-word{font-size:27px}}
+
+/* A quarter of a weighted black lamp base, cropped at the top-left. The rocker controls the whole desk's light. */
+.desk-scene .reader-header{padding-left:130px}
+.desk-scene .spread-topline{padding-left:130px}
+.desk-lamp{position:fixed;z-index:60;left:-160px;top:-160px;width:300px;height:300px;border-radius:50%;background:radial-gradient(ellipse at 32% 27%,#66655f 0%,#383936 20%,#20211f 47%,#101210 72%,#060807 100%);box-shadow:inset 2px 2px 3px #ffffff35,inset -5px -7px 8px #000,3px 8px 0 #090a09,0 14px 15px #0008,-12px 27px 35px #130a0780;border:1px solid #0a0c0b;transition:filter .85s}
+.desk-lamp:before{content:"";position:absolute;inset:9px;border-radius:50%;border:1px solid #ffffff0b;box-shadow:inset 0 2px 3px #0004;pointer-events:none}
+.lamp-stem{position:absolute;width:39px;height:91px;top:9px;left:102px;border-radius:50%;background:linear-gradient(90deg,#080a09,#4c4f49 39%,#171a17 70%,#050706);box-shadow:5px 5px 9px #0009}
+.lamp-switch-recess{position:absolute;left:190px;top:185px;transform:rotate(-28deg);width:51px;height:70px;border-radius:9px;background:#050605;box-shadow:0 1px 1px #ffffff30,inset 0 3px 5px #000;padding:4px;perspective:180px}
+.lamp-rocker{width:43px;height:62px;padding:7px 0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;border-radius:5px;border:1px solid #4b4d47;background:linear-gradient(180deg,#121512,#282b26 50%,#4d5048);box-shadow:0 3px 3px #000b,inset 0 -2px 2px #ffffff24;transform:rotateX(-13deg);transition:transform .23s,background .23s,box-shadow .23s;color:#e4e4d9;touch-action:manipulation}
+.lamp-rocker[aria-checked=false]{transform:rotateX(13deg);background:linear-gradient(180deg,#55574e,#292c27 50%,#121511);box-shadow:0 -2px 3px #000a,inset 0 2px 2px #ffffff24}
+.rocker-symbol{font:13px/1 Arial,sans-serif;text-shadow:0 1px 1px #000}
+.rocker-on{font-size:15px}.lamp-status{display:none;position:absolute;left:64px;top:205px;font:6px/1 Arial,sans-serif;letter-spacing:.17em;color:#aeafa397}
+.desk-light-falloff{position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(ellipse 90% 95% at 95% 0%,#466f823b,transparent 75%),linear-gradient(150deg,#101619c9,#28130bc2 47%,#080d12eb),var(--desk-texture);background-size:cover;background-position:center;opacity:0;transition:opacity 1.2s ease}
+.lamp-off .desk-light-falloff{opacity:1}
+.lamp-off .desk-lamp{filter:brightness(.65) saturate(.7)}
+.lamp-off .lamp-status{color:#c2c9cb}
+@media(orientation:portrait){.desk-scene .reader-header{padding-left:110px}.desk-scene .spread-topline{padding-left:110px}.desk-lamp{width:260px;height:260px;left:-140px;top:-140px}.lamp-switch-recess{left:163px;top:160px;transform:rotate(-28deg) scale(.85);transform-origin:center}.lamp-stem{top:-10px;left:82px}.lamp-status{left:43px;top:172px}.desk-scene .reader-brand span{display:none}.desk-scene .contents-toggle{gap:9px}}
+@media(prefers-reduced-motion:reduce){.desk-light-falloff,.desk-lamp,.lamp-rocker{transition:none}}
+
+/* The photograph and its specular highlights stay fixed. Only label and strobe phase move. */
+.desk-record{--record-size:min(105vw,calc((100svh - 255px)*1.5));position:fixed;inset:0;z-index:22;pointer-events:none}
+.vinyl-platter{position:absolute;width:var(--record-size);height:var(--record-size);left:calc(var(--record-size)*-.6);bottom:calc(var(--record-size)*-.57);border-radius:50%;background:radial-gradient(circle,#111612 65%,#555950 69%,#101411 70%);box-shadow:0 3px 0 #44493e,0 7px 0 #11150f,10px 17px 24px #100b09a0;overflow:hidden}
+.vinyl-photograph{position:absolute;inset:2%;width:96%;height:96%;object-fit:contain;pointer-events:none}
+.vinyl-label{position:absolute;inset:35.5%;border-radius:50%;overflow:hidden;background:#f5815c;animation:vinyl-spin 1.8s linear infinite;box-shadow:inset 0 0 8px #692a1826}
+.vinyl-label-art{position:absolute;inset:0;background:conic-gradient(from 20deg,transparent 0 15%,#1b251d 15% 17%,transparent 17% 33%,#36ffb6 33% 56%,transparent 56%);opacity:.8}
+.platter-strobe{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.strobe-row{transform-origin:500px 500px;animation:strobe-drift 18s linear infinite}.strobe-row-1{animation-duration:22s}.strobe-row-2{animation-duration:26s}
+.platter-light{position:absolute;inset:0;border-radius:50%;pointer-events:none;background:conic-gradient(from 20deg,#fff4d438,transparent 20%,#0005 38%,transparent 58%,#fff4d426 80%,#fff4d438);mask:radial-gradient(circle,transparent 64%,#000 65%)}
+.tonearm{position:absolute;left:-121px;bottom:8px;width:260px;height:390px;padding:0;transform-origin:35% 15%;transform:rotate(-64deg);filter:drop-shadow(15px 22px 9px #070b0899);transition:transform 1.2s cubic-bezier(.45,0,.2,1),filter 1.2s;pointer-events:auto;touch-action:manipulation}
+.tonearm img{display:block;width:100%;height:100%;max-width:none;pointer-events:none;user-select:none}
+.needle-down .tonearm{transform:rotate(-35deg);filter:drop-shadow(3px 5px 2px #070b08a6)}
+.tonearm:focus-visible{outline:none}.tonearm:focus-visible img{filter:drop-shadow(0 0 3px #36ffb6)}
+.desk-scene:not(.is-landing) .motion-controls{visibility:hidden}
+.is-landing .reader-header,.is-landing .spread-topline,.is-landing .reader-controls{visibility:hidden;pointer-events:none}
+.is-landing .prototype-switcher,.is-landing .invitation-hint{display:none}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@keyframes vinyl-spin{to{transform:rotate(360deg)}}
+@keyframes strobe-drift{to{transform:rotate(-360deg)}}
+@media(orientation:portrait){.desk-record{--record-size:125vw}.tonearm{bottom:-8px;left:-92px;width:200px;height:300px}}
+@media(orientation:landscape) and (max-height:600px){.desk-record{--record-size:115svh}.tonearm{bottom:-10px;left:-92px;width:200px;height:300px}}
+@media(prefers-reduced-motion:reduce){.vinyl-label,.vinyl-surface-motion,.strobe-row{animation:none}.tonearm{transition:none}}
+@media(orientation:portrait){.needle-down .tonearm{transform:rotate(-22deg)}}
+
+/* Lights out changes each material's illumination, rather than tinting the whole screen. */
+.desk-scene .opening-copy,.desk-scene .opening-copy:after,.desk-scene .closed-cover:before,.desk-scene .magazine-page,.desk-scene .invitation-word,.desk-scene .vinyl-photograph,.desk-scene .platter-strobe,.desk-scene .tonearm img,.desk-scene .platter-light{transition:background-color 1.2s,color 1.2s,filter 1.2s,opacity 1.2s,box-shadow 1.2s}
+.lamp-off{--paper:#e2dfd6;--accent:#c04b33;--green:#72e6bd;--ink:#172321;--rule:#a4aaa1}
+.lamp-off .closed-cover{box-shadow:1px 3px 4px #000b,7px 16px 34px #0008,0 0 0 1px #839ca528}
+.lamp-off.variant-C .opening-copy{background-color:#ae3e2c;background-image:radial-gradient(ellipse at 100% 0%,#d6977840,transparent 65%),linear-gradient(135deg,#1c141754,transparent 45%,#47140b66);color:#f3e4cd;box-shadow:inset 0 1px 0 #bedbe344,inset -1px 0 0 #aecdd644}
+.lamp-off .closed-cover .opening-copy:after{opacity:.13}
+.lamp-off .closed-cover .opening-copy:before{opacity:.5}
+.lamp-off .closed-cover:before{filter:brightness(.65) sepia(.1)}
+.lamp-off .cover-star{color:#72e6bd;text-shadow:0 0 18px #36ffb619}
+.lamp-off .invitation-word{color:#e6fff4;text-shadow:0 0 10px #c2ffe9a6,0 0 30px #36ffb680,0 0 65px #36ffb64d}
+.lamp-off .invitation-aura{background:radial-gradient(ellipse,#a3ffdd4d, #36ffb61c 35%,transparent 70%);opacity:.7}
+.lamp-off .invitation-spark{color:#a3ffdd;filter:drop-shadow(0 0 5px #36ffb6)}
+.lamp-off .vinyl-photograph{filter:brightness(.4) saturate(.75)}
+.lamp-off .platter-strobe{filter:brightness(.55)}
+.lamp-off .platter-light{opacity:.18}
+.lamp-off .tonearm img{filter:brightness(.56) saturate(.75)}
+.lamp-off .vinyl-platter{box-shadow:0 3px 0 #202c2a,0 7px 0 #060a09,8px 15px 30px #000c}
+.lamp-off .desk-lamp{filter:brightness(.47) saturate(.8)}
+.lamp-off .lamp-rocker{color:#e2ebe5}
+.lamp-off .reader-header,.lamp-off .spread-topline,.lamp-off .reader-controls{color:#c6d8d3;text-shadow:0 1px 3px #0008;border-color:#c6d8d333}
+.lamp-off .contents-overlay{background:#182622;color:#e2e8df;--ink:#e2e8df;--rule:#52645b;--accent:#72e6bd}
+@media(prefers-reduced-motion:reduce){.desk-scene .opening-copy,.desk-scene .opening-copy:after,.desk-scene .closed-cover:before,.desk-scene .magazine-page,.desk-scene .invitation-word,.desk-scene .vinyl-photograph,.desk-scene .platter-strobe,.desk-scene .tonearm img,.desk-scene .platter-light{transition:none}}
+
+.vinyl-surface-motion{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;animation:vinyl-spin 1.8s linear infinite}
+.lamp-off .vinyl-surface-motion{opacity:.45}
+@media(prefers-reduced-motion:reduce){.vinyl-surface-motion{animation:none}}
+
+/* One camera move carries the opening spread from the desk into the viewport. */
+.magazine-book{transform-origin:0 0}
+.reader-open .magazine-book{position:fixed;inset:0;width:100vw;height:100svh;aspect-ratio:auto;margin:0;z-index:28;border-radius:0;box-shadow:none!important}
+.desk-lamp{transition:transform 1.45s cubic-bezier(.22,.72,.12,1),opacity .85s ease,filter 1.2s}
+.desk-record{transform-origin:0 100%;transition:transform 1.45s cubic-bezier(.22,.72,.12,1),opacity .9s ease}
+.reader-open .desk-lamp{transform:translate(-170px,-170px) rotate(-12deg);opacity:0;pointer-events:none}
+.reader-open .desk-record{transform:translate(-36vw,40svh) rotate(-8deg);opacity:0;pointer-events:none}
+.reader-open .tonearm{pointer-events:none}
+.reader-open .reader-header,.reader-open .spread-topline,.reader-open .prototype-switcher,.reader-open .interaction-hint{visibility:hidden;pointer-events:none}
+.reader-open .reader-controls{position:fixed;left:50%;bottom:12px;z-index:35;transform:translateX(-50%);margin:0;display:flex;gap:0;padding:3px 8px;border-radius:30px;background:#101b16b3;color:#f3f0e8;backdrop-filter:blur(12px);box-shadow:0 2px 15px #0002;text-shadow:none}
+.reader-open .motion-controls{display:none}
+.reader-open .paging{font-size:10px;gap:12px}.reader-open .paging small{color:#d3dfd5}
+.reader-exit{position:fixed;left:12px;top:12px;z-index:35;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:#101b16b3;color:#f3f0e8;font-size:21px;backdrop-filter:blur(12px);box-shadow:0 2px 15px #0002}
+.reader-exit:hover{background:#173a2ae6}
+@media(orientation:portrait){
+ .reader-open .magazine-book{overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
+ .reader-open .book-base{height:auto}
+ .reader-open .book-base>.magazine-page{height:100svh;min-height:100svh;aspect-ratio:auto}
+ .reader-open .reader-controls{bottom:10px}
+}
+@media(prefers-reduced-motion:reduce){.desk-lamp,.desk-record{transition:none}}
+.reader-open .interaction-hint{display:none}
+.reader-exit{left:8px;top:8px;width:30px;height:30px}
+@media(orientation:portrait){.reader-exit{top:42px}}
+@media(orientation:portrait){.reader-exit{left:auto;right:8px}}
+.magazine-app:has(.is-closing) .reader-header,.magazine-app:has(.is-closing) .spread-topline,.magazine-app:has(.is-closing) .reader-controls,.magazine-app:has(.is-closing) .prototype-switcher{visibility:hidden}
+/* Hidden desk decoration must not keep animating underneath the immersive reader. */
+.reader-open .vinyl-label,.reader-open .vinyl-surface-motion,.reader-open .strobe-row{animation-play-state:paused}
+/* The WebGL receiver supplies the moving shadow; avoid repainting a CSS shadow every frame. */
+.magazine-book.is-turning{box-shadow:0 20px 35px -22px #16171466,0 3px 5px #16171433}
+
+/* Preset-only flip experiment: no live mesh, snapshots, spring or drag scrubbing. */
+.turn-shading,.back-shading{box-shadow:none;opacity:0}
+.back-shading{background:linear-gradient(90deg,#0002,transparent 45%,#fff1)}
+.turning-sheet .closed-cover:before,.turning-sheet .closed-cover:after{display:none}
+@media(orientation:portrait){
+ .turning-sheet{width:100%;left:0!important;transform-origin:left center!important}
+ .turning-sheet .magazine-page{height:100svh;aspect-ratio:auto}
+}
+
+@media(orientation:portrait){
+ .reader-open .magazine-book.is-closed.is-turning .book-base{display:flex;flex-direction:column}
+ .magazine-book.is-closing .book-base{display:grid;grid-template-columns:35% 65%;align-items:stretch}
+ .magazine-book.is-closing .cover-whitespace{height:100%;aspect-ratio:auto}
+ .magazine-book.is-closing .closed-cover{height:auto;aspect-ratio:.84}
+ .turning-sheet .magazine-page{height:100%!important;aspect-ratio:auto}
+ .turning-sheet .sheet-back{display:none}
+ .reader-open .magazine-book.is-closed.is-turning .turning-sheet{width:65%;left:35%!important}
+}
+
+/* Page replacement is structural, not a day/night material transition.
+   Interpolating ivory to transparent left a ghost page over the desk. */
+.desk-scene .magazine-page{transition:filter 1.2s,color 1.2s}
+.desk-scene .is-turning .opening-copy,.desk-scene .is-closed .opening-copy,
+.desk-scene .is-turning .opening-copy:after,.desk-scene .is-closed .opening-copy:after{transition:none}
+.desk-scene .magazine-book.is-closed,.desk-scene .magazine-book.is-closing{background:transparent;box-shadow:none}
+.desk-scene .cover-whitespace{background:transparent;box-shadow:none;transition:none}
+
+/* Clear glass lettering: the desk remains visible through the letter bodies. */
+.desk-scene .invitation-word{
+ font-size:clamp(42px,5.6vw,88px);white-space:nowrap;line-height:1.25;
+ color:transparent;-webkit-text-fill-color:transparent;
+ background:linear-gradient(165deg,#fff7e99c 0%,#fff8e842 18%,#ffffff12 32%,#ffffff08 46%,#fff9e89c 48%,#ffffff14 52%,#ffffff08 72%,#fff5df70 100%);
+ background-clip:text;-webkit-background-clip:text;
+ -webkit-text-stroke:.45px #fff6e75c;
+ text-shadow:0 1px 0 #ffffff21,1px 2px 2px #24120755;
+ filter:drop-shadow(0 -1px 0 #fff9ed26);
+ animation:none;transition:filter .4s ease;
+}
+.desk-scene .open-invitation:hover .invitation-word,
+.desk-scene .open-invitation:focus-visible .invitation-word{
+ color:transparent;text-shadow:0 1px 0 #ffffff30,1px 2px 2px #24120755;filter:brightness(1.2);
+}
+.lamp-off .invitation-word{-webkit-text-stroke-color:#b8dbd35e;filter:brightness(.78)}
+@media(orientation:portrait){.desk-scene .invitation-word{font-size:clamp(29px,7.7vw,48px)}}
+
+/* Leave a clear tabletop footprint for the fully opened issue. */
+@media(orientation:landscape){
+ .desk-scene:not(.reader-open) .magazine-book{width:min(72vw,calc((100svh - 340px)*1.68));margin-left:auto;margin-right:3vw}
+}
+/* Rounded liquid edges, with a fine highlight and a lower refracted rim. */
+.desk-scene .invitation-word{
+ background-image:linear-gradient(175deg,#fff9efb3 0%,#ffffff38 19%,#ffffff08 38%,#ffffff12 57%,#26130724 76%,#fff7de87 95%,#ffffff38 100%);
+ -webkit-text-stroke:.65px #fff7e761;
+ text-shadow:0 -1px 1px #fffae966,0 1px 1px #3d230a70,0 2px 1px #fff1d24d,1px 4px 3px #21110452;
+}
+@media(orientation:portrait){
+ .desk-scene:not(.reader-open) .magazine-book{aspect-ratio:1.68;height:auto}
+ .desk-scene:not(.reader-open) .magazine-book .book-base{display:grid;grid-template-columns:1fr 1fr;height:100%}
+ .desk-scene:not(.reader-open) .book-base>.magazine-page{height:100%;min-height:0;aspect-ratio:auto}
+ .desk-scene:not(.reader-open) .open-invitation{width:50%}
+ .desk-scene:not(.reader-open) .magazine-book.is-closed.is-turning .turning-sheet{width:50%;left:50%!important}
+}
+
+/* One camera transform for the entire tabletop, including its wood grain. */
+.desk-scene{background-image:none;overflow-x:clip}
+.desk-world{position:fixed;inset:0;z-index:-1;transform-origin:0 0;pointer-events:none;will-change:transform;
+ background-color:#4b2c18;
+ background-image:radial-gradient(ellipse 85% 75% at 50% -10%,#ffe1a01c,transparent 72%),linear-gradient(180deg,#180b0405 0%,#160a0317 65%,#12080242 100%),var(--desk-texture);
+ background-position:center;background-size:cover;background-repeat:no-repeat;
+}
+.desk-world .desk-lamp,.desk-world .desk-record{position:absolute;transition:filter 1.2s;transform:none;opacity:1}
+.desk-world .desk-lamp{pointer-events:auto}
+.reader-open .desk-world .desk-lamp,.reader-open .desk-world .desk-record{transform:none;opacity:1;pointer-events:none}
+.desk-world .desk-light-falloff{position:absolute;z-index:0}
+.reader-open .magazine-book.is-closed .book-base{display:grid;grid-template-columns:1fr 1fr;height:100%}
+.reader-open .magazine-book.is-closed .book-base>.magazine-page{height:100%;min-height:0;aspect-ratio:auto}
+.is-landing .reader-exit{visibility:hidden;pointer-events:none}
+
+/* Keep glyph rasterization consistent when the camera animation releases. */
+.magazine-app{-webkit-text-size-adjust:100%;text-size-adjust:100%;-webkit-font-smoothing:antialiased}
+.magazine-book{transform:translate3d(0,0,0);will-change:transform}
+.magazine-page{-webkit-backface-visibility:hidden;backface-visibility:hidden}
+
+/* Five liquid invitation studies, shown only after the return camera settles. */
+.invitation-gallery{position:absolute;inset:3% 50% 3% 0;z-index:14;display:flex;flex-direction:column;animation:invitation-arrive .65s ease both}
+.invitation-gallery .open-invitation{position:relative;inset:auto;width:100%;height:auto;flex:1;min-height:0}
+.invitation-gallery .invitation-word{font-size:clamp(28px,4vw,62px);display:inline-block;will-change:transform}
+.invitation-number{position:absolute;left:9%;top:50%;transform:translateY(-50%);font:9px/1 var(--sans);letter-spacing:.1em;color:#fff4dc70}
+.liquid-1 .invitation-word{animation:liquid-breathe 5.7s ease-in-out infinite!important}
+.liquid-2 .invitation-word{background-image:linear-gradient(110deg,#ffffff09 10%,#fff4df85 30%,#ffffff0a 46%,#fff9ecac 57%,#ffffff0a 72%)!important;background-size:240% 100%!important;animation:liquid-flow 8s ease-in-out infinite!important}
+.invitation-gallery .liquid-3 .invitation-word{background:none;-webkit-text-stroke:.5px #fff5df61}
+.invitation-letter{display:inline-block;background:linear-gradient(175deg,#fff9ef9c,#ffffff12 40%,#ffffff05 68%,#fff8df94);background-clip:text;-webkit-background-clip:text;animation:liquid-tide 4.8s ease-in-out infinite;animation-delay:calc(var(--letter)*-.27s)}
+.liquid-4 .invitation-word{background-image:linear-gradient(177deg,#fffdf4c7,#ffffff10 24%,#3b302826 48%,#fff9d9b8 65%,#ffffff12 85%)!important;animation:liquid-mercury 7s ease-in-out infinite!important;transform-origin:50% 70%}
+.liquid-5 .invitation-word{background-image:linear-gradient(125deg,#36ffb64d,#fff9ec0d 27%,#ff5a3642 48%,#fff9ec7d 62%,#36ffb61f 85%)!important;background-size:200% 180%!important;animation:liquid-iridescence 9s ease-in-out infinite!important}
+@keyframes invitation-arrive{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@keyframes liquid-breathe{0%,100%{transform:translate3d(0,2px,0) scale(1.015,.985)}50%{transform:translate3d(0,-3px,0) scale(.985,1.025)}}
+@keyframes liquid-flow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes liquid-tide{0%,100%{transform:translate3d(0,2px,0) rotate(-1deg)}50%{transform:translate3d(0,-3px,0) rotate(1deg)}}
+@keyframes liquid-mercury{0%,100%{transform:scale(1.025,.98) skewX(-1deg)}50%{transform:scale(.98,1.03) skewX(1deg)}}
+@keyframes liquid-iridescence{0%,100%{background-position:0% 0%;transform:translateY(1px)}50%{background-position:100% 100%;transform:translateY(-2px)}}
+@media(orientation:portrait){
+ .invitation-gallery{inset:-8% 50% -8% 0}
+ .invitation-gallery .invitation-word{font-size:clamp(20px,5.7vw,32px)}
+ .invitation-number{left:1%;font-size:6px}
+}
+@media(prefers-reduced-motion:reduce){.invitation-gallery,.invitation-gallery .invitation-word,.invitation-letter{animation:none!important}}
+@media(orientation:portrait){
+ .invitation-gallery{inset:10% 50% -20% 0}
+ .desk-scene:not(.reader-open) .invitation-gallery .open-invitation{width:100%}
+}
+
+.invitation-selected{animation:invitation-arrive .65s ease both}
+@media(prefers-reduced-motion:reduce){.invitation-selected,.invitation-selected .invitation-word{animation:none!important}}
+
+/* Keep the interactive hardware above the app background. Empty layout space
+   must not intercept the tonearm, which extends beyond the book footprint. */
+.desk-world{z-index:0}
+.reader-main{position:relative;z-index:1;pointer-events:none}
+.magazine-book,.reader-controls{pointer-events:auto}
+.reader-header{position:relative;z-index:2}
