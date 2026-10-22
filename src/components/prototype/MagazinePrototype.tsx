@@ -255,12 +255,9 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     <header className="reader-header"><a href={base} className="reader-brand">LA<span> / PORTFOLIO</span></a><div className="reader-edition">The magazine experiment <span>— Issue No. 01</span></div><button className="contents-toggle" onClick={()=>setContents(!contents)} aria-expanded={contents} aria-controls="issue-contents">{contents?'Close':'Contents'} <span>{contents?'×':'☰'}</span></button></header>
     <main className="reader-main"><div className="spread-topline"><span>{spread===-1?'The cover':`${pad(spread+1)} / ${names[spread]}`}</span><span>Product, people & everything in between.</span></div><div className={`magazine-book ${turn?'is-turning':''} ${spread===-1?'is-closed':''} ${turn?.to===-1?'is-closing':''}`} ref={book} onPointerDown={pointerDown} onPointerUp={e=>pointerUp(e)} onPointerCancel={e=>pointerUp(e,true)} aria-label={spread===-1?'Closed magazine cover':`Magazine spread ${spread+1}: ${names[spread]}`}><div className="book-base">{Page({index:turn&&(portraitMode||turn.direction<0)?turn.to:spread,side:0})}{Page({index:turn&&(portraitMode||turn.direction>0)?turn.to:spread,side:1})}</div>{turn&&<div className={`turning-sheet ${turn.direction>0?'forward':'backward'}`} ref={sheet}>{Page({index:spread,side:spread===-1?1:portraitMode?0:turn.direction>0?1:0,face:"sheet-front"})}{Page({index:turn.to,side:turn.to===-1?1:portraitMode?0:turn.direction>0?0:1,face:"sheet-back"})}<div className="turn-shading"/><div className="back-shading"/></div>}
       {spread===-1&&!turn&&!immersive&&deskReady&&<>
-        <div className="invitation-gallery" aria-label="Five organic Open me studies">
-          {['Droplet','Flow','Tide','Mercury','Iridescence'].map((name,i)=><button key={name} className={`open-invitation liquid-${i+1}`} onClick={()=>go(0)} aria-label={`Open me — ${name} variation`}>
-            <span className="invitation-number" aria-hidden="true">{pad(i+1)}</span>
-            <span className="invitation-word">{i===2?Array.from('Open me').map((letter,j)=><span className="invitation-letter" key={j} style={{'--letter':j} as CSSProperties}>{letter===' '?'\u00a0':letter}</span>):'Open me'}</span>
-          </button>)}
-        </div>
+        <button className="open-invitation liquid-2 invitation-selected" onClick={()=>go(0)} aria-label="Open me — open the magazine">
+          <span className="invitation-word">Open me</span>
+        </button>
         <button className="cover-hitarea" onClick={()=>go(0)} aria-label="Open magazine cover"/>
       </>}
       <div className="book-spine" aria-hidden="true"/>{!turn&&spread>=0&&<button className="edge-turn edge-prev" aria-label="Turn to previous spread" onClick={()=>go(spread-1)}>↶</button>}{!turn&&spread>=0&&spread<total-1&&<button className="edge-turn edge-next" aria-label="Turn to next spread" onClick={()=>go(spread+1)}>↷</button>}</div>

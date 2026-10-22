@@ -343,3 +343,6 @@ astro-dev-toolbar{display:none}
  .invitation-gallery{inset:10% 50% -20% 0}
  .desk-scene:not(.reader-open) .invitation-gallery .open-invitation{width:100%}
 }
+
+.invitation-selected{animation:invitation-arrive .65s ease both}
+@media(prefers-reduced-motion:reduce){.invitation-selected,.invitation-selected .invitation-word{animation:none!important}}
