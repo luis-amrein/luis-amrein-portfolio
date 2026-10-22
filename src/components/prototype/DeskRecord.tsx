@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 
-export default function DeskRecord({src,artBase,inactive=false}:{src:string;artBase:string;inactive?:boolean}) {
+function DeskRecord({src,artBase,inactive=false}:{src:string;artBase:string;inactive?:boolean}) {
   const player = useRef<HTMLAudioElement>(null);
   const fade = useRef(0);
   const active = useRef(false);
@@ -61,3 +61,5 @@ export default function DeskRecord({src,artBase,inactive=false}:{src:string;artB
     <span className="sr-only" role="status">{failed?'Music could not start. Click the tonearm to retry.':engaged?'Jazz playing':'Jazz paused'}</span>
   </aside>;
 }
+
+export default memo(DeskRecord);

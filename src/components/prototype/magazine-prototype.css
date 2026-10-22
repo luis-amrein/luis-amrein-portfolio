@@ -228,3 +228,7 @@ astro-dev-toolbar{display:none}
 @media(orientation:portrait){.reader-exit{top:42px}}
 @media(orientation:portrait){.reader-exit{left:auto;right:8px}}
 .magazine-app:has(.is-closing) .reader-header,.magazine-app:has(.is-closing) .spread-topline,.magazine-app:has(.is-closing) .reader-controls,.magazine-app:has(.is-closing) .prototype-switcher{visibility:hidden}
+/* Hidden desk decoration must not keep animating underneath the immersive reader. */
+.reader-open .vinyl-label,.reader-open .vinyl-surface-motion,.reader-open .strobe-row{animation-play-state:paused}
+/* The WebGL receiver supplies the moving shadow; avoid repainting a CSS shadow every frame. */
+.magazine-book.is-turning{box-shadow:0 20px 35px -22px #16171466,0 3px 5px #16171433}
