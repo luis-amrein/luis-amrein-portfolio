@@ -227,3 +227,4 @@ astro-dev-toolbar{display:none}
 .reader-exit{left:8px;top:8px;width:30px;height:30px}
 @media(orientation:portrait){.reader-exit{top:42px}}
 @media(orientation:portrait){.reader-exit{left:auto;right:8px}}
+.magazine-app:has(.is-closing) .reader-header,.magazine-app:has(.is-closing) .spread-topline,.magazine-app:has(.is-closing) .reader-controls,.magazine-app:has(.is-closing) .prototype-switcher{visibility:hidden}
