@@ -73,3 +73,6 @@ Landscape now zooms one shared camera stage while page layout and container typo
 
 ### No outside text during camera handoff
 Legacy header, chapter topline and variant-switcher labels remain hidden during every desk/camera state, including the open-on-desk pause. Controls only appear in the immersive reader after camera completion. This prevents the former prototype labels flashing between cover opening and zoom.
+
+### Five localized cover halftones
+Design question: which localized dot composition adds printed texture to the coral cover? Use the landing selector or `?variant=D&cover=1` through `cover=5`: Gezeiten (upper-right ink fade), Drucknebel (lower-edge ink cloud), Grünes Band (mint ribbon), Eclipse (cropped circular ink field), Kreidestaub (two ivory islands). Static SVGs contain actual dots with smaller radii, lower opacity and sparser edges; they sit below cover typography. The selector is only present on the prototype landing and disappears during opening.

@@ -381,3 +381,14 @@ astro-dev-toolbar{display:none}
 .desk-scene .reader-header,.desk-scene .spread-topline{visibility:hidden;pointer-events:none}
 .desk-scene .prototype-switcher{display:none}
 .desk-scene:not(.reader-open) .reader-controls,.camera-moving .edge-turn{visibility:hidden;pointer-events:none}
+
+/* Localized printed halftones: actual dot radii taper toward each field edge. */
+.cover-halftone{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:fill;pointer-events:none;user-select:none;z-index:0}
+.opening-copy>.running-head,.opening-copy>.cover-title,.opening-copy>.cover-bottom,.opening-copy>.folio{z-index:1}
+.cover-studies{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:70;display:flex;align-items:center;gap:20px;padding:10px 12px 10px 18px;border-radius:40px;background:#14231ff2;color:#f3f0e8;box-shadow:0 5px 25px #0003;font:11px/1 var(--sans)}
+.cover-studies>span{min-width:115px;letter-spacing:.03em}
+.cover-studies>div{display:flex;gap:4px}
+.cover-studies button{border:1px solid #f3f0e833;border-radius:50%;width:32px;height:32px;font-size:10px}
+.cover-studies button[aria-pressed=true]{background:#36ffb6;color:#14231f;border-color:#36ffb6}
+.cover-studies button:hover{border-color:#36ffb6}
+@media(orientation:portrait){.cover-studies{gap:9px;padding:8px 10px;bottom:15px;white-space:nowrap}.cover-studies>span{min-width:95px;font-size:10px}.cover-studies button{width:28px;height:28px}}
