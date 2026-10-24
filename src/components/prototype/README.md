@@ -67,3 +67,6 @@ Selected invitation: variation 02, flowing glass reflection. The five-study comp
 
 ### Interaction recovery
 The desk scene now sits above the app background, and unused reader layout space does not intercept hardware clicks. Page turns no longer wait for an unrelated previous camera animation. Both flip and camera completion have a bounded fallback so a missing Web Animations completion event cannot permanently hold the navigation lock.
+
+### Resumed camera and pointer polish
+Landscape now zooms one shared camera stage while page layout and container typography stay at their desk dimensions. Controls sit outside the camera and blur effects are removed; vinyl animation pauses during camera movement. Portrait retains its stacked reader and the camera frame is recalculated on orientation changes. The selected flowing-glass invitation uses identical filter and shadow values for idle, hover and focus. Browser checks covered desktop/portrait opening, closing, orientation changes, horizontal navigation, physical tonearm clicks and matching hover styles.

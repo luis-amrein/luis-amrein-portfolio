@@ -353,3 +353,25 @@ astro-dev-toolbar{display:none}
 .reader-main{position:relative;z-index:1;pointer-events:none}
 .magazine-book,.reader-controls{pointer-events:auto}
 .reader-header{position:relative;z-index:2}
+
+/* The landscape camera moves one scene with a stable page layout. */
+.camera-stage{position:relative;transform:translate3d(0,0,0);transform-origin:0 0;will-change:transform}
+@media(orientation:landscape){
+ .camera-stage{position:fixed;inset:0;padding:0 3.4vw;pointer-events:none}
+ .desk-scene .magazine-book,.reader-open .magazine-book{position:relative;inset:auto;width:min(72vw,calc((100svh - 340px)*1.68));height:auto;aspect-ratio:1.68;margin:0 3vw 0 auto}
+ .camera-stage .desk-world{position:absolute;transform:none}
+ .reader-open .reader-controls{z-index:35}
+}
+.camera-moving .vinyl-label,.camera-moving .vinyl-surface-motion,.camera-moving .strobe-row{animation-play-state:paused}
+.camera-moving .reader-controls,.camera-moving .reader-exit{visibility:hidden;pointer-events:none}
+.reader-open .reader-controls,.reader-exit{backdrop-filter:none;background:#182b23ed}
+/* Cursor proximity must not change the chosen glass material. */
+.desk-scene .invitation-selected .invitation-word,
+.desk-scene .invitation-selected:hover .invitation-word,
+.desk-scene .invitation-selected:focus-visible .invitation-word{
+ color:transparent;filter:none;transition:none;
+ text-shadow:0 -1px 1px #fffae966,0 1px 1px #3d230a70,0 2px 1px #fff1d24d,1px 4px 3px #21110452;
+}
+@media(orientation:portrait){
+ .camera-stage{position:fixed;inset:0;padding:0 5vw;pointer-events:none}
+}

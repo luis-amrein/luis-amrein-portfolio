@@ -31,6 +31,8 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
  const [contents,setContents]=useState(false);
  const [immersive,setImmersive]=useState(false);
  const [deskReady,setDeskReady]=useState(true);
+ const [cameraMoving,setCameraMoving]=useState(false);
+ const cameraStage=useRef<HTMLDivElement>(null);
  const immersiveRef=useRef(immersive);
  const zoomFrom=useRef<DOMRect|null>(null);
  const zoomAnimation=useRef<Animation|null>(null);
@@ -47,6 +49,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
   const motion = useRef<Motion | null>(null);
   const swipe=useRef<{x:number;y:number}|null>(null);
   const wheel=useRef({last:0,locked:false,amount:0});
+  const previousPortrait=useRef(portraitMode);
   const total = projects.length + 3;
   const names = ['Portrait & contents', 'Selected work', 'About Luis', ...projects.map(p => p.title)];
   const direction = directions.find(d => d.key === variant)!;
@@ -70,6 +73,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
   function readingView(open:boolean) {
     if(open===immersiveRef.current)return;
     immersiveRef.current=open;
+    setCameraMoving(!reduced);
     zoomFrom.current=book.current?.getBoundingClientRect()||null;
     zoomAnimation.current?.cancel();
     setImmersive(open);
@@ -79,7 +83,23 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     if(!element||!from)return;
     zoomFrom.current=null;
     const to=element.getBoundingClientRect();
-    if(!to.width||!to.height)return;
+    if(!to.width||!to.height){setCameraMoving(false);return;}
+    const timing={duration:immersive?1450:1100,easing:'cubic-bezier(.32,0,.2,1)',fill:'none' as FillMode};
+    const stage=cameraStage.current;
+    if(!portraitMode&&stage){
+      // Keep every page at its desk layout; the camera scales one shared scene.
+      const start=stage.style.transform||'translate3d(0,0,0) scale(1,1)';
+      if(immersive){
+        const sx=window.innerWidth/from.width,sy=window.innerHeight/from.height;
+        worldZoom.current=`translate3d(${-from.left*sx}px,${-from.top*sy}px,0) scale(${sx},${sy})`;
+      }
+      const target=immersive?worldZoom.current:'translate3d(0,0,0) scale(1,1)';
+      if(deskWorld.current)deskWorld.current.style.transform='';
+      stage.style.transform=target;
+      if(!reduced)zoomAnimation.current=stage.animate([{transform:start},{transform:target}],timing);
+      return;
+    }
+    if(stage)stage.style.transform='translate3d(0,0,0)';
     const world=deskWorld.current;
     const previousWorld=worldZoom.current;
     if(immersive){
@@ -90,7 +110,6 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     worldAnimation.current?.cancel();
     if(world)world.style.transform=targetWorld;
     if(reduced)return;
-    const timing={duration:immersive?1450:1100,easing:immersive?'cubic-bezier(.22,.72,.12,1)':'cubic-bezier(.32,0,.18,1)',fill:'none' as FillMode};
     zoomAnimation.current=element.animate([
       {transform:`translate3d(${from.left-to.left}px,${from.top-to.top}px,0) scale(${from.width/to.width},${from.height/to.height})`},
       {transform:'translate3d(0,0,0) scale(1,1)'}
@@ -99,7 +118,22 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
       {transform:immersive?'translate(0px,0px) scale(1,1)':previousWorld},
       {transform:targetWorld}
     ],timing);
-  },[immersive,reduced]);
+  },[immersive,reduced,portraitMode]);
+  useLayoutEffect(()=>{
+    if(previousPortrait.current===portraitMode)return;
+    previousPortrait.current=portraitMode;
+    const stage=cameraStage.current,world=deskWorld.current,element=book.current;
+    if(!stage||!world||!element)return;
+    zoomAnimation.current?.cancel();worldAnimation.current?.cancel();
+    stage.style.transform='translate3d(0,0,0)';world.style.transform='';
+    if(!immersiveRef.current)return;
+    if(portraitMode){world.style.transform=worldZoom.current;return;}
+    const rect=element.getBoundingClientRect();
+    if(!rect.width||!rect.height)return;
+    const sx=window.innerWidth/rect.width,sy=window.innerHeight/rect.height;
+    worldZoom.current=`translate3d(${-rect.left*sx}px,${-rect.top*sy}px,0) scale(${sx},${sy})`;
+    stage.style.transform=worldZoom.current;
+  },[portraitMode]);
   useEffect(()=>{
     if(portraitMode&&book.current)book.current.scrollTop=0;
   },[spread,portraitMode]);
@@ -130,6 +164,7 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
       if(motion.current!==m)return;
     }
     motion.current=null;busy.current=false;swipe.current=null;
+    setCameraMoving(false);
     setDeskReady((committed?m.to:m.from)===-1);
   }
 
@@ -244,8 +279,9 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
       {index===-1?(side===0?null:Hero({side:0})):index===0?(side===0?Hero({side:1}):IssueContents()):index===1?Work({side}):index===2?About({side}):ProjectPage({index,side})}
     </div>;
   }
-  return <div className={`magazine-app desk-scene ${immersive?'reader-open':''} ${spread===-1?'is-landing':''} ${lampOn?'lamp-on':'lamp-off'} ${variant==='D'?'variant-C variant-D':`variant-${variant}`}`} style={{'--desk-texture':`url("${asset('prototype/walnut-desk-v1.webp')}")`} as CSSProperties}>
+  return <div className={`magazine-app desk-scene ${immersive?'reader-open':''} ${cameraMoving?'camera-moving':''} ${spread===-1?'is-landing':''} ${lampOn?'lamp-on':'lamp-off'} ${variant==='D'?'variant-C variant-D':`variant-${variant}`}`} style={{'--desk-texture':`url("${asset('prototype/walnut-desk-v1.webp')}")`} as CSSProperties}>
     {immersive&&<button className="reader-exit" onClick={()=>go(-1)} aria-label="Close magazine and return to the desk" title="Back to desk">↙</button>}
+    <div className="camera-stage" ref={cameraStage}>
     <div className="desk-world" ref={deskWorld}>
     <DeskRecord src={asset('prototype/backbay-lounge.mp3')} artBase={asset('prototype')} inactive={immersive}/>
     <div className="desk-light-falloff" aria-hidden="true"/>
@@ -269,7 +305,8 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
         <button className="cover-hitarea" onClick={()=>go(0)} aria-label="Open magazine cover"/>
       </>}
       <div className="book-spine" aria-hidden="true"/>{!turn&&spread>=0&&<button className="edge-turn edge-prev" aria-label="Turn to previous spread" onClick={()=>go(spread-1)}>↶</button>}{!turn&&spread>=0&&spread<total-1&&<button className="edge-turn edge-next" aria-label="Turn to next spread" onClick={()=>go(spread+1)}>↷</button>}</div>
-    <div className="reader-controls"><div className="motion-controls"><span className="small-dot"/>{reduced?'Reduced motion':'Sculpted paper'}<button onClick={()=>setSlow(!slow)} aria-pressed={slow}>{slow?'Slow study':'Natural pace'}</button></div><div className="paging"><button onClick={()=>go(spread-1)} disabled={spread===-1||!!turn} aria-label="Previous spread">←</button><span aria-live="polite">{spread===-1?'Cover':<>{pad(spread*2+1)} — {pad(spread*2+2)} <small>/ {pad(total*2)}</small></>}</span><button onClick={()=>go(spread+1)} disabled={spread===total-1||!!turn} aria-label="Next spread">→</button></div><p className="interaction-hint">{spread===-1?<>A little curiosity <span>opens a whole world.</span></>:<>Scroll horizontally <span>or swipe to turn ↔</span></>}</p></div></main>
+    </main></div>
+    <div className="reader-controls"><div className="motion-controls"><span className="small-dot"/>{reduced?'Reduced motion':'Sculpted paper'}<button onClick={()=>setSlow(!slow)} aria-pressed={slow}>{slow?'Slow study':'Natural pace'}</button></div><div className="paging"><button onClick={()=>go(spread-1)} disabled={spread===-1||!!turn} aria-label="Previous spread">←</button><span aria-live="polite">{spread===-1?'Cover':<>{pad(spread*2+1)} — {pad(spread*2+2)} <small>/ {pad(total*2)}</small></>}</span><button onClick={()=>go(spread+1)} disabled={spread===total-1||!!turn} aria-label="Next spread">→</button></div><p className="interaction-hint">{spread===-1?<>A little curiosity <span>opens a whole world.</span></>:<>Scroll horizontally <span>or swipe to turn ↔</span></>}</p></div>
     <div className="prototype-switcher" aria-label="Prototype design directions"><span className="prototype-badge">Prototype</span><button onClick={()=>switchVariant(-1)} aria-label="Previous design direction">‹</button><div><strong>{direction.key} — {direction.name}</strong><span>{direction.description}</span></div><button onClick={()=>switchVariant(1)} aria-label="Next design direction">›</button><span className="variant-count">{directions.findIndex(d=>d.key===variant)+1}/{directions.length}</span></div>
     {contents&&<div className="contents-overlay" id="issue-contents"><div className="contents-heading"><span className="mini-label">Inside this issue</span><h2>Contents.</h2></div><nav aria-label="Magazine contents"><button onClick={()=>{setContents(false);go(-1)}} aria-current={spread===-1?'page':undefined}><span>Cover</span><strong>Return to the cover</strong><span>↶</span></button>{names.map((name,i)=><button key={i} onClick={()=>{setContents(false);go(i)}} aria-current={spread===i?'page':undefined}><span>{pad(i*2+1)}—{pad(i*2+2)}</span><strong>{name}</strong><span>↗</span></button>)}</nav><p>One spread per chapter. Take your time.</p><p className="music-credit">Music: <a href="https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1700068" target="_blank" rel="noreferrer">“Backbay Lounge” — Kevin MacLeod (incompetech.com)</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>. Playback volume fades in and out.</p></div>}
   </div>;
