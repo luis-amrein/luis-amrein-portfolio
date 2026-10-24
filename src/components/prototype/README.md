@@ -82,3 +82,5 @@ Landscape cover footprint now uses up to 78vw with 250px of vertical desk cleara
 
 ### Selected cover direction: curved four-point stars
 Version 01 now uses a broader upper-right field of four-point stars with concave cubic curves between the tips. It retains the ink/coral palette and the original graded radius, opacity and density treatment. The dot original remains in cover-halftone-01.svg; the active asset is cover-starfield-01.svg.
+
+Selected cover refinement: restored the original version 01 fading circles (cover-halftone-01.svg). The curved-star study remains saved as a reference asset.
