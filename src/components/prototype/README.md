@@ -70,3 +70,6 @@ The desk scene now sits above the app background, and unused reader layout space
 
 ### Resumed camera and pointer polish
 Landscape now zooms one shared camera stage while page layout and container typography stay at their desk dimensions. Controls sit outside the camera and blur effects are removed; vinyl animation pauses during camera movement. Portrait retains its stacked reader and the camera frame is recalculated on orientation changes. The selected flowing-glass invitation uses identical filter and shadow values for idle, hover and focus. Browser checks covered desktop/portrait opening, closing, orientation changes, horizontal navigation, physical tonearm clicks and matching hover styles.
+
+### No outside text during camera handoff
+Legacy header, chapter topline and variant-switcher labels remain hidden during every desk/camera state, including the open-on-desk pause. Controls only appear in the immersive reader after camera completion. This prevents the former prototype labels flashing between cover opening and zoom.

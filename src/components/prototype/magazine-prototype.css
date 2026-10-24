@@ -375,3 +375,9 @@ astro-dev-toolbar{display:none}
 @media(orientation:portrait){
  .camera-stage{position:fixed;inset:0;padding:0 5vw;pointer-events:none}
 }
+
+/* These layout spacers must stay empty in every tabletop/camera phase.
+   The open-on-desk pause has neither is-landing nor reader-open. */
+.desk-scene .reader-header,.desk-scene .spread-topline{visibility:hidden;pointer-events:none}
+.desk-scene .prototype-switcher{display:none}
+.desk-scene:not(.reader-open) .reader-controls,.camera-moving .edge-turn{visibility:hidden;pointer-events:none}
