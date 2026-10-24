@@ -90,3 +90,5 @@ Circle field now extends behind the Making Products headline to the left spine, 
 The selected circle pattern is now two separate fields: left behind Making Products to the spine, and upper right. A clear coral gap leaves Make sense free of dots.
 
 The gap between the two larger circle fields now has a continuous layer of microdots on the same 8-unit grid, fading out softly toward the lower edge.
+
+Microdots now cover the entire front cover edge to edge on the same grid, beneath the two localized larger-dot fields.
