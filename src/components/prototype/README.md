@@ -79,3 +79,6 @@ Design question: which localized dot composition adds printed texture to the cor
 
 ### Larger issue and quieter desk crop
 Landscape cover footprint now uses up to 78vw with 250px of vertical desk clearance, increasing the cover while retaining room to unfold. Record and tonearm shift together left/down beyond the viewport. Portrait desk margins shrink to 2vw. Camera framing continues to derive from the actual book bounds.
+
+### Selected cover direction: curved four-point stars
+Version 01 now uses a broader upper-right field of four-point stars with concave cubic curves between the tips. It retains the ink/coral palette and the original graded radius, opacity and density treatment. The dot original remains in cover-halftone-01.svg; the active asset is cover-starfield-01.svg.
