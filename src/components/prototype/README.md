@@ -76,3 +76,6 @@ Legacy header, chapter topline and variant-switcher labels remain hidden during 
 
 ### Five localized cover halftones
 Design question: which localized dot composition adds printed texture to the coral cover? Use the landing selector or `?variant=D&cover=1` through `cover=5`: Gezeiten (upper-right ink fade), Drucknebel (lower-edge ink cloud), Grünes Band (mint ribbon), Eclipse (cropped circular ink field), Kreidestaub (two ivory islands). Static SVGs contain actual dots with smaller radii, lower opacity and sparser edges; they sit below cover typography. The selector is only present on the prototype landing and disappears during opening.
+
+### Larger issue and quieter desk crop
+Landscape cover footprint now uses up to 78vw with 250px of vertical desk clearance, increasing the cover while retaining room to unfold. Record and tonearm shift together left/down beyond the viewport. Portrait desk margins shrink to 2vw. Camera framing continues to derive from the actual book bounds.

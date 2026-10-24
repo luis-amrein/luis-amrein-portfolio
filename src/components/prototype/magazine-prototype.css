@@ -280,7 +280,7 @@ astro-dev-toolbar{display:none}
 
 /* Leave a clear tabletop footprint for the fully opened issue. */
 @media(orientation:landscape){
- .desk-scene:not(.reader-open) .magazine-book{width:min(72vw,calc((100svh - 340px)*1.68));margin-left:auto;margin-right:3vw}
+ .desk-scene:not(.reader-open) .magazine-book{width:min(78vw,calc((100svh - 250px)*1.68));margin-left:auto;margin-right:3vw}
 }
 /* Rounded liquid edges, with a fine highlight and a lower refracted rim. */
 .desk-scene .invitation-word{
@@ -358,7 +358,7 @@ astro-dev-toolbar{display:none}
 .camera-stage{position:relative;transform:translate3d(0,0,0);transform-origin:0 0;will-change:transform}
 @media(orientation:landscape){
  .camera-stage{position:fixed;inset:0;padding:0 3.4vw;pointer-events:none}
- .desk-scene .magazine-book,.reader-open .magazine-book{position:relative;inset:auto;width:min(72vw,calc((100svh - 340px)*1.68));height:auto;aspect-ratio:1.68;margin:0 3vw 0 auto}
+ .desk-scene .magazine-book,.reader-open .magazine-book{position:relative;inset:auto;width:min(78vw,calc((100svh - 250px)*1.68));height:auto;aspect-ratio:1.68;margin:0 3vw 0 auto}
  .camera-stage .desk-world{position:absolute;transform:none}
  .reader-open .reader-controls{z-index:35}
 }
@@ -392,3 +392,9 @@ astro-dev-toolbar{display:none}
 .cover-studies button[aria-pressed=true]{background:#36ffb6;color:#14231f;border-color:#36ffb6}
 .cover-studies button:hover{border-color:#36ffb6}
 @media(orientation:portrait){.cover-studies{gap:9px;padding:8px 10px;bottom:15px;white-space:nowrap}.cover-studies>span{min-width:95px;font-size:10px}.cover-studies button{width:28px;height:28px}}
+
+/* Crop the complete record assembly together, keeping the needle reachable. */
+.desk-world .desk-record{
+ inset:clamp(48px,8svh,80px) clamp(65px,7vw,110px) calc(-1 * clamp(48px,8svh,80px)) calc(-1 * clamp(65px,7vw,110px));
+}
+@media(orientation:portrait){.camera-stage{padding-inline:2vw}}
