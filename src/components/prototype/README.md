@@ -86,3 +86,5 @@ Version 01 now uses a broader upper-right field of four-point stars with concave
 Selected cover refinement: restored the original version 01 fading circles (cover-halftone-01.svg). The curved-star study remains saved as a reference asset.
 
 Circle field now extends behind the Making Products headline to the left spine, with a softer broad shoulder merging into the denser upper-right field.
+
+The selected circle pattern is now two separate fields: left behind Making Products to the spine, and upper right. A clear coral gap leaves Make sense free of dots.
