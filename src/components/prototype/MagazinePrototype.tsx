@@ -2,13 +2,16 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { flushSync } from 'react-dom';
 import './magazine-prototype.css';
+import './engineering-drawing.css';
 import DeskRecord from './DeskRecord';
+import { DrawingFrame, EngineeringPortrait, EngineeringContents } from './EngineeringDrawing';
 type Project = { id:string; title:string; eyebrow:string; summary:string; year:string; role:string; challenge:string; outcome:string; outcomeLabel:string; tags:string[]; showcase?:{type:string;src:string;alt:string}[] };
 type Props = { projects:Project[]; portrait:string; base:string };
 type Turn = { to:number; direction:number; corner:number };
 type Motion = Turn & {from:number;animation?:Animation;shading?:Animation};
 const directions = [
  {key:'D',name:'The Luis Issue',description:'Art journal × fashion issue · coral & green · sculpted paper'},
+ {key:'E',name:'The Drawing Set',description:'Technische Zeichnung · Maschinenbau · Schnittstellen'},
  {key:'A',name:'The Editorial',description:'Warm paper · serif headlines · quiet tension'},
  {key:'B',name:'The Fashion Issue',description:'Full-bleed portraits · oversized type · high contrast'},
  {key:'C',name:'The Art Journal',description:'Coral · graphic compositions · radical scale'}
@@ -140,13 +143,13 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
     if(portraitMode&&book.current)book.current.scrollTop=0;
   },[spread,portraitMode]);
 
-  function switchVariant(step: number) {
-    if (busy.current) return;
-    const next = directions[(directions.findIndex(d => d.key === variant) + step + directions.length) % directions.length].key;
+  function selectVariant(next:string){
+    if(busy.current)return;
     setVariant(next);
     const url = new URL(window.location.href); url.searchParams.set('variant', next);
     window.history.replaceState({}, '', url);
   }
+  function switchVariant(step:number){selectVariant(directions[(directions.findIndex(d=>d.key===variant)+step+directions.length)%directions.length].key)}
 
   async function finishTurn(m:Motion,committed:boolean){
     if(motion.current!==m)return;
@@ -278,10 +281,12 @@ export default function MagazinePrototype({projects,portrait,base}:Props){
   function Page({index,side,face=''}:{index:number;side:number;face?:string}){
     const kind = index===-1 ? (side===0?'cover-whitespace':'closed-cover') : '';
     return <div key={`${index}:${side}:${face}`} className={`magazine-page side-${side} ${kind} ${face}`} aria-hidden={!!face||index===-1&&side===0||undefined} inert={!!face||undefined}>
-      {index===-1?(side===0?null:Hero({side:0})):index===0?(side===0?Hero({side:1}):IssueContents()):index===1?Work({side}):index===2?About({side}):ProjectPage({index,side})}
+      {index===-1?(side===0?null:Hero({side:0})):index===0?(variant==='E'?(side===0?<EngineeringPortrait portrait={portrait}/>:<EngineeringContents names={names} onSelect={go}/>):(side===0?Hero({side:1}):IssueContents())):index===1?Work({side}):index===2?About({side}):ProjectPage({index,side})}
+      {variant==='E'&&index>=0&&<DrawingFrame sheet={index*2+side+1} title={index===0?(side===0?'Systemübersicht / Luis Amrein':'Zeichnungsverzeichnis'):names[index]}/>}
     </div>;
   }
-  return <div className={`magazine-app desk-scene ${immersive?'reader-open':''} ${cameraMoving?'camera-moving':''} ${spread===-1?'is-landing':''} ${lampOn?'lamp-on':'lamp-off'} ${variant==='D'?'variant-C variant-D':`variant-${variant}`}`} style={{'--desk-texture':`url("${asset('prototype/walnut-desk-v1.webp')}")`} as CSSProperties}>
+  return <div className={`magazine-app desk-scene ${immersive?'reader-open':''} ${cameraMoving?'camera-moving':''} ${spread===-1?'is-landing':''} ${lampOn?'lamp-on':'lamp-off'} ${variant==='D'||variant==='E'?`variant-C variant-D ${variant==='E'?'variant-E':''}`:`variant-${variant}`}`} style={{'--desk-texture':`url("${asset('prototype/walnut-desk-v1.webp')}")`} as CSSProperties}>
+    {!cameraMoving&&!turn&&<nav className="design-comparison" aria-label="Magazindesign vergleichen"><button aria-pressed={variant!=='E'} onClick={()=>selectVariant('D')}>Magazin</button><button aria-pressed={variant==='E'} onClick={()=>selectVariant('E')}>Technische Zeichnung</button></nav>}
     {immersive&&<button className="reader-exit" onClick={()=>go(-1)} aria-label="Close magazine and return to the desk" title="Back to desk">↙</button>}
     <div className="camera-stage" ref={cameraStage}>
     <div className="desk-world" ref={deskWorld}>

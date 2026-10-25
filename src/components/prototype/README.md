@@ -92,3 +92,7 @@ The selected circle pattern is now two separate fields: left behind Making Produ
 The gap between the two larger circle fields now has a continuous layer of microdots on the same 8-unit grid, fading out softly toward the lower edge.
 
 Microdots now cover the entire front cover edge to edge on the same grid, beneath the two localized larger-dot fields.
+
+### Variant E — The Drawing Set
+Question: can the magazine read like a mechanical engineering drawing set? Open `?variant=E&cover=1` and use the top-right comparison to switch between D and E without losing the current spread. The cover remains the selected coral design. E adds a document frame, coordinate zones, drawing numbers, revision/sheet title blocks, grid paper, monospaced typography, projection mark, sectional portrait annotations and an interactive drawing index. Work, about and every project use the same sheet language. Colors stay ivory, deep green, coral and mint. This is a schematic visual study, not a dimensioned manufacturing drawing.
+Browser checked first spread, work, about, a project, live D/E switching, close/zoom and mobile vertical reading.
