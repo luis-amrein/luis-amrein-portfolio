@@ -1,0 +1,88 @@
+/* E — a drawing set, framed like an engineering document rather than a glossy issue. */
+.design-comparison{position:fixed;right:14px;top:14px;z-index:70;display:flex;gap:3px;padding:4px;border:1px solid #e7e4d03b;border-radius:4px;background:#14231ff2;color:#f3f0e8;font:10px/1 'Helvetica Neue',Arial,sans-serif;box-shadow:0 3px 18px #0002}
+.design-comparison button{padding:9px 11px;border-radius:2px}
+.design-comparison button[aria-pressed=true]{background:#36ffb6;color:#14231f}
+.variant-E .magazine-page:not(.closed-cover):not(.cover-whitespace){--sans:'SFMono-Regular',Consolas,'Liberation Mono',monospace;--serif:var(--sans);--paper:#f2f1e9;--ink:#193b35;--rule:#193b3540;background:var(--paper);color:var(--ink);font-family:var(--sans);background-image:linear-gradient(#193b3507 1px,transparent 1px),linear-gradient(90deg,#193b3507 1px,transparent 1px);background-size:3cqw 3cqw}
+.variant-E .page-inner:not(.opening-copy){padding:7cqw 7cqw 17cqw}
+.variant-E .magazine-page:not(.closed-cover) .running-head{font:1.5cqw/1.3 var(--sans);border-bottom:1px solid var(--ink);padding-bottom:2cqw;letter-spacing:.03em;color:var(--ink)}
+.variant-E .magazine-page:not(.closed-cover) .folio{display:none}
+.drawing-frame{position:absolute;inset:3cqw;border:1px solid #193b3599;pointer-events:none;z-index:5}
+.drawing-zones{position:absolute;top:-1.4cqw;left:10%;right:10%;display:flex;justify-content:space-between;font:1.45cqw/1 var(--sans)}
+.drawing-zones span{padding:.5cqw 1.2cqw;background:var(--paper);border-inline:1px solid #193b3540}
+.drawing-side-code{position:absolute;left:-2.4cqw;top:20%;writing-mode:vertical-rl;transform:rotate(180deg);font:1.15cqw/1 var(--sans);letter-spacing:.06em}
+.drawing-titleblock{position:absolute;bottom:0;right:0;left:0;display:grid;grid-template-columns:1.6fr 1fr .3fr .4fr;background:var(--paper);border-top:1px solid var(--ink)}
+.drawing-titleblock>div{padding:1cqw 1.2cqw;border-right:1px solid var(--rule);min-height:6cqw;display:flex;flex-direction:column;justify-content:space-between;gap:.8cqw;min-width:0}
+.drawing-titleblock small{font-size:.95cqw;line-height:1.2;letter-spacing:.02em}
+.drawing-titleblock strong{font-size:1.5cqw;line-height:1.15;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.drawing-titleblock>span{grid-column:span 2;padding:.7cqw 1.2cqw;border-top:1px solid var(--rule);font-size:.95cqw;line-height:1.2;letter-spacing:.02em}
+.engineering-heading{margin-top:4cqw}
+.engineering-heading .mini-label{font-size:1.5cqw;color:var(--accent)}
+.engineering-heading h2{font:500 7.2cqw/.98 var(--sans);letter-spacing:-.07em;margin-top:2cqw}
+.engineering-heading h2 em{font-style:normal;color:var(--accent);font-size:5.8cqw;letter-spacing:-.06em}
+.engineering-portrait{position:relative;margin:5cqw auto 0;width:68%;height:39cqw;border:1px solid var(--ink);padding:1cqw;background:#36ffb610}
+.engineering-portrait img{width:100%;height:100%;object-fit:cover;object-position:50% 34%;filter:grayscale(1) contrast(1.15);mix-blend-mode:multiply}
+.portrait-section{position:absolute;top:1cqw;left:1cqw;padding:1cqw;background:var(--ink);color:var(--paper);font-size:1.7cqw}
+.portrait-axis{position:absolute;pointer-events:none;opacity:.65}
+.axis-horizontal{left:-5cqw;right:-5cqw;top:50%;border-top:1px dashed var(--accent)}
+.axis-vertical{top:-3cqw;bottom:-3cqw;left:50%;border-left:1px dashed var(--accent)}
+.portrait-dimension{position:absolute;font-size:1.15cqw;letter-spacing:.02em;white-space:nowrap}
+.dimension-top{top:-2.6cqw;left:0;right:0;border-bottom:1px solid var(--ink);padding-bottom:.6cqw;text-align:center}
+.dimension-top:before,.dimension-top:after{content:'';position:absolute;bottom:-1cqw;height:2cqw;border-left:1px solid var(--ink)}
+.dimension-top:before{left:0}.dimension-top:after{right:0}
+.dimension-side{right:-4.5cqw;top:0;bottom:0;writing-mode:vertical-rl;border-left:1px solid var(--ink);text-align:center;padding-left:.8cqw}
+.engineering-portrait figcaption{position:absolute;bottom:-3cqw;left:0;font-size:1.15cqw;white-space:nowrap}
+.engineering-note{margin-top:auto;padding-top:5cqw;border-bottom:1px solid var(--rule);padding-bottom:2cqw}
+.engineering-note>span{font-size:1.3cqw;color:var(--accent)}
+.engineering-note p{font:400 3cqw/1.2 var(--sans);margin-top:1.5cqw;letter-spacing:-.045em}
+.engineering-note small{display:block;font-size:1.15cqw;margin-top:1.5cqw}
+.engineering-kicker{display:block;margin-top:5cqw;color:var(--accent);font-size:1.4cqw}
+.engineering-index-title{position:relative;font:500 6.6cqw/1.05 var(--sans);letter-spacing:-.065em;margin-top:2cqw}
+.engineering-index-title>span{position:absolute;right:0;bottom:0;color:var(--accent);font-size:8cqw;font-weight:300}
+.engineering-index-note{font:1.55cqw/1.6 var(--sans);margin-top:3cqw}
+.drawing-table-head,.drawing-index button{display:grid;grid-template-columns:6cqw 1fr 7cqw;align-items:center;gap:1.4cqw;text-align:left}
+.drawing-table-head{font-size:1.2cqw;padding:1.2cqw 1cqw;margin-top:5cqw;background:var(--ink);color:var(--paper)}
+.drawing-index button{width:100%;min-height:6cqw;border-bottom:1px solid var(--rule);font-size:1.6cqw;line-height:1.2;padding:1.3cqw 1cqw}
+.drawing-index button>span:first-child{color:var(--accent)}
+.drawing-index button>span:last-child{text-align:right;font-size:1.5cqw}
+.drawing-index strong{font-weight:400}
+.drawing-index button:hover{background:#36ffb628;color:var(--ink)}
+.drawing-legend{margin-top:auto;padding-top:3cqw;display:flex;align-items:center;gap:3cqw}
+.drawing-legend svg{width:17cqw;fill:none;stroke:var(--ink);stroke-width:.8}
+.drawing-legend span{font-size:1.2cqw;color:var(--accent)}
+.drawing-legend p{font:1.3cqw/1.5 var(--sans);margin-top:.8cqw}
+/* Apply the same document language to work, about and every project sheet. */
+.variant-E .magazine-page:not(.closed-cover) .editorial-title{font-family:var(--sans);font-size:7cqw!important;line-height:1.05;letter-spacing:-.06em;font-weight:500;text-transform:uppercase}
+.variant-E .magazine-page:not(.closed-cover) .editorial-title em{font-family:var(--sans);font-size:inherit;font-style:normal;color:var(--accent);letter-spacing:inherit}
+.variant-E .section-intro{font-size:1.8cqw;line-height:1.55;max-width:100%;margin-top:3cqw}
+.variant-E .contents-list{border-top:1px solid var(--ink)}
+.variant-E .contents-list button{font-size:2cqw;padding:2.1cqw 0;gap:1.5cqw;grid-template-columns:5cqw 1fr auto}
+.variant-E .contents-list small{font-size:1.1cqw}
+.variant-E .contents-list button>span:first-child{font-family:var(--sans);font-style:normal;color:var(--accent);font-size:1.7cqw}
+.variant-E .phone-composition{height:41cqw;background:#36ffb615;border:1px solid var(--rule)}
+.variant-E .phone-composition img{transform:none;border:1px solid var(--ink);border-radius:1.5cqw;box-shadow:none}
+.variant-E .composition-word{font:500 6cqw/1 var(--sans);letter-spacing:-.06em;color:var(--accent)}
+.variant-E .about-photo{transform:none;margin:5cqw auto;width:74%;height:48cqw;padding:1cqw;border:1px solid var(--ink)}
+.variant-E .about-0 .editorial-title{margin-top:auto}
+.variant-E .about-pullquote{font:400 5.7cqw/1.1 var(--sans);letter-spacing:-.06em;margin-top:5cqw}
+.variant-E .about-pullquote em{font-family:var(--sans);font-style:normal;color:var(--accent)}
+.variant-E .article-columns{font-family:var(--sans);font-size:2.1cqw;line-height:1.5;gap:3cqw;margin-top:4cqw}
+.variant-E .article-columns p:first-child::first-letter{float:none;font-size:inherit;line-height:inherit;padding:0}
+.variant-E .off-clock p{font-family:var(--sans);font-style:normal;font-size:2.5cqw;line-height:1.4}
+.variant-E .project-category{font-size:1.4cqw;margin-top:4cqw;color:var(--accent)}
+.variant-E .project-summary{font:2.6cqw/1.4 var(--sans);margin-top:4cqw;max-width:100%;letter-spacing:-.025em}
+.variant-E .project-number{font:400 18cqw/1 var(--sans);opacity:.1;bottom:22cqw;right:7cqw}
+.variant-E .project-role{max-width:85%;border-top:1px solid var(--rule);padding-top:2cqw}
+.variant-E .project-role p{font-size:2cqw;line-height:1.4}
+.variant-E .project-visual{height:46cqw;margin-top:4cqw;padding:2cqw;background:#36ffb610;border:1px solid var(--rule)}
+.variant-E .project-visual img{box-shadow:none;border-radius:0}
+.variant-E .project-visual figcaption{font:1.15cqw/1.5 var(--sans)}
+.variant-E .project-story{gap:3cqw}
+.variant-E .project-story p{font-family:var(--sans);font-size:2cqw;line-height:1.45}
+.variant-E .project-type-art{height:44cqw;margin-top:4cqw;background:repeating-linear-gradient(45deg,#193b3512 0 1px,transparent 1px 7px);border:1px solid var(--ink);color:var(--ink)}
+.variant-E .project-type-art strong{font:400 20cqw/1 var(--sans);color:var(--accent)}
+@media(orientation:portrait){.design-comparison{right:8px;top:8px;font-size:9px}.design-comparison button{padding:8px}}
+/* Reserve a clean strip above the drawing title block. */
+.engineering-portrait{height:36cqw}
+.engineering-note{padding-top:3cqw}
+.drawing-index button{min-height:5cqw;padding-block:1.05cqw}
+.drawing-legend{padding-top:2cqw}
