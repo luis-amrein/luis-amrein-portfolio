@@ -14,7 +14,12 @@ function Volume({ project, index, base }: { project: ShelfProject; index: number
   const pull = (target: number) => {
     const state = motion.current;
     state.target = target;
-    if (target) book.current?.parentElement?.style.setProperty('z-index', '20');
+    const link = book.current?.parentElement;
+    if (target && link) {
+      link.style.setProperty('z-index', '20');
+      // A centered, frontal pull grows exactly to the viewport edges.
+      link.style.setProperty('--pull-scale', String(Math.max(0, window.innerWidth / link.getBoundingClientRect().width - 1)));
+    }
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       book.current?.style.setProperty('--pull', String(target));
       return;
@@ -41,8 +46,6 @@ function Volume({ project, index, base }: { project: ShelfProject; index: number
       onPointerEnter={(event) => { if (event.pointerType !== 'touch') pull(1); }}
       onPointerLeave={() => pull(0)} onFocus={() => pull(1)} onBlur={() => pull(0)}>
       <div className="shelf-book" ref={book}>
-        <div className="book-pages" aria-hidden="true" />
-        <div className="book-tail" aria-hidden="true" />
         <div className="book-spine">
           <span className="book-number">{String(index + 1).padStart(2, '0')}<i />LA</span>
           <div className="book-title-block">
@@ -87,7 +90,6 @@ export default function BookshelfPrototype({ projects, base }: { projects: Shelf
         <div className="shelf-cabinet">
           {projects.map((project, index) => <Volume project={project} index={index} base={base} key={project.id} />)}
         </div>
-        <div className="shelf-plinth" aria-hidden="true" />
       </div>
       {import.meta.env.DEV && <div className="shelf-switcher" aria-label="Bookshelf prototype variants">
         <span className="shelf-prototype-label">EXPERIMENT</span>
