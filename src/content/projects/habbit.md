@@ -13,8 +13,8 @@ outcomeLabel: Built end-to-end, used by me and friends
 status: ready
 link: https://github.com/luis-amrein/habbit
 linkLabel: View on GitHub
-showcaseTitle: Habbit on iPhone 17 Pro
-showcaseLabel: In the simulator
+showcaseTitle: ""
+showcaseLabel: ""
 showcase:
   - type: video
     src: work/habbit/demo.mp4

@@ -32,7 +32,7 @@ He currently shapes digital health products at Caspar Health. Previously he work
 - Adjustable Knee Prosthesis: https://luis-amrein.github.io/luis-amrein-portfolio/work/adjustable-knee-prosthesis/
 - MEDWING Registration: https://luis-amrein.github.io/luis-amrein-portfolio/work/medwing-registration/
 - MEDWING Recommendations: https://luis-amrein.github.io/luis-amrein-portfolio/work/medwing-recommendations/
-- Persephone: https://luis-amrein.github.io/luis-amrein-portfolio/work/persephone/
+- Compliance carbon market tool: https://luis-amrein.github.io/luis-amrein-portfolio/work/persephone/
 - Habit Tracker for Atom: https://luis-amrein.github.io/luis-amrein-portfolio/work/habit-tracker/
 
 ## Contact and profiles

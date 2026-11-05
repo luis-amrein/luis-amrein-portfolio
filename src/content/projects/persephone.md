@@ -1,5 +1,5 @@
 ---
-title: Persephone
+title: Compliance carbon market tool
 eyebrow: Internal Platform · Operations · B2B
 summary: Bringing structure, reliability, and a client-facing layer to a young operations platform.
 year: "2024"
@@ -15,7 +15,7 @@ status: needs-update
 
 ## The situation
 
-Persephone was an internal platform for operations, sales, and key account management in the compliance carbon market. A client portal adds transaction tracking and creates opportunities for relevant follow-on sales.
+The compliance carbon market tool was an internal platform for operations, sales, and key account management in the compliance carbon market. A client portal adds transaction tracking and creates opportunities for relevant follow-on sales.
 
 I joined two months after launch as the first dedicated internal Product Manager. The product worked in parts, but the team needed a shared direction, a repeatable delivery rhythm, and a way to balance urgent operational needs with product improvements.
 

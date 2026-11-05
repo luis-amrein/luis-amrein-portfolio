@@ -29,12 +29,14 @@ const railLabels = {
 const railLabel = railLabels[railFrame];
 ---
 
-<section class={`device-showcase device-showcase--${railFrame}`} aria-labelledby="device-showcase-heading">
+<section class={`device-showcase device-showcase--${railFrame}`} aria-labelledby={title ? "device-showcase-heading" : undefined} aria-label={title ? undefined : label || 'Product visuals'}>
   <div class="shell">
-    <div class="section-heading reveal">
-      <p class="section-label">{label}</p>
-      <h2 id="device-showcase-heading">{title}</h2>
-    </div>
+    {(title || label) && (
+      <div class="section-heading reveal">
+        {label && <p class="section-label">{label}</p>}
+        {title && <h2 id="device-showcase-heading">{title}</h2>}
+      </div>
+    )}
 
     {
       video && (
