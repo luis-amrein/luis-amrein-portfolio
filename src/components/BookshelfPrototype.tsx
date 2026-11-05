@@ -6,8 +6,8 @@ export type ShelfProject = {
   id: string; title: string; eyebrow: string; outcomeLabel: string; summary?: string; outcome?: string;
 };
 const variants = ['Stacked volumes', 'Upright library', 'Face-out collection'];
-const covers = ['Clothbound', 'Swiss graphic', 'Paper archive', 'Blueprint', 'Sculpted black'];
-const coverKeys = ['cloth', 'swiss', 'paper', 'blueprint', 'black'];
+const covers = ['Color editions', 'Type studies', 'Art press', 'Gallery series', 'Soft spectrum'];
+const coverKeys = ['editions', 'type', 'art', 'gallery', 'spectrum'];
 
 function Volume({ project, index, base }: { project: ShelfProject; index: number; base: string }) {
   const book = useRef<HTMLDivElement>(null);
@@ -70,7 +70,7 @@ export default function BookshelfPrototype({ projects, base }: { projects: Shelf
     const read = () => {
       const query = new URLSearchParams(location.search);
       setVariant(Math.max(0, ['stacked', 'upright', 'covers'].indexOf(query.get('variant') ?? 'stacked')));
-      setCover(Math.max(0, coverKeys.indexOf(query.get('cover') ?? 'cloth')));
+      setCover(Math.max(0, coverKeys.indexOf(query.get('cover') ?? 'editions')));
     };
     read(); window.addEventListener('popstate', read);
     return () => window.removeEventListener('popstate', read);

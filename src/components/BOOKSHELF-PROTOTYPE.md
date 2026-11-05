@@ -10,4 +10,8 @@ Evaluation: pending user review. Keep this experiment on `experiment/bookshelf-i
 
 ## Cover studies
 
-Five designs share the same straight pull and touch directly: `?cover=cloth` (foil clothbound), `?cover=swiss` (geometric graphics and bold typography), `?cover=paper` (pasted archival labels), `?cover=blueprint` (drafting grid and monospaced type), and `?cover=black` (satin black and embossed silver). Select in the development-only bottom controls; left/right arrow keys cycle cover styles. The layout arrows still compare the three shelf arrangements.
+The previous vintage cover studies were rejected. Five contemporary replacements use `?cover=editions` (minimal color editions), `?cover=type` (large series numbers and bold type), `?cover=art` (art-publishing geometry), `?cover=gallery` (white museum catalogues), and `?cover=spectrum` (soft full-bleed color fields). The development-only controls switch designs; left/right keys cycle covers.
+
+Corrected spine geometry: left and right cut edges are flat. Curved lighting runs horizontally along the upper and lower edges. No upright binding bevel, ornamental frame, tilt or page geometry remains. The frontal spring pull and direct stack are retained.
+
+Design selection remains pending user review.
