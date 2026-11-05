@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import './book-projects.css';
 
 export type ShelfProject = {
   id: string; title: string; eyebrow: string; outcomeLabel: string; summary?: string; outcome?: string;

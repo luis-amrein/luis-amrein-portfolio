@@ -24,16 +24,16 @@ He currently shapes digital health products at Caspar Health. Previously he work
 
 ## Canonical URLs
 
-- Home: https://luis-amrein.github.io/luis-amrein-portfolio/
-- Work index: https://luis-amrein.github.io/luis-amrein-portfolio/work/
-- About: https://luis-amrein.github.io/luis-amrein-portfolio/about/
-- Habbit: https://luis-amrein.github.io/luis-amrein-portfolio/work/habbit/
-- Voluntary Carbon Marketplace: https://luis-amrein.github.io/luis-amrein-portfolio/work/voluntary-carbon-marketplace/
-- Adjustable Knee Prosthesis: https://luis-amrein.github.io/luis-amrein-portfolio/work/adjustable-knee-prosthesis/
-- MEDWING Registration: https://luis-amrein.github.io/luis-amrein-portfolio/work/medwing-registration/
-- MEDWING Recommendations: https://luis-amrein.github.io/luis-amrein-portfolio/work/medwing-recommendations/
-- Compliance carbon market tool: https://luis-amrein.github.io/luis-amrein-portfolio/work/persephone/
-- Habit Tracker for Atom: https://luis-amrein.github.io/luis-amrein-portfolio/work/habit-tracker/
+- Home: https://luis-amrein.github.io/portfolio/
+- Work index: https://luis-amrein.github.io/portfolio/work/
+- About: https://luis-amrein.github.io/portfolio/about/
+- Habbit: https://luis-amrein.github.io/portfolio/work/habbit/
+- Voluntary Carbon Marketplace: https://luis-amrein.github.io/portfolio/work/voluntary-carbon-marketplace/
+- Adjustable Knee Prosthesis: https://luis-amrein.github.io/portfolio/work/adjustable-knee-prosthesis/
+- MEDWING Registration: https://luis-amrein.github.io/portfolio/work/medwing-registration/
+- MEDWING Recommendations: https://luis-amrein.github.io/portfolio/work/medwing-recommendations/
+- Compliance carbon market tool: https://luis-amrein.github.io/portfolio/work/persephone/
+- Habit Tracker for Atom: https://luis-amrein.github.io/portfolio/work/habit-tracker/
 
 ## Contact and profiles
 

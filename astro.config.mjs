@@ -7,7 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://luis-amrein.github.io',
-  base: '/luis-amrein-portfolio',
+  base: '/portfolio',
   output: 'static',
   trailingSlash: 'always',
   integrations: [react(), sitemap()],
