@@ -23,8 +23,14 @@
 .book-description > span { display:block; font-size:.64rem; line-height:1.4; opacity:.65; margin-top:7px; }
 .book-mark { font:400 1.4rem/1 Arial,sans-serif; z-index:2; }
 
-/* 03 — Art press: modern art publishing, oversized geometric prints and light typography. */
-.book-spine { background:radial-gradient(ellipse 15% 150% at 83% 95%,var(--accent) 0 66%,transparent 67%),radial-gradient(ellipse 15% 140% at 99% -25%,var(--print) 0 63%,transparent 64%),var(--jacket); }
+/* Art press: a different Bauhaus composition printed across each book. */
+.book-artwork { position:absolute; top:0; right:0; width:45%; height:100%; overflow:hidden; pointer-events:none; z-index:0; }
+.art-red { fill:#d64b34; }
+.art-blue { fill:#2850b0; }
+.art-yellow { fill:#ebc744; }
+.art-ink { fill:#242820; }
+.art-paper { fill:#f1eddf; }
+.book-number { position:relative; z-index:2; }
 .book-title-block h3 { font-family:Georgia,'Times New Roman',serif; font-size:clamp(1.35rem,2.9vw,2.55rem); font-weight:400; line-height:1; letter-spacing:-.065em; }
 .book-description { background:#f6f3e9e8; color:#202120; padding:10px 12px; max-width:27ch; }
 .book-number { font-family:Georgia,serif; font-size:.9rem; }
@@ -34,6 +40,8 @@
  .shelf-volume { height:125px; }
  .book-spine { grid-template-columns:28px 1fr 20px; padding:19px 22px; gap:18px; }
  .book-description { display:none; }
+ .book-artwork { width:43%; opacity:.4; }
+ .book-title-block { text-shadow:0 1px 3px var(--jacket); }
  .book-category { font-size:.45rem; }
 }
 @media(max-width:480px) {
