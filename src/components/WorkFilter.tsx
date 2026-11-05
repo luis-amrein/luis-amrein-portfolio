@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import BookshelfPrototype from './BookshelfPrototype';
+import BookProjects from './BookProjects';
 
 type Project = {
   id: string;
@@ -43,7 +43,7 @@ export default function WorkFilter({ projects, base }: Props) {
           </button>
         ))}
       </div>
-      <div aria-live="polite"><BookshelfPrototype projects={visibleProjects} base={base} /></div>
+      <div aria-live="polite"><BookProjects projects={visibleProjects} base={base} /></div>
     </>
   );
 }

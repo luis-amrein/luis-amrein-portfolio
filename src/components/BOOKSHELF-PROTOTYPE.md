@@ -1,17 +1,9 @@
-# Bookshelf interaction experiment
+# Bookshelf design decision
 
-Question: can project links feel like physical books pulled out of a shelf, while preserving the existing list, filtering and navigation?
+Selected design: Art press, using the stacked arrangement. The books touch directly, have flat side cuts and horizontal spine curvature, and pull straight forward to viewport width. No shelf background, pages, tilt, collection labels or comparison controls remain.
 
-Run `pnpm dev --background` and visit `/luis-amrein-portfolio/work/#case-studies`.
+The comparative prototypes are preserved in Git history on this branch (4daa630). Current implementation is in BookProjects.tsx and book-projects.css.
 
-The default is stacked volumes. The development-only bottom switcher and left/right arrow keys compare `?variant=stacked`, `?variant=upright`, and `?variant=covers`. The same collection is on the homepage. The stacked books touch directly with no shelf background. Each book has a stable hit area, a spring-driven frontal pull to the viewport width, cloth grain, raised spine edges, foil lettering and a changing cast shadow. There is no rotation and no exposed page geometry. Keyboard focus also pulls the book forward. Reduced motion disables displacement; touch follows links directly.
+Animation correction: each activation receives a newer paint order, above any other book that is still returning. Its order is retained until the spring reaches the exact resting position. Hover and focus are tracked independently so one input cannot cancel the other. Reduced motion cancels any pending spring and restores the correct order immediately.
 
-Evaluation: pending user review. Keep this experiment on `experiment/bookshelf-interaction`; no design has been selected for publication.
-
-## Cover studies
-
-The previous vintage cover studies were rejected. Five contemporary replacements use `?cover=editions` (minimal color editions), `?cover=type` (large series numbers and bold type), `?cover=art` (art-publishing geometry), `?cover=gallery` (white museum catalogues), and `?cover=spectrum` (soft full-bleed color fields). The development-only controls switch designs; left/right keys cycle covers.
-
-Corrected spine geometry: left and right cut edges are flat. Curved lighting runs horizontally along the upper and lower edges. No upright binding bevel, ornamental frame, tilt or page geometry remains. The frontal spring pull and direct stack are retained.
-
-Design selection remains pending user review.
+Run pnpm dev --background. Review on the homepage or /luis-amrein-portfolio/work/ before publication.
