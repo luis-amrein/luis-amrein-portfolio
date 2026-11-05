@@ -36,8 +36,7 @@ const base = import.meta.env.BASE_URL;
 
     <section class="section shell slide-over" aria-labelledby="selected-work">
       <div class="section-heading reveal">
-        <p class="section-label">01 · Selected work</p>
-        <h2 id="selected-work">Things I shipped, shaped, or steered.</h2>
+        <h2 id="selected-work">Selected Work</h2>
       </div>
       <div class="project-list">
         {projects.map((project, index) => <ProjectCard project={project} index={index} />)}
@@ -50,8 +49,7 @@ const base = import.meta.env.BASE_URL;
 
   <section class="section shell" aria-labelledby="background">
     <div class="section-heading reveal">
-      <p class="section-label">02 · Background</p>
-      <h2 id="background">From screws and sensors to screens and systems.</h2>
+      <h2 id="background">Background</h2>
     </div>
     <div class="about-grid reveal">
       <p class="hero-intro">
@@ -74,13 +72,12 @@ const base = import.meta.env.BASE_URL;
 
   <section class="personal-band">
     <div>
-      <p class="section-label">Off the clock</p>
-      <h2>Still curious.<br />Less Jira.</h2>
+      <h2>Outside Work</h2>
     </div>
     <div>
       <p>
-        Gravel rides to Brandenburg lakes, piano lessons from my mum, Portuguese practice, too
-        many Urban Sports classes, mixing music, and making things for my flat.
+        Gravel rides to Brandenburg lakes, remote piano lessons from my mum, Portuguese practice, a variety
+        of Urban Sports classes, mixing music, and making things for my flat.
       </p>
       <a class="button secondary" href={`${base}about/#outside-work`}>Meet the person behind the roadmap</a>
     </div>

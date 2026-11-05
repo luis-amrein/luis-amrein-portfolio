@@ -13,8 +13,8 @@ outcomeLabel: 4 prototype generations
 status: ready
 link: work/knee-prosthesis/frugal-knee-prosthesis-thesis.pdf
 linkLabel: Read the thesis PDF
-showcaseTitle: One knee, designed as a system
-showcaseLabel: Thesis artefacts
+showcaseTitle: ""
+showcaseLabel: ""
 showcase:
   - type: image
     src: work/knee-prosthesis/physical-prototype.webp

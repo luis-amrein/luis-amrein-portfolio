@@ -427,6 +427,10 @@ input {
   margin-bottom: clamp(2.5rem, 6vw, 5rem);
 }
 
+.section-heading > h2:only-child {
+  grid-column: 1 / -1;
+}
+
 .section-heading h2 {
   max-width: none;
   margin: 0;
@@ -704,7 +708,7 @@ input {
   letter-spacing: -0.045em;
 }
 
-.case-body article h2:first-child {
+.case-body article > h2:first-of-type {
   margin-top: 0;
 }
 
@@ -1134,6 +1138,10 @@ input {
   .device-showcase__hint-arrow {
     animation: none;
   }
+}
+
+.evidence-section {
+  background: var(--signal);
 }
 
 .draft-note {
