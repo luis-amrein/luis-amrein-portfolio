@@ -6,6 +6,8 @@ export type ShelfProject = {
   id: string; title: string; eyebrow: string; outcomeLabel: string; summary?: string; outcome?: string;
 };
 const variants = ['Stacked volumes', 'Upright library', 'Face-out collection'];
+const covers = ['Clothbound', 'Swiss graphic', 'Paper archive', 'Blueprint', 'Sculpted black'];
+const coverKeys = ['cloth', 'swiss', 'paper', 'blueprint', 'black'];
 
 function Volume({ project, index, base }: { project: ShelfProject; index: number; base: string }) {
   const book = useRef<HTMLDivElement>(null);
@@ -47,7 +49,7 @@ function Volume({ project, index, base }: { project: ShelfProject; index: number
       onPointerLeave={() => pull(0)} onFocus={() => pull(1)} onBlur={() => pull(0)}>
       <div className="shelf-book" ref={book}>
         <div className="book-spine">
-          <span className="book-number">{String(index + 1).padStart(2, '0')}<i />LA</span>
+          <span className="book-number"><span>{String(index + 1).padStart(2, '0')}</span><i /><span className="book-author-mark">LA</span></span>
           <div className="book-title-block">
             <span className="book-category">{project.eyebrow}</span>
             <h3>{project.title}</h3>
@@ -63,8 +65,13 @@ function Volume({ project, index, base }: { project: ShelfProject; index: number
 
 export default function BookshelfPrototype({ projects, base }: { projects: ShelfProject[]; base: string }) {
   const [variant, setVariant] = useState(0);
+  const [cover, setCover] = useState(0);
   useEffect(() => {
-    const read = () => setVariant(Math.max(0, ['stacked', 'upright', 'covers'].indexOf(new URLSearchParams(location.search).get('variant') ?? 'stacked')));
+    const read = () => {
+      const query = new URLSearchParams(location.search);
+      setVariant(Math.max(0, ['stacked', 'upright', 'covers'].indexOf(query.get('variant') ?? 'stacked')));
+      setCover(Math.max(0, coverKeys.indexOf(query.get('cover') ?? 'cloth')));
+    };
     read(); window.addEventListener('popstate', read);
     return () => window.removeEventListener('popstate', read);
   }, []);
@@ -72,30 +79,42 @@ export default function BookshelfPrototype({ projects, base }: { projects: Shelf
     next = (next + 3) % 3; setVariant(next);
     const url = new URL(location.href); url.searchParams.set('variant', ['stacked', 'upright', 'covers'][next]); history.replaceState(null, '', url);
   };
+  const changeCover = (next: number) => {
+    next = (next + covers.length) % covers.length; setCover(next);
+    const url = new URL(location.href); url.searchParams.set('cover', coverKeys[next]); history.replaceState(null, '', url);
+  };
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement;
       if (target.closest('input, textarea, select, [contenteditable="true"]')) return;
       if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-        event.preventDefault(); change(variant + (event.key === 'ArrowRight' ? 1 : -1));
+        event.preventDefault(); changeCover(cover + (event.key === 'ArrowRight' ? 1 : -1));
       }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [variant]);
+  }, [cover]);
   return (
     <>
-      <div className={`bookshelf-prototype shelf-variant-${variant}`}>
+      <div className={`bookshelf-prototype shelf-variant-${variant} cover-${coverKeys[cover]}`}>
         <div className="shelf-inscription" aria-hidden="true"><span>THE WORK COLLECTION</span><span>{String(projects.length).padStart(2, '0')} VOLUMES · PULL TO EXPLORE</span></div>
         <div className="shelf-cabinet">
           {projects.map((project, index) => <Volume project={project} index={index} base={base} key={project.id} />)}
         </div>
       </div>
       {import.meta.env.DEV && <div className="shelf-switcher" aria-label="Bookshelf prototype variants">
-        <span className="shelf-prototype-label">EXPERIMENT</span>
-        <button onClick={() => change(variant - 1)} aria-label="Previous shelf variant">←</button>
-        <span>{variants[variant]}</span>
-        <button onClick={() => change(variant + 1)} aria-label="Next shelf variant">→</button>
+        <div className="shelf-layout-controls">
+          <span className="shelf-prototype-label">COVER STUDIES</span>
+          <button onClick={() => change(variant - 1)} aria-label="Previous shelf layout">←</button>
+          <span>{variants[variant]}</span>
+          <button onClick={() => change(variant + 1)} aria-label="Next shelf layout">→</button>
+        </div>
+        <div className="cover-options" aria-label="Book cover designs">
+          {covers.map((name, index) => <button key={name} aria-pressed={cover === index} onClick={() => changeCover(index)}>
+            <i className={`cover-swatch cover-swatch-${index}`} aria-hidden="true" />
+            <span>{String(index + 1).padStart(2, '0')} {name}</span>
+          </button>)}
+        </div>
       </div>}
     </>
   );

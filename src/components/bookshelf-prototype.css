@@ -51,3 +51,75 @@
 @media(max-width:820px) { .shelf-volume { height:125px; } .book-spine { grid-template-columns:30px 1fr 20px; padding:18px 22px; gap:16px; } .book-description { display:none; } .book-number { padding-right:10px; } .book-category { font-size:.45rem; } .shelf-inscription { font-size:.5rem; letter-spacing:.08em; } .shelf-variant-2 .shelf-cabinet { grid-template-columns:repeat(2,minmax(0,1fr)); padding:20px; gap:20px; } .shelf-variant-2 .book-spine { padding:22px; } }
 @media(max-width:480px) { .shelf-volume { height:120px; } .book-title-block h3 { font-size:1.2rem; } .book-category { line-height:1.5; } .book-spine { padding-inline:20px 16px; gap:10px; } .shelf-inscription span:last-child { display:none; } .shelf-prototype-label { display:none; } .shelf-variant-1 .shelf-cabinet { gap:4px; padding-inline:8px; } .shelf-variant-1 .book-spine { padding:20px 4px; } .shelf-variant-1 .book-number { font-size:.5rem; } .shelf-variant-1 .book-title-block h3 { font-size:.95rem; } .shelf-variant-2 .shelf-volume { height:310px; } .shelf-variant-2 .book-spine { padding:18px; } .shelf-variant-2 .book-title-block h3 { font-size:1.4rem; } }
 @media(prefers-reduced-motion:reduce) { .shelf-book { transform:none; will-change:auto; } .shelf-volume:hover .book-spine,.shelf-volume:focus-visible .book-spine { outline:2px solid var(--foil); } }
+
+/* Five cover studies; identical frontal pull, distinct materials and typography. */
+.shelf-switcher { flex-direction:column; gap:7px; padding:10px 14px; border-radius:18px; max-width:calc(100vw - 24px); }
+.shelf-layout-controls { display:flex; gap:10px; align-items:center; }
+.cover-options { display:flex; gap:4px; }
+.cover-options button { display:flex; gap:7px; align-items:center; border:1px solid transparent; border-radius:7px; padding:7px 9px; font-size:.65rem; }
+.cover-options button[aria-pressed=true] { background:#ffffff18; border-color:#ffffff40; }
+.cover-swatch { display:block; width:12px; height:17px; border-radius:2px; box-shadow:inset 1px 0 1px #fff4; }
+.cover-swatch-0 { background:#617459; }
+.cover-swatch-1 { background:linear-gradient(135deg,#f04d24 50%,#f3ede0 50%); }
+.cover-swatch-2 { background:#ded1ac; }
+.cover-swatch-3 { background:repeating-linear-gradient(0deg,transparent 0 4px,#ffffff60 4px 5px),#164d79; }
+.cover-swatch-4 { background:linear-gradient(110deg,#111,#4a4a4a,#111); }
+
+/* 02 — Swiss: oversized serials and a vivid geometric jacket. */
+.cover-swiss .book-spine { color:#f9f5e9; border-radius:2px; background:linear-gradient(118deg,transparent 0 68%,#191c18 68% 69%,#f3ecda 69% 82%,#151814 82% 83%,transparent 83%),linear-gradient(180deg,#ffffff13,#0003),var(--cover); --cover:#d64620; --foil:#fbf3df; padding-left:28px; box-shadow:inset 0 2px 1px #fff4,inset 0 -3px 2px #0006,0 calc(2px + var(--pull)*22px) calc(3px + var(--pull)*28px) #0006; }
+.cover-swiss .shelf-volume:nth-child(even) .book-spine { --cover:#184bad; }
+.cover-swiss .shelf-volume:nth-child(3n) .book-spine { --cover:#e0b925; color:#1c261e; --foil:#1c261e; }
+.cover-swiss .book-spine::after { border:0; inset:0; border-left:10px solid #171b17; border-radius:0; }
+.cover-swiss .book-number { font-family:Arial,sans-serif; font-size:2.6rem; font-weight:900; letter-spacing:-.1em; border:0; padding:0; text-shadow:none; }
+.cover-swiss .book-number i, .cover-swiss .book-author-mark { display:none; }
+.cover-swiss .book-number { overflow:hidden; line-height:.8; justify-content:flex-start; padding-top:4px; max-height:48px; }
+.cover-swiss .book-title-block h3 { font-family:Arial,Helvetica,sans-serif; font-weight:900; letter-spacing:-.06em; text-shadow:none; font-size:clamp(1.2rem,2.8vw,2.4rem); }
+.cover-swiss .book-category { letter-spacing:.06em; font-weight:800; opacity:1; }
+.cover-swiss .book-description { background:#1a211ee8; color:#f8f0dc; padding:10px 12px; border:0; position:relative; z-index:1; }
+.cover-swiss .book-description strong { font-family:Arial,sans-serif; font-size:.82rem; font-weight:700; }
+.cover-swiss .book-mark { color:#f5ecd7; }
+
+/* 03 — Paper: sewn archival volumes with pasted labels and ink stamps. */
+.cover-paper .book-spine { color:#3a352b; --foil:#494233; border-radius:3px 5px 5px 3px; background:repeating-linear-gradient(90deg,#80612d05 0 1px,transparent 1px 4px),linear-gradient(90deg,#584b3577 0,transparent 1%,#8f7e5670 1.5%,transparent 2.5%,transparent 97%,#8c754133),linear-gradient(#e9dfc5,#d4c4a1); box-shadow:inset 0 1px 0 #fff8,inset 0 -2px 2px #75613d88,0 calc(2px + var(--pull)*20px) calc(3px + var(--pull)*28px) #382b2355; }
+.cover-paper .shelf-volume:nth-child(even) .book-spine { background-color:#d8cfb5; background-blend-mode:multiply; }
+.cover-paper .book-spine::before { opacity:.5; mix-blend-mode:multiply; }
+.cover-paper .book-spine::after { inset:0; border:0; border-left:18px solid #766d54; border-radius:2px; box-shadow:inset 20px 0 2px #0002; }
+.cover-paper .book-number { font-family:'Courier New',monospace; color:#a03e2e; border:1px solid #a03e2e88; padding:6px; margin-left:6px; align-self:center; transform:rotate(-5deg); font-size:.7rem; text-shadow:none; }
+.cover-paper .book-title-block { background:#f5efdc; padding:12px 16px; box-shadow:0 1px 2px #483f3330,inset 0 0 12px #b29c6b22; }
+.cover-paper .book-title-block h3 { font-family:Georgia,serif; font-style:italic; text-shadow:none; font-size:clamp(1.15rem,2.4vw,2rem); }
+.cover-paper .book-category { font-family:'Courier New',monospace; font-size:.52rem; letter-spacing:.04em; opacity:.8; }
+.cover-paper .book-description { border-left:1px solid #81775c55; }
+.cover-paper .book-description strong { font-family:'Courier New',monospace; font-size:.8rem; }
+
+/* 04 — Blueprint: gridded technical folios with drafting marks. */
+.cover-blueprint .book-spine { color:#e2f2f7; --foil:#d5eff9; border-radius:2px; background:linear-gradient(90deg,#0006,transparent 2%,transparent 98%,#0004),repeating-linear-gradient(0deg,transparent 0 15px,#c4eeff12 15px 16px),repeating-linear-gradient(90deg,transparent 0 15px,#c4eeff12 15px 16px),linear-gradient(110deg,#174664,#153b5e); }
+.cover-blueprint .shelf-volume:nth-child(even) .book-spine { background-color:#1c6081; background-blend-mode:normal,normal,normal,screen; }
+.cover-blueprint .book-spine::after { border:1px solid #bce7ff88; border-radius:0; inset:12px; background:linear-gradient(#c8edff,#c8edff) left top/10px 1px no-repeat,linear-gradient(#c8edff,#c8edff) right bottom/10px 1px no-repeat; box-shadow:none; }
+.cover-blueprint .book-spine::before { opacity:.12; }
+.cover-blueprint .book-number { font-family:'Courier New',monospace; font-size:.9rem; border-right:1px dashed #b8e3ff66; text-shadow:none; }
+.cover-blueprint .book-title-block h3 { font-family:'Courier New',monospace; font-size:clamp(1.05rem,2.35vw,1.9rem); letter-spacing:-.06em; text-shadow:none; font-weight:400; }
+.cover-blueprint .book-category { font-family:'Courier New',monospace; font-size:.5rem; letter-spacing:.03em; color:#91c6dc; opacity:1; }
+.cover-blueprint .book-description { border:1px solid #a6d7ec55; padding:9px 12px; background:#0c263c77; }
+.cover-blueprint .book-description strong { font-family:'Courier New',monospace; font-size:.75rem; }
+.cover-blueprint .book-description > span { font-family:'Courier New',monospace; font-size:.6rem; }
+
+/* 05 — Sculpted black: blind debossing, satin edges and a minimal metal serial. */
+.cover-black .book-spine { color:#d3d3cb; --foil:#d3d3cb; border-radius:7px; background:linear-gradient(90deg,#080909,transparent 2%,#ffffff09 3%,#0009 4%,transparent 5%),linear-gradient(165deg,#3a3c3b 0%,#242626 35%,#151717 78%,#0b0c0c); box-shadow:inset 0 2px 1px #ffffff28,inset 0 -3px 4px #000c,0 calc(3px + var(--pull)*25px) calc(4px + var(--pull)*30px) #0007; }
+.cover-black .book-spine::after { border:0; inset:11px; border-radius:3px; box-shadow:inset 0 2px 3px #000a,0 1px 0 #fff1; }
+.cover-black .book-spine::before { opacity:.13; }
+.cover-black .book-title-block h3 { font-family:Arial,Helvetica,sans-serif; font-size:clamp(1.2rem,2.7vw,2.25rem); font-weight:800; letter-spacing:-.055em; color:#bfc3ba; text-shadow:0 1px 1px #ffffff22,0 -2px 2px #000; }
+.cover-black .book-category { color:#a2a69f; font-weight:400; letter-spacing:.18em; }
+.cover-black .book-number { color:#b8bcb4; text-shadow:0 1px 1px #000; border:0; font-size:.8rem; background:linear-gradient(105deg,#474c47,#171b18 40%,#656b61 70%,#282c27); padding:9px; margin-block:10px; border-radius:2px; box-shadow:0 1px 2px #000b,inset 0 1px 0 #fff3; }
+.cover-black .book-description { border-color:#ffffff15; }
+.cover-black .book-description strong { font-family:Arial,sans-serif; font-weight:400; color:#b4b8af; font-size:.8rem; }
+.cover-black .book-description > span { color:#adb0aa; }
+.cover-black .book-mark { color:#bec7b8; }
+@media(max-width:680px) {
+  .cover-options button { padding:6px; gap:4px; }
+  .cover-options button span { font-size:0; }
+  .cover-options button span::first-letter { font-size:0; }
+  .cover-swatch { width:24px; height:28px; }
+  .cover-options button { min-width:42px; justify-content:center; }
+  .cover-swiss .book-number { font-size:1.7rem; max-height:30px; }
+  .cover-paper .book-title-block { padding:8px; }
+}
