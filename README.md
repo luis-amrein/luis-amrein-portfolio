@@ -2,7 +2,7 @@
 
 An editorial portfolio focused on product judgment, measurable outcomes, and the person behind the work.
 
-Live site: [luis-amrein.github.io/luis-amrein-portfolio](https://luis-amrein.github.io/luis-amrein-portfolio/)
+Live site: [luis-amrein.github.io/portfolio](https://luis-amrein.github.io/portfolio/)
 
 ## Stack
 
@@ -22,7 +22,7 @@ pnpm install
 pnpm dev
 ```
 
-The local site runs at `http://localhost:4321/luis-amrein-portfolio/`.
+The local site runs at `http://localhost:4321/portfolio/`.
 
 Useful commands:
 
@@ -49,7 +49,7 @@ Before considering the portfolio final:
 
 Pushes to `main` trigger `.github/workflows/deploy.yml`. The deployment workflow builds static assets and deploys them to GitHub Pages. Pull requests and pushes to `main` also run the separate `Validate portfolio` workflow, which runs `pnpm validate`. Manual deployment is restricted to `main`.
 
-The repository must use **GitHub Actions** as its Pages source under **Settings → Pages**. The configured base path is `/luis-amrein-portfolio`.
+The repository must use **GitHub Actions** as its Pages source under **Settings → Pages**. The configured base path is `/portfolio`.
 
 ### Discoverability
 

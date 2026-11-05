@@ -13,6 +13,6 @@ Software: Astro, React, Tailwind CSS
 Hosting: GitHub Pages
 
 /* AGENT CONTEXT */
-llms.txt: /luis-amrein-portfolio/llms.txt
-llms-full.txt: /luis-amrein-portfolio/llms-full.txt
-Sitemap: /luis-amrein-portfolio/sitemap-index.xml
+llms.txt: /portfolio/llms.txt
+llms-full.txt: /portfolio/llms-full.txt
+Sitemap: /portfolio/sitemap-index.xml
