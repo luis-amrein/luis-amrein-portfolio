@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroAntigravity from '../components/HeroAntigravity';
-import ProjectCard from '../components/ProjectCard.astro';
+import BookshelfPrototype from '../components/BookshelfPrototype';
 
 const projects = (await getCollection('projects'))
   .filter((project) => project.data.featured)
@@ -38,9 +38,7 @@ const base = import.meta.env.BASE_URL;
       <div class="section-heading reveal">
         <h2 id="selected-work">Selected Work</h2>
       </div>
-      <div class="project-list">
-        {projects.map((project, index) => <ProjectCard project={project} index={index} />)}
-      </div>
+      <BookshelfPrototype client:load projects={projects.map((project) => ({ id: project.id, ...project.data }))} base={base} />
       <div class="button-row">
         <a class="button secondary" href={`${base}work/`}>View all case studies</a>
       </div>

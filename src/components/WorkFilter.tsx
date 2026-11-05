@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import BookshelfPrototype from './BookshelfPrototype';
 
 type Project = {
   id: string;
@@ -42,22 +43,7 @@ export default function WorkFilter({ projects, base }: Props) {
           </button>
         ))}
       </div>
-      <div className="project-list" aria-live="polite">
-        {visibleProjects.map((project, index) => (
-          <a className="project-card" href={`${base}work/${project.id}/`} key={project.id}>
-            <span className="project-index">{String(index + 1).padStart(2, '0')}</span>
-            <div>
-              <p className="kicker">{project.eyebrow}</p>
-              <h3>{project.title}</h3>
-            </div>
-            <p>
-              <span className="project-outcome">{project.outcomeLabel}</span>
-              {project.summary}
-            </p>
-            <span className="arrow" aria-hidden="true">↗</span>
-          </a>
-        ))}
-      </div>
+      <div aria-live="polite"><BookshelfPrototype projects={visibleProjects} base={base} /></div>
     </>
   );
 }
